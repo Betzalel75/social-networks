@@ -914,7 +914,7 @@ func followUser(w http.ResponseWriter, r *http.Request, ws *WsServer) {
 		}
 		if usr.StatusProfil == "public" || follow.FollowType == "unfollow" {
 			app.AddFollow(userID, follow.FollowedUser, follow.FollowType)
-		}else{
+		} else {
 			// Add notification
 			app.AddNotification(userID, follow.FollowedUser, "private", follow.FollowType, "aucun")
 		}
@@ -1036,7 +1036,7 @@ func eventHandler(w http.ResponseWriter, r *http.Request, ws *WsServer) {
 			return
 		}
 		image := "event.jpg"
-		
+
 		file, _, _ := r.FormFile("image")
 		if file != nil {
 			img, err := tools.UploadAvatar(w, r, "image", userID)
@@ -1078,7 +1078,16 @@ func eventHandler(w http.ResponseWriter, r *http.Request, ws *WsServer) {
 		event.UserID = userID
 		event.Image = image
 		event.GroupID = idGroup
-		app.AddEvents(event)
+		err = app.AddEvents(event)
+		if err != nil {
+			data := map[string]interface{}{
+				"code":    http.StatusInternalServerError,
+				"message": "Internal Server error",
+			}
+			tools.ResponseJSON(w, http.StatusInternalServerError, data)
+			tools.Log(err)
+			return
+		}
 
 		members, err := repo.GetGroupMembers(bd.GetDB(), idGroup)
 		if err != nil {
@@ -1092,7 +1101,7 @@ func eventHandler(w http.ResponseWriter, r *http.Request, ws *WsServer) {
 		}
 
 		for _, id := range members {
-			app.AddNotification(userID,id, "private", "event", idGroup)
+			app.AddNotification(userID, id, "private", "event", idGroup)
 		}
 
 		tools.ResponseJSON(w, http.StatusCreated, "Event Created")
@@ -1462,11 +1471,13 @@ func responseForInvit(w http.ResponseWriter, r *http.Request, wsServer *WsServer
 		tools.ResponseJSON(w, http.StatusInternalServerError, data)
 		return
 	}
+	tools.Debogage(data.Category)
 
 	switch data.Category {
 	case "follow":
 		followRequest(data.SenderID, data.ReceiverID, data.NotifID, data.Type)
 	case "event":
+		responseToParticpe(userID, data.GroupID, data.NotifID, data.Type)
 	case "inscription":
 		responseToRejoin(userID, data.GroupID, data.NotifID, data.Type)
 	case "unfollow":
@@ -1540,16 +1551,29 @@ func responseToRejoin(receiverID, groupID, notifID, types string) {
 	}
 
 	if types == "accept" {
-		fmt.Println(groupID)
+		fmt.Println("groupID:", groupID)
 		err = repo.AddMemberToGroup(bd.GetDB(), groupID, receiverID)
 		if err != nil {
 			tools.Log(err)
 		}
 	}
-
 }
 
-//
+// Accept invitation to particip an event
+func responseToParticpe(receiverID, eventID, notifID, types string) {
+	// Supprimer la notification
+	err := repo.DeleteNotification(bd.GetDB(), notifID)
+	if err != nil {
+		tools.Log(err)
+	}
+
+	if types == "accept" {
+		err = repo.AddMemberToEventMembers(bd.GetDB(), eventID, receiverID)
+		if err != nil {
+			tools.Log(err)
+		}
+	}
+}
 
 func datasGroup(w http.ResponseWriter, r *http.Request, visitedID string) interface{} {
 	cookie, _ := app.GetCookie(w, r)
@@ -1575,7 +1599,7 @@ func datasGroup(w http.ResponseWriter, r *http.Request, visitedID string) interf
 	// Filtrer les noms
 	userList := filterNames(data, follow)
 	// evenement du groupe
-	events , err:= repo.GetEventByGroupId(bd.GetDB(), visitedID)
+	events, err := repo.GetEventByGroupId(bd.GetDB(), visitedID)
 	if err != nil {
 		tools.Log(err)
 	}

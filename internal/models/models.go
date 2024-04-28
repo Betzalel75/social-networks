@@ -234,3 +234,9 @@ type Event struct {
 	Image       string
 	GroupID     string
 }
+
+type EventMember struct {
+	EventMemberID string // Primary Key
+	EventID       string // Primary Key
+	UserID        string // Foreign Key, references User entity
+}

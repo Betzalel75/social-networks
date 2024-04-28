@@ -45,6 +45,7 @@ func InitDB(path string) error {
 	CreateKeysTable(db)
 	CreateUserKeyTable(db)
 	CreateGroupPostsTable(db)
+	CreateEventMembersTable(db)
 	// CreateLikesCommentTable(db)
 
 	return nil

@@ -6,16 +6,16 @@
     </div>
     <div class="nott-list">
       <!-- 
-                  category
-                  email
-                  senderID
-                  type
-                  username
-                  photo
-                  created_at
-                  groupID
-                  notifID
-                -->
+      category
+      email
+      senderID
+      type
+      username
+      photo
+      created_at
+      groupID
+      notifID
+      -->
       <div v-for="(data, index) in notifications" :key="index">
         <div class="notfication-details">
           <div class="noty-user-img">
