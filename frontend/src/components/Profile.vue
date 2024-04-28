@@ -66,7 +66,7 @@
           </div>
           <div class="profile" style="width: 96%; margin: 20px auto 0 auto; margin-bottom: 5rem;">
             <div class="profile-avatar">
-              <img :src="'/src/assets/images/' + avatar" alt="" class="profile-img" />
+              <img :src="profileImage" ref="profileImage" @load="extractColors" alt="" class="profile-img" />
             </div>
             <div class="composents">
               <!--  -->
@@ -107,7 +107,8 @@
               </div>
               <!--  -->
             </div>
-            <img src="/src/assets/images/cover_zone02.jpg" alt="" class="profile-cover" />
+            <!-- <img src="/src/assets/images/cover_zone02.jpg" alt="" class="profile-cover" /> -->
+            <div class="profile-cover" id="group-background" :style="{ backgroundColor: dominantColor }"></div>
   
           </div>
           <div class="main-container" style="padding: 10px 18px 20px 28px">
@@ -399,6 +400,8 @@ export default {
       followed: [],
       nbrFollowed: "",
       statusProfil: "",
+      profileImage: "", 
+      dominantColor: '#ffffff',
     };
   },
   computed: {
@@ -433,6 +436,7 @@ export default {
           element.parentNode.removeChild(element);
         }
       });
+      this.profileImage = '/src/assets/images/'+this.avatar
       const parent = document.querySelector('.content-publication');
       const child = parent.querySelector('.status-textarea');
       child.innerHTML = "";
