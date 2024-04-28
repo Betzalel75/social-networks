@@ -1,0 +1,15 @@
+You will have to create a Facebook-like social network that will contain the following features:
+
+✅ Followers
+✅ Posts
+✅ Chats Prive
+✅ Profile
+Groups
+Page de Groupe
+Notification
+Liste de conversations
+Chat de Groupe
+Pour le chat de Groupe il va fonctionner comme un chat normal a la difference que lorsqu'on reccupere son ID envoye via 
+la connexion websockets. On va effectuer une requette vers la base de données pour recuperer tous les ID des members de 
+ce Groupe ranger dans un tableau. Ains on va faire un boucle de ce tableau d'ID pour envoyer individuellement le message
+a chaque membre.

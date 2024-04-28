@@ -1,0 +1,28 @@
+.side-wrapper.groups {
+    padding-top: 10px;
+    & .title-container{
+        display: flex;
+        margin-bottom: 10px;
+        & .side-title{
+            flex: 1;
+            margin-bottom: 0;
+            /* background-color: red; */
+            display: flex;
+            align-items: center;
+        }
+        & .add-group-btn{
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            display: none;
+            & img {
+                filter: invert();
+                &:hover {
+                    filter: none;
+                    background-color: white;
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+}

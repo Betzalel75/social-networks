@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/web/static/css/login.css">
+  <link rel="stylesheet" href="/web/static/css/mobile.css">
+  <link rel="stylesheet" href="/web/static/css/main.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"/>
+  <script src="/web/static/js/forum.js"></script>
+  <script src="/web/static/js/likeAndDislike.js"></script>
+  <script src="/web/static/js/upload.js"></script>
+  <link rel="shortcut icon" href="/web/static/media/forum_FILL0_wght400_GRAD0_opsz24.png" type="images/png">
+
+  <title>Forum</title>
+</head>
+
+<body>
+  
+  <!-- partial:index.partial.html -->
+  <div class="forumPage">
+    
+  </div>
+  <!-- Settings Page -->
+  <div class="settingPage"></div>
+  
+  <!-- SIN IN / UP -->
+  <div class="connexionPage">
+    <div class="main">
+      <div class="container a-container" id="a-container">
+        <form method="POST" class="form" id="a-form">
+          <h2 class="form_title title">Create Account</h2>
+          <div class="form__icons"><i class="bx bxl-git form__icon"></i></div>
+          <span class="form__span {{.Infolog.Status}}">{{.Infolog.Message}}</span>
+          <input type="text" class="form__input values" placeholder="Nickname" name="identifiant" required />
+          <input type="number" class="form__input values" name="age" id="age" placeholder="Age" required min="1" />
+          <!-- <input type="checkbox" class="form__input values" name="gender" id="gender" placeholder="Gender" required> -->
+          <div class="form__input radio">
+            <input type="radio" id="male" name="gender" value="male" />
+            <label for="male">Homme</label><br />
+            <input type="radio" id="female" name="gender" value="female" />
+            <label for="female">Femme</label><br />
+            <input type="radio" id="other" name="gender" value="other" />
+            <label for="other">Autre</label><br />
+          </div>
+
+          <input type="first-name" class="form__input values" name="first-name" id="first-name" placeholder="First Name"
+            required />
+          <input type="last-name" class="form__input values" name="last-name" id="last-name" placeholder="Last Name"
+            required />
+          <input class="form__input" type="email" placeholder="Email" name="email" required />
+          <input class="form__input values" type="password" placeholder="Password" name="password" required />
+          <input type="submit" class="form__button button submit switch-button-signin" name="signup" value="SIGN UP" />
+        </form>
+      </div>
+      <div class="container b-container" id="b-container">
+        <form method="POST" class="form myForm" id="b-form">
+          <h2 class="form_title title">Sign in to Website</h2>
+          <div class="form__icons"><i class="bx bxl-git form__icon"></i></div>
+          <span class="form__span {{.Infolog.Status}}">{{.Infolog.Message}}</span>
+          <input class="form__input values" type="text" placeholder="Email/Nickname" name="identifiant" id="email" required />
+          <input class="form__input values" type="password" placeholder="Password" name="password" id="password" required />
+          <input type="submit" class="form__button button submit switch-button-signin" name="signin" value="SIGN IN" />
+        </form>
+      </div>
+      <div class="switch" id="switch-cnt">
+        <div class="switch__circle"></div>
+        <div class="switch__circle switch__circle--t"></div>
+        <div class="switch__container" id="switch-c1">
+          <h2 class="switch__title title">Welcome Back !</h2>
+          <p class="switch__description description">
+            To keep connected with us please login with your personal info
+          </p>
+          <button class="switch__button button switch-btn">SIGN IN</button>
+        </div>
+        <div class="switch__container is-hidden" id="switch-c2">
+          <h2 class="switch__title title">Hello Friend !</h2>
+          <p class="switch__description description">
+            Enter your personal details and start journey with us
+          </p>
+          <button class="switch__button button switch-btn">SIGN UP</button>
+        </div>
+      </div>
+    </div>
+    <!-- partial:index.partial.html -->
+    <div class="form-structor">
+      <form method="POST" class="signup" id="form-a">
+        <h2 class="form-title" id="signup"><span>or</span>Sign up</h2>
+        <div>
+          <span class="form__span mobile_info {{.Infolog.Status}}">{{.Infolog.Message}}</span>
+          <div class="form-holder">
+            <input type="text" class="input values" placeholder="Nickname" name="identifiant" required />
+            <input type="number" class="input values" name="age" id="age" placeholder="Age" required />
+            <div class="input radio">
+              <input type="radio" id="male" name="gender" value="male" />
+              <label for="male">Homme</label><br />
+              <input type="radio" id="female" name="gender" value="female" />
+              <label for="female">Femme</label><br />
+              <input type="radio" id="other" name="gender" value="other" />
+              <label for="other">Autre</label><br />
+            </div>
+            <input type="first-name" class="input values" name="first-name" id="first-name" placeholder="First Name"
+              required />
+            <input type="last-name" class="input values" name="last-name" id="last-name" placeholder="Last Name" required />
+            <input type="email" class="input" placeholder="Email" name="email" required />
+            <input type="password" class="input values" placeholder="Password" name="password" required />
+          </div>
+        </div>
+        <button type="submit" class="submit-btn" name="signup" value="SIGN UP">
+          Sign up
+        </button>
+      </form>
+      <div class="login slide-up">
+        <form method="POST" class="center myForm" id="form-b">
+          <h2 class="form-title" id="login"><span>or</span>Log in</h2>
+          <div>
+            <span class="form__span mobile_info {{.Infolog.Status}}">{{.Infolog.Message}}</span>
+            <div class="form-holder">
+              <input type="text" class="input values" placeholder="Email/Nickname" name="identifiant" required />
+              <input type="password" class="input values" placeholder="Password" name="password" required />
+            </div>
+          </div>
+          <button type="submit" class="submit-btn" name="signin" value="SIGN IN">
+            Log in
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+  
+  
+  <div class="conversation">
+    
+  </div>
+  
+  
+  <script src="/web/static/js/mobile.js"></script>
+  <script type="module" src="/web/static/js/login.js"></script>
+  <script type="module" src="/web/static/js/aps.js"></script>
+  <script type="module" src="/web/static/js/module.js"></script>
+  <script type="module" src="/web/static/js/config.js"></script>
+  <script type="module" src="/web/static/js/utils.js"></script>
+  <script src="/web/static/js/Loginform.js?v=1.1"></script>
+</body>
+
+</html>

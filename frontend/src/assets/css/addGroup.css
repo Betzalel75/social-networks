@@ -1,0 +1,122 @@
+.add-group-overlay {
+  display: none;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  transition: 1s;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+}
+.add-group-modal {
+  position: absolute;
+  z-index: 30;
+  left: -201%;
+  /* transition: 1s; */
+  /* animation: moveLeft 0.9s; */
+
+  max-width: 800px;
+  /* background-color: white; */
+  background-color: #272a3a;
+  width: 30vw;
+  height: 80vh;
+  min-width: 500px;
+  border-radius: 10px;
+
+  & .header {
+    display: flex;
+    & .title {
+      flex: 1;
+      color: white;
+      font-size: 20px;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    & button {
+      width: 30px;
+      height: 30px;
+      margin: 10px;
+      color: white;
+      border-radius: 50%;
+      background-color: transparent;
+      border: 2px solid white;
+      cursor: pointer;
+      &:hover {
+        color: black;
+        background-color: white;
+      }
+    }
+  }
+  .body {
+    padding: 10px;
+    & label.input-container {
+      display: block;
+      margin-top: 20px;
+      & input {
+        width: 100%;
+        margin-top: 10px;
+        padding: 5px 10px 5px 10px;
+        border-radius: 5px;
+        &:focus {
+          box-shadow: 0 0 20px rgba(27, 134, 249, 0.3);
+        }
+      }
+      textarea {
+        width: 100%;
+        min-height: 200px;
+        margin-top: 10px;
+        padding: 5px 10px 5px 10px;
+        border-radius: 5px;
+        border: none;
+        &:focus {
+          box-shadow: 0 0 20px rgba(27, 134, 249, 0.3);
+        }
+      }
+    }
+    .button-container {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      button {
+        margin: auto;
+        background: #1b86f9;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        border-radius: 5px;
+        box-shadow: 0 0 20px #1b86f9;
+      }
+    }
+  }
+}
+
+.add-group-modal.activated {
+  animation: moveRight 0.9s;
+
+  & + .add-group-overlay {
+    display: block;
+  }
+}
+
+@keyframes moveRight {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes moveLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-1000%);
+  }
+}
