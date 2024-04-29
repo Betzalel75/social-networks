@@ -442,6 +442,15 @@ export default {
         });
       });
     },
+    async verificateMember(){
+        let groupId = this.$store.getters.idGroupe
+        let ok= await this.isGroupMember(groupId);
+        if(ok){ // User is member in group
+            this.go();
+        }else{
+            this.$router.push({ name: 'Errors' }); // This should work
+        }
+    },
     toggleFiltre(event) {
       event.preventDefault();
       // Toggler l'élément suivant avec l'ID 'notification'
@@ -466,7 +475,8 @@ export default {
     },
   },
   mounted() {
-    this.go();
+    // this.go();
+    this.verificateMember();
   },
 };
 </script>

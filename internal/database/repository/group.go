@@ -38,6 +38,25 @@ func GetGroups(db *sql.DB) ([]model.Group, error) {
 	return groups, nil
 }
 
+func GetGroupByGroupID(db *sql.DB, groupId string) (model.Group, error) {
+	querySQL := `SELECT group_id, group_title, group_desc, group_owner, group_users, created_at
+	             FROM groups
+				 WHERE group_id = ?;`
+	var group model.Group
+	err := db.QueryRow(querySQL, groupId).Scan(&group.GroupId, &group.GroupTitle, &group.GroupDesc, &group.GroupOwner, &group.GroupUsers, &group.CreatedAt)
+
+	if err == sql.ErrNoRows {
+		tools.Log("group avec l'ID introuvable: " + groupId)
+	}
+
+	if err != nil {
+		tools.Log(err)
+		return model.Group{}, err
+	}
+
+	return group, nil
+}
+
 // AddMemberToGroup ajoute un membre à un groupe à partir de l'ID du groupe
 func AddMemberToGroup(db *sql.DB, groupID, userID string) error {
 	// Vérifier si le groupe existe

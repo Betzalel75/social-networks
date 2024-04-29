@@ -3,7 +3,9 @@ package handler
 import (
 	"encoding/json"
 	"forum/internal/app"
+	bd "forum/internal/database"
 	model "forum/internal/models"
+	repo "forum/internal/database/repository"
 	"forum/internal/tools"
 	"log"
 	"path/filepath"
@@ -56,11 +58,14 @@ func (server *WsServer) Run() {
 type WebSocketHandler func(*WsServer, []byte)
 
 var webSocketEndPoint = map[string]WebSocketHandler{
-	"typing":   func(server *WsServer, comment []byte) { server.sendTyping(comment) },
-	"message":  func(server *WsServer, comment []byte) { server.sendPrivateMessage(comment) },
-	"comment":  func(server *WsServer, comment []byte) { server.broadcastToClients(comment) },
-	"NewPost":  func(server *WsServer, comment []byte) { server.broadcastPostToClients(comment) },
-	"addGroup": func(server *WsServer, comment []byte) { server.addGroup(comment) },
+	"typing":          func(server *WsServer, comment []byte) { server.sendTyping(comment) },
+	"message":         func(server *WsServer, comment []byte) { server.sendPrivateMessage(comment) },
+	"comment":         func(server *WsServer, comment []byte) { server.broadcastToClients(comment) },
+	"NewPost":         func(server *WsServer, comment []byte) { server.broadcastPostToClients(comment) },
+	"addGroup":        func(server *WsServer, comment []byte) { server.addGroup(comment) },
+	"messageRoom":     func(server *WsServer, comment []byte) { server.sendPrivateMessage(comment) },
+	"joinGroup":       func(server *WsServer, comment []byte) { server.sendJoinGroupNotification(comment) },
+	"acceptJoinGroup": func(server *WsServer, comment []byte) { server.acceptJoinGroupNotification(comment) },
 }
 
 func (server *WsServer) handleEndPoint(value string, comment []byte) {
@@ -116,7 +121,7 @@ func (server *WsServer) broadcastToClients(comment []byte) {
 	submit := commentMessage.Submit
 	senderId := commentMessage.SenderID
 	photo := commentMessage.Image
-	
+
 	commentId := tools.NeewId()
 	go func() {
 		image := ""
@@ -300,8 +305,6 @@ func (server *WsServer) addGroup(p []byte) {
 		return
 	}
 
-	// group := model.Group{GroupTitle: title, GroupDesc: desc, GroupOwner: ownerID}
-
 	group, err := app.AddGroup(title, desc, ownerID)
 	if err != nil {
 		tools.Log(err)
@@ -315,5 +318,95 @@ func (server *WsServer) addGroup(p []byte) {
 	}
 	for client := range server.clients {
 		client.send <- groupData
+	}
+}
+
+/*----------------------------------------------------/
+======================================================
+/----------------------------------------------------*/
+
+func (server *WsServer) sendJoinGroupNotification(p []byte) {
+
+	var data map[string]interface{}
+	if err := json.Unmarshal(p, &data); err != nil {
+		tools.Log(err)
+		return
+	}
+
+	notifType, ok := data["notifType"].(string)
+	if !ok {
+		err := "notifType manquant ou invalide"
+		tools.Log(err)
+		return
+	}
+	category, ok := data["category"].(string)
+	if !ok {
+		err := "category manquant ou invalide"
+		tools.Log(err)
+		return
+	}
+	idGroupe, ok := data["idGroupe"].(string)
+	if !ok {
+		err := "idGroupe manquant ou invalide"
+		tools.Log(err)
+		return
+	}
+	idUser, ok := data["idUser"].(string)
+	if !ok {
+		err := "idUser manquant ou invalide"
+		tools.Log(err)
+		return
+	}
+	db := bd.GetDB()
+	group, err := repo.GetGroupByGroupID(db, idGroupe)
+	if err != nil {
+		tools.Log(err)
+		return
+	}
+	app.AddNotification(idUser, group.GroupOwner, notifType, category, idGroupe)
+}
+
+func (server *WsServer) acceptJoinGroupNotification(p []byte) {
+
+	var data map[string]interface{}
+	if err := json.Unmarshal(p, &data); err != nil {
+		tools.Log(err)
+		return
+	}
+
+	notificationID, ok := data["notificationID"].(string)
+	if !ok {
+		err := "notificationID manquant ou invalide"
+		tools.Log(err)
+		return
+	}
+	sourceID, ok := data["sourceID"].(string)
+	if !ok {
+		err := "sourceID manquant ou invalide"
+		tools.Log(err)
+		return
+	}
+	senderID, ok := data["senderID"].(string)
+	if !ok {
+		err := "senderID manquant ou invalide"
+		tools.Log(err)
+		return
+	}
+	db := bd.GetDB()
+	_, err := repo.GetGroupByGroupID(db, sourceID)
+	if err != nil {
+		tools.Log("Group not found")
+		tools.Log(err)
+		return
+	}
+	err = repo.AddMemberToGroup(db, sourceID, senderID)
+	if err != nil {
+		tools.Log(err)
+		return
+	}
+	err = repo.UpdateNotification(db, notificationID, true)
+	if err != nil {
+		tools.Log(err)
+		return
 	}
 }

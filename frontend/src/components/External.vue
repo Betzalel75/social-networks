@@ -44,7 +44,7 @@ export default {
           cookie: this.getCookieValue("session"),
           groupID: this.idGroupe,
           receiverID: id,
-          category: "inscription",
+          category: "invitation",
         };
         const options = {
           method: "POST",
@@ -69,7 +69,7 @@ export default {
         }
 
         const data = await response.json();
-        console.log(data);
+        return data;
         // this.$store.commit("setExternal", data);
       } catch (error) {
         console.error("Error fetching data:", error);

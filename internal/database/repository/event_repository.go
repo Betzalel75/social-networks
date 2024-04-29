@@ -78,3 +78,27 @@ func AddMemberToEventMembers(db *sql.DB, eventID, userID string) error {
 
 	return nil
 }
+
+// Get event members by eventID
+func GetEventMembersByEventID(db *sql.DB, eventID string) ([]string, error) {
+	// Vérifier si le groupe existe
+  var existingeventID string
+  err := db.QueryRow("SELECT event_id FROM event_members WHERE event_id = ?", eventID).Scan(&existingeventID)
+  if err != nil {
+    if errors.Is(err, sql.ErrNoRows) {
+      return nil, errors.New("l'evenement n'existe pas")
+    }
+    return nil, err
+  }
+
+  // Récupérer les membres du groupe
+  var groupUsers string
+  err = db.QueryRow("SELECT user_id FROM event_members WHERE event_id = ?", eventID).Scan(&groupUsers)
+  if err != nil {
+    return nil, err
+  }
+
+  // Séparer la chaîne des membres en un tableau de membres
+	members := strings.Split(groupUsers, ",")
+  return members, nil
+}

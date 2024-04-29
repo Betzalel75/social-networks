@@ -1,0 +1,60 @@
+.join-popup {
+    position: fixed;
+    top: -150px;
+    left: 50vw;
+    background-color: #373e57;
+    min-width: 300px;
+    min-height: 100px;
+    transform: translateX(-50%);
+    transition: 1s;
+    border-radius: 10px;
+    padding: 10px;
+    visibility: hidden;
+    &.active {
+        top: 10px;
+        visibility: visible;
+    }
+    & p {
+        color: gray;
+    }
+    & hr {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        height: 1px;
+        border: none;
+        background-color: gray;
+    }
+    & .btn-containers {
+        text-align: right;
+
+        & button {
+            border-radius: 5px;
+            border: none;
+            padding: 5px;
+            margin-left: 10px ;
+            min-width: 70px;
+            cursor: pointer;
+            &.primary{
+                background-color: #1b86f9;
+                color: white;
+            }
+            &.secondary{
+                background-color: gray;
+                color: white;
+            }
+            &.sent{
+                background-color: green;
+                color: white;
+            }
+        }
+    }
+}
+& .join-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    visibility: visible;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+}

@@ -10,10 +10,6 @@ func (room *Room) GetName() string {
 	return room.Name
 }
 
-// func (room *Room) GetPrivate() bool {
-// 	return room.Private
-// }
-
 func (server *WsServer) findRoomByName(name string) *Room {
 	var foundRoom *Room
 	for room := range server.rooms {

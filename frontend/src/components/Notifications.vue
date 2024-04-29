@@ -6,16 +6,16 @@
     </div>
     <div class="nott-list">
       <!-- 
-      category
-      email
-      senderID
-      type
-      username
-      photo
-      created_at
-      groupID
-      notifID
-      -->
+          category
+          email
+          senderID
+          type
+          username
+          photo
+          created_at
+          groupID
+          notifID
+          -->
       <div v-for="(data, index) in notifications" :key="index">
         <div class="notfication-details">
           <div class="noty-user-img">
@@ -30,9 +30,9 @@
           </div>
           <div class="container-buttons" style="display: none;" v-if="data.category !='post'">
             <button class="accept-button"
-              @click="reponse(data.senderID, data.groupID,data.notifID, 'accept')">Accepter</button>
+              @click="reponse(data.senderID, data.groupID,data.notifID,data.category, 'accept')">Accepter</button>
             <button class="reject-button"
-              @click="reponse(data.senderID, data.groupID,data.notifID, 'reject')">Refuser</button>
+              @click="reponse(data.senderID, data.groupID,data.notifID,data.category, 'reject')">Refuser</button>
           </div>
           <!--  -->
           <div class="container-buttons" style="display: none;" v-if="data.category =='post'">
@@ -84,6 +84,8 @@ export default {
           return "a créé un nouvel événement";
         case "inscription":
           return "veut intégrer votre groupe";
+        case "invitation":
+          return "vous invite à intégrer un groupe";
         default:
           return "";
       }
@@ -97,13 +99,13 @@ export default {
       });
     },
     // Méthode pour accepter une notification
-    async reponse(senderID, groupID, notifID, responseType) {
+    async reponse(senderID, groupID, notifID, category, responseType) {
       try {
         const vals = {
           cookie: this.getCookieValue("session"),
           groupID: groupID,
           senderID: senderID,
-          category: "inscription",
+          category: category,
           type: responseType,
           notifID: notifID,
         };
@@ -130,8 +132,7 @@ export default {
         }
 
         const data = await response.json();
-        console.log(data);
-        // this.$store.commit("setExternal", data);
+        return data
       } catch (error) {
         console.error("Error fetching data:", error);
         this.$router.push("/errors");

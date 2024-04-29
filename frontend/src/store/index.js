@@ -32,6 +32,7 @@ const state = reactive({
     idGroupe: "",
     listGroups: [],
     notifs:[],
+    showJoinGroupPopup: false,
     showAllNotifications : false, // Show all notifications
     external : [],
     lock: false,
@@ -174,6 +175,9 @@ const mutations = {
     setNotifs(state, notifs) {
         state.notifs = notifs;
     },
+    showJoinGroupPopup(state,bool) {
+        state.showJoinGroupPopup = bool;
+    },
     setShowAllNotifications(state, showAllNotifications) {
         state.showAllNotifications = showAllNotifications;
     },
@@ -272,6 +276,7 @@ const getters = {
     showAllNotifications: state => state.showAllNotifications,
     external: state => state.external,
     lock: state => state.lock,
+    showJoinGroupPopup: state => state.showJoinGroupPopup,
 }
 
 

@@ -26,8 +26,6 @@ const app = {
     },
     sendRoomMessage(event) {
       const parent = event.target.parentNode
-      alert("room: ",event.target);
-      return false;
       const containerChatElement = parent.closest(".container-chat");
       const idUser = containerChatElement.getAttribute("id");
       const message_id_chat = idUser.split("message-list-").pop();
@@ -47,6 +45,7 @@ const app = {
           sender: store.getters.nickName.toLowerCase(),
           senderID: store.getters.localID,
           receiverID: userId, // id of room
+          submit: "Send message",
         };
         store.dispatch("sendMessage", data);
         room.newMessage = "";
@@ -176,7 +175,6 @@ const app = {
       if (this.getToken("session")) {
         store.dispatch("sendMessage", data);
       } else {
-        console.log("cookie not found");
         myMixin.methods.sayonara();
       }
     },
@@ -196,7 +194,6 @@ const app = {
     },
     newPost(datas) {
       if (datas.type == "NewPost") {
-        console.log(datas);
         if (datas.name !== store.getters.nickName.toLowerCase()) {
           const bell = document.getElementById("notification-bell");
           bell.classList.add("ring");

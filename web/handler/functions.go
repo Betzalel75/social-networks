@@ -1071,7 +1071,8 @@ func eventHandler(w http.ResponseWriter, r *http.Request, ws *WsServer) {
 			tools.ResponseJSON(w, http.StatusBadRequest, data)
 			return
 		}
-		event.EventID = tools.NeewId()
+		eventID := tools.NeewId()
+		event.EventID = eventID
 		event.Title = titre
 		event.Description = description
 		event.Date = date
@@ -1101,7 +1102,7 @@ func eventHandler(w http.ResponseWriter, r *http.Request, ws *WsServer) {
 		}
 
 		for _, id := range members {
-			app.AddNotification(userID, id, "private", "event", idGroup)
+			app.AddNotification(userID, id, "private", "event", eventID)
 		}
 
 		tools.ResponseJSON(w, http.StatusCreated, "Event Created")
@@ -1471,7 +1472,6 @@ func responseForInvit(w http.ResponseWriter, r *http.Request, wsServer *WsServer
 		tools.ResponseJSON(w, http.StatusInternalServerError, data)
 		return
 	}
-	tools.Debogage(data.Category)
 
 	switch data.Category {
 	case "follow":

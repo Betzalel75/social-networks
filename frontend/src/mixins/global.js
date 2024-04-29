@@ -168,17 +168,6 @@ const myMixin = {
       }
       router.push(url.toLowerCase());
     },
-    getGroupe(e) {
-      e.preventDefault();
-      const atr = e.target.getAttribute("data-id");
-      store.commit("setIdGroupe", atr);
-      const title = e.target
-        .closest(".user")
-        .querySelector(".username span")
-        .textContent.trim();
-      store.commit("setNickNameGroupe", title);
-      router.push("/groups");
-    },
     async getProfil(event) {
       event.preventDefault();
       const headerchat = event.target;
@@ -418,6 +407,46 @@ const myMixin = {
           nextNotificationElement.style.display === "" ? "none" : "";
       }
     },
+    async getGroupe(e, group) {
+      e.preventDefault();
+      let ok = await this.isGroupMember(group.GroupId);
+      if (ok) {
+        // S'il es membre
+        const atr = e.target.getAttribute("data-id");
+        store.commit("setIdGroupe", atr);
+        const title = e.target
+          .closest(".user")
+          .querySelector(".username span")
+          .textContent.trim();
+        store.commit("setNickNameGroupe", title);
+        router.push("/groups");
+      } else {
+        // S'il n'est pas membre
+        store.commit("setIdGroupe", group.GroupId);
+        store.commit("setNickNameGroupe", group.GroupTitle);
+        store.commit("showJoinGroupPopup", true);
+      }
+    },
+    isGroupMember(groupId) {
+      const idUser = store.getters.localID.trim();
+      return new Promise((resolve, reject) => {
+        utils.methods
+          .fetchData("/getmembers", groupId)
+          .then((response) => {
+            let member = response.members.find(
+              (member) => member.UserID === idUser
+            );
+            if (member) {
+              // user found in group members
+              resolve(true);
+            } else {
+              // user not found in group members
+              resolve(false);
+            }
+          })
+          .catch(() => reject("Error getting members"));
+      });
+    },
     // Dynamiser la couverture en fonction de la photo de profile
     extractColors() {
       const img = this.$refs.profileImage;
@@ -449,9 +478,8 @@ const myMixin = {
       b = Math.floor(b / (imageData.length / 4));
 
       this.dominantColor = `rgb(${r}, ${g}, ${b})`;
-    },    
+    },
   },
 };
 
 export default myMixin;
-

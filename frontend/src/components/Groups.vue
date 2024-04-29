@@ -3,10 +3,11 @@
     <div class="title-container">
       <div class="side-title">GROUPS</div>
       <AddGroup />
+      <JoinGroupPopup />
     </div>
     <div v-for="(group, index) in groups" :key="index">
       <div class="user">
-        <img src="https://picsum.photos/200" alt="" class="user-img" :data-id="group.GroupId" @click="getGroupe($event);"/>
+        <img src="https://picsum.photos/200" alt="" class="user-img" :data-id="group.GroupId" @click="getGroupe($event,group);"/>
         <div class="username">
           <span>
             {{ group.GroupTitle }}
@@ -20,7 +21,9 @@
 
 <script setup>
 import AddGroup from "./AddGroup.vue"
+import JoinGroupPopup from "./JoinGroupPopup.vue"
 </script>
+
 <script>
 import myMixin from "@/mixins/global";
 export default {
@@ -33,22 +36,6 @@ export default {
   computed: {
     groups() {
       return this.$store.getters.listGroups;
-      // Vérifie si listGroups existe et n'est pas null avant de l'utiliser
-      // if (this.$store.getters.listGroups) {
-      //   const id = this.$store.getters.localID;
-      //   return this.$store.getters.listGroups.filter(item => {
-      //     // Vérifie si idUser existe et n'est pas null avant de l'utiliser
-      //     if (id) {
-      //       if (item.GroupUsers) {
-      //         return item.GroupUsers.indexOf(id) >= 0;
-      //       }
-      //       return false; // Retourne false si item.GroupUsers est undefined
-      //     }
-      //     return false; // Retourne false si id n'est pas défini
-      //   });
-      // }
-      // // Retourne un tableau vide si listGroups est null
-      // return [];
     }
   },
 };
