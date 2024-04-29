@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="verouiller">
     <div class="pages box">
       <div class="intro-title">
         This profile is locked
@@ -15,3 +15,12 @@ export default {
 
 }
 </script>
+
+<style scoped>
+.verouiller{
+  position: absolute;
+  z-index: 33;
+  width: 100%;
+  height: 100%;
+}
+</style>

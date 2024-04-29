@@ -4,8 +4,8 @@
       <div class="carousel" v-for="(data, index) in suggestion" :key="index">
         <div class="status_top">
           <div class="user_status" :data-user-id="data.UserID">
-            <router-link
-              to="/profiles?name=all"
+            <a
+              
               href="javascript:void(0);"
               @click="getProfil($event)"
             >
@@ -15,7 +15,7 @@
                 class="user-img"
                 style="cursor: pointer"
               />
-            </router-link>
+            </a>
             <div :class="'username-' + data.UserID">
               {{ data.Name }}
             </div>

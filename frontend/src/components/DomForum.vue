@@ -67,17 +67,21 @@
             </button>
           </div>
           <!-- <div class="composentsForum"> -->
-            <div class="profile" style="max-height: 250px; min-height: 200px">
-            <Suggestion />  
+          <div class="profile" style="max-height: 250px; min-height: 200px">
+            <Suggestion />
             <div class="profile-menu-forum">
-              <a class="public profile-menu-link active" href="/forum?name=all" @click="setActiveLink('all');queryCategory($event);">All Posts</a>
-              <a class="public profile-menu-link" href="/forum?name=Event" @click="setActiveLink('Event');queryCategory($event);">Events</a>
-              <a class="public profile-menu-link" href="/forum?name=General" @click="setActiveLink('General');queryCategory($event);">Generals</a>
-              <a class="public profile-menu-link" href="/forum?name=Issue" @click="setActiveLink('Issue');queryCategory($event);">Issues</a>
+              <a class="public profile-menu-link active" href="/forum?name=all"
+                @click="setActiveLink('all');queryCategory($event);">All Posts</a>
+              <a class="public profile-menu-link" href="/forum?name=Event"
+                @click="setActiveLink('Event');queryCategory($event);">Events</a>
+              <a class="public profile-menu-link" href="/forum?name=General"
+                @click="setActiveLink('General');queryCategory($event);">Generals</a>
+              <a class="public profile-menu-link" href="/forum?name=Issue"
+                @click="setActiveLink('Issue');queryCategory($event);">Issues</a>
             </div>
           </div>
-        <!-- </div> -->
-
+          <!-- </div> -->
+  
           <!-- part all users -->
           <div class="main-container-forum">
             <div class="timeline">
@@ -153,10 +157,10 @@
           <Groups />
           <div class="side-wrapper contacts">
             <div style="
-                        display: grid;
-                        justify-content: center;
-                        margin-bottom: 20px;
-                      ">
+                          display: grid;
+                          justify-content: center;
+                          margin-bottom: 20px;
+                        ">
               <router-link to="/profile?name=all" href="javascript:void(0)" class="status-share"
                 style="text-decoration: none">New Post</router-link>
             </div>
@@ -189,9 +193,9 @@
           </div>
         </div>
         <div class="overlay" @click="
-                    rightSide = false;
-                    leftSide = false;
-                  " :class="{ active: rightSide || leftSide }"></div>
+                      rightSide = false;
+                      leftSide = false;
+                    " :class="{ active: rightSide || leftSide }"></div>
       </div>
     </div>
     <div>
@@ -220,17 +224,22 @@ import utils from "@/mixins/utils";
 import webSocketGo from "@/mixins/websocket";
 import Groups from "./Groups.vue";
 import Notifications from './Notifications.vue';
+import Locked from './Locked.vue';
 </script>
 
 <style scoped>
 @import url("../assets/css/style.css");
 @import url("../assets/css/styles.css");
+.verouiller{
+  position: absolute;
+  z-index: 33;
+}
 </style>
 
 <script>
 export default {
   mixins: [myMixin, app, webSocketGo, utils],
-  components: { Posts, Users, Suggestion, Groups, Notifications },
+  components: { Posts, Users, Suggestion, Groups, Notifications, Locked },
 
   data() {
     return {
@@ -252,6 +261,9 @@ export default {
     },
     avatar() {
       return this.$store.getters.avatar;
+    },
+    lock() {
+      return this.$store.getters.lock;
     },
   },
   cookie: "",

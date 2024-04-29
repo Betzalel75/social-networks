@@ -6,10 +6,10 @@
         <div class="chat-header clearfix">
           <div class="row">
             <div class="col-lg-6">
-              <router-link to="/profiles" href="javascript:void(0);" @click="getProfil($event); quitter($event)"
+              <a  href="javascript:void(0);" @click="getProfil($event); quitter($event)"
                 data-toggle="modal" data-target="#view_info">
                 <img src="../assets/images/default.jpg" alt="avatar" style="cursor: pointer" />
-              </router-link>
+              </a>
               <div class="chat-about">
                 <h2 class="head-discussion"></h2>
                 <small class="typing" style="visibility: hidden">

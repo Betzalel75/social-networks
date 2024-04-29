@@ -64,6 +64,16 @@
               </svg>
             </button>
           </div>
+          <div v-if="showPopup" class="popup">
+            <div class="popup-content">
+              <h2 class="intro-title">Liste des {{indication}}</h2>
+              <!-- <p>Contenu du pop-up...</p> -->
+              <div class="listFollow">
+                <Users :users="listFollowers" />
+              </div>
+              <button @click="showPopup = false" class="status-share" style="margin-top: 1rem;">Fermer</button>
+            </div>
+          </div>
           <div class="profile" style="width: 96%; margin: 20px auto 0 auto; margin-bottom: 5rem;">
             <div class="profile-avatar">
               <img :src="profileImage" ref="profileImage" @load="extractColors" alt="" class="profile-img" />
@@ -75,8 +85,10 @@
                   <div class="section-follow">
                     <div class="profile-name" :data-userId="localID">{{ nickName }}</div>
                     <div class="follows-type">
-                      <a id="number-followers">Followers: {{ nbrFollowers }}</a>
-                      <a id="number-followers">Followed: {{ nbrFollowed }}</a>
+                      <a @click="showPopup = true; listFollowers = followers; indication='Followers';"
+                        class="btn-followers" id="number-followers">Followers: <strong>{{ nbrFollowers }}</strong></a>
+                      <a @click="showPopup = true; listFollowers = followed; indication='Followed';" class="btn-followers"
+                        id="number-followers">Followed: <strong>{{ nbrFollowed }}</strong></a>
                     </div>
                   </div>
                 </div>
@@ -92,6 +104,9 @@
               </div>
               <!--  -->
               <div class="profile-menu">
+                <a class="private profile-menu-link" href="javascript:void(0)/?name=infos"
+                  @click="setActiveLink('infos'); setInfo();">Infos
+                </a>
                 <a class="private profile-menu-link active" href="/profile/?name=all"
                   @click="setActiveLink('all'); queryCategory($event);">All
                   Posts</a>
@@ -191,7 +206,7 @@
                     <div class="status-main content-publication">
                       <textarea class="status-textarea" placeholder="Post Goes Here" name="desc"
                         style="resize: none; width: 95%;" required>
-                                </textarea>
+                                      </textarea>
                       <label for="postimage">
                         <img class="album-photos" id="output" />
                       </label>
@@ -230,6 +245,17 @@
                 </div>
                 <div class="all-posts">
                   <Posts :posts="allPosts" :classeName="classe" :avatarName="avatar" />
+                </div>
+                <div class="pages box infosUser view">
+                  <div class="intro-title" style="font-size: 1.5rem;">Informations</div>
+                  <ul style="font-size: 1.5rem;">
+                    <li><strong>First Name:</strong> {{ infosUser.FirstName }}</li>
+                    <li><strong>Last Name: </strong>{{ infosUser.LastName }}</li>
+                    <li><strong>Nick Name:</strong> {{ infosUser.Username }}</li>
+                    <li><strong>Date of Birth:</strong> {{ infosUser.Age }}</li>
+                    <li><strong>Email:</strong> {{ infosUser.Email }}</li>
+                    <li><strong>About Me:</strong> {{ infosUser.About ? infosUser.About : "Aucune inforation" }}</li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -327,9 +353,9 @@
           </div>
         </div>
         <div class="overlay" @click="
-                    rightSide = false;
-                  leftSide = false;
-                  " :class="{ active: rightSide || leftSide }"></div>
+                          rightSide = false;
+                        leftSide = false;
+                        " :class="{ active: rightSide || leftSide }"></div>
       </div>
     </div>
     <div class="conversation">
@@ -400,8 +426,12 @@ export default {
       followed: [],
       nbrFollowed: "",
       statusProfil: "",
-      profileImage: "", 
+      profileImage: "",
       dominantColor: '#ffffff',
+      showPopup: false,
+      listFollowers: [],
+      indication: "",
+      infosUser: {},
     };
   },
   computed: {
@@ -436,7 +466,7 @@ export default {
           element.parentNode.removeChild(element);
         }
       });
-      this.profileImage = '/src/assets/images/'+this.avatar
+      this.profileImage = '/src/assets/images/' + this.avatar
       const parent = document.querySelector('.content-publication');
       const child = parent.querySelector('.status-textarea');
       child.innerHTML = "";
@@ -446,6 +476,7 @@ export default {
         const data = response.publication;
         this.statusProfil = response.user.StatusProfil;
         this.$store.commit("setAllPosts", data);
+        this.infosUser = response.user;
       }).catch(error => {
         console.error("Erreur lors de la récupération des données :", error);
       });
@@ -462,9 +493,18 @@ export default {
     async getNumbersFollowers() {
       const data = await this.fetchData("/followers");
       this.$store.commit("setNumberFollowers", data.nubers);
-      this.followers = data.users;
-      this.followed = data.followed;
+      if (data.users) {
+        this.followers = data.users;
+      } else {
+        this.followers = [];
+      }
+      if (data.followed) {
+        this.followed = data.followed;
+      } else {
+        this.followed = [];
+      }
       this.nbrFollowed = data.numbersFollowed;
+      console.log(this.followed, this.followers);
     },
   },
   mounted() {

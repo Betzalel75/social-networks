@@ -66,6 +66,16 @@
               </svg>
             </button>
           </div>
+          <div v-if="showPopup" class="popup">
+            <div class="popup-content">
+              <h2 class="intro-title">Liste des {{indication}}</h2>
+              <!-- <p>Contenu du pop-up...</p> -->
+              <div class="listFollow">
+                <Users :users="listFollowers" />
+              </div>
+              <button @click="showPopup = false" class="status-share" style="margin-top: 1rem;">Fermer</button>
+            </div>
+          </div>
           <div class="profile" style="width: 96%; margin: 20px auto 0 auto">
             <div class="profile-avatar">
               <img :src="'/src/assets/images/' + avatarProfile" alt="" class="profile-img" />
@@ -77,8 +87,9 @@
                     {{ nickNameProfile }}
                   </div>
                   <div class="follows-type">
-                    <a id="number-followers">Followers: {{ nbrFollowers }}</a>
-                    <a id="number-followers">Followed: {{ nbrFollowed }}</a>
+                    <a @click="showPopup = true; listFollowers = followers; indication='Followers';"
+                        class="btn-followers" id="number-followers">Followers: <strong>{{ nbrFollowers }}</strong></a>
+                    <a @click="showPopup = true; listFollowers = followed; indication='Followed';" class="btn-followers" id="number-followers">Followed: <strong>{{ nbrFollowed }}</strong></a>
                   </div>
                 </div>
               </div>
@@ -91,26 +102,29 @@
                 </div>
               </div>
               <div class="profile-menu">
+                <a class="private profile-menu-link" href="javascript:void(0)/?name=infos"
+                  @click="setActiveLink('infos'); setInfo();">Infos
+                </a>
                 <a class="private profile-menu-link active" href="/profiles/?name=all" @click="
-                      setActiveLink('all');
-                    queryCategories($event);
-                    ">All Posts</a>
+                          setActiveLink('all');
+                        queryCategories($event);
+                        ">All Posts</a>
                 <a class="private profile-menu-link" href="/profiles/?name=Event" @click="
-                      setActiveLink('Event');
-                    queryCategories($event);
-                    ">Events</a>
+                          setActiveLink('Event');
+                        queryCategories($event);
+                        ">Events</a>
                 <a class="private profile-menu-link" href="/profiles/?name=General" @click="
-                      setActiveLink('General');
-                    queryCategories($event);
-                    ">Generals</a>
+                          setActiveLink('General');
+                        queryCategories($event);
+                        ">Generals</a>
                 <a class="private profile-menu-link" href="/profiles/?name=Issue" @click="
-                      setActiveLink('Issue');
-                    queryCategories($event);
-                    ">Issues</a>
+                          setActiveLink('Issue');
+                        queryCategories($event);
+                        ">Issues</a>
                 <a class="private profile-menu-link" href="/profiles/?name=Liked" @click="
-                      setActiveLink('Liked');
-                    queryCategories($event);
-                    ">Liked Post</a>
+                          setActiveLink('Liked');
+                        queryCategories($event);
+                        ">Liked Post</a>
               </div>
             </div>
   
@@ -158,12 +172,23 @@
                 </div>
               </div>
               <div class="timeline-right">
-                
+  
                 <div class="all-posts">
                   <Posts :posts="datas" :classeName="classe" :avatarName="avatarProfile" />
                   <div v-if="lock">
                     <Locked></Locked>
                   </div>
+                </div>
+                <div class="pages box infosUser view">
+                  <div class="intro-title" style="font-size: 1.5rem;">Informations</div>
+                  <ul style="font-size: 1.5rem;">
+                    <li><strong>First Name:</strong> {{ infosUser.FirstName }}</li>
+                    <li><strong>Last Name: </strong>{{ infosUser.LastName }}</li>
+                    <li><strong>Nick Name:</strong> {{ infosUser.Username }}</li>
+                    <li><strong>Date of Birth:</strong> {{ infosUser.Age }}</li>
+                    <li><strong>Email:</strong> {{ infosUser.Email }}</li>
+                    <li><strong>About Me:</strong> {{ infosUser.About ? infosUser.About : "Aucune inforation" }}</li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -259,9 +284,9 @@
           </div>
         </div>
         <div class="overlay" @click="
-              rightSide = false;
-            leftSide = false;
-            " :class="{ active: rightSide || leftSide }"></div>
+                    rightSide = false;
+                  leftSide = false;
+                  " :class="{ active: rightSide || leftSide }"></div>
       </div>
     </div>
     <div class="conversation">
@@ -287,6 +312,25 @@ import Conversations from "./Conversations.vue";
 @import url("../assets/css/style.css");
 @import url("../assets/css/loginForm.css");
 @import url("../assets/css/styles.css");
+
+/* .cash{
+  margin-top: 0dvh;
+} */
+
+
+.composents {
+  padding-top: 1dvh;
+  /* padding-bottom: 25dvh; */
+}
+
+.profile-avatar {
+  top: -20px;
+}
+
+
+.profile-cover {
+  height: 125px;
+}
 
 .content-publication {
   display: inline;
@@ -342,6 +386,11 @@ export default {
       rightSide: false,
       nbrFollowed: "",
       followed: [],
+      followers: [],
+      infosUser: {},
+      showPopup: false,
+      listFollowers: [],
+      indication: "",
     };
   },
   computed: {
@@ -383,7 +432,7 @@ export default {
       const chatPosition = document.querySelector(".chat-position");
       chatPosition.classList.add("activated");
     },
-   
+
     go() {
       const chatDiv = document.querySelectorAll(".userList");
       chatDiv.forEach((element) => {
@@ -402,6 +451,8 @@ export default {
             this.$store.commit("setLock", true);
           }
           this.$store.commit("setPublicationsUsers", data);
+          console.log(response);
+          this.infosUser = response.user;
         })
         .catch((error) => {
           console.error("Erreur lors de la récupération des données :", error);
@@ -413,7 +464,16 @@ export default {
       this.$store.commit("setNumberFollowers", data.nombre);
       this.$store.commit("setIsFollowing", data.isFollow);
       this.nbrFollowed = data.numbersFollowed;
-      this.followed = data.followed;
+      if (data.follwers) {
+        this.followers = data.follwers;
+      } else {
+        this.followers = [];
+      }
+      if (data.followed) {
+        this.followed = data.followed;
+      } else {
+        this.followed = [];
+      }
     },
   },
   mounted() {

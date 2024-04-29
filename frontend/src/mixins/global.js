@@ -9,6 +9,12 @@ const myMixin = {
     idUser() {
       return store.getters.idUser;
     },
+    iFollow(){
+      return store.getters.isFollowing;
+    },
+    lock() {
+      return this.$store.getters.lock;
+    },
   },
   methods: {
     getCookieValue(cookieName) {
@@ -87,6 +93,22 @@ const myMixin = {
         document
           .querySelector('.profile-menu-link[href^="/forum"]')
           .classList.add("active");
+      }
+      const time = document.querySelector(".timeline-left");
+      if (time && time.classList.contains("view")) {
+        time.classList.remove("view");
+      }
+      const allPosts = document.querySelector(".all-posts");
+      if (allPosts && allPosts.classList.contains("view")) {
+        allPosts.classList.remove("view");
+      }
+      const status_actions = document.querySelector(".status.box");
+      if (status_actions && status_actions.classList.contains("view")) {
+        status_actions.classList.remove("view");
+      }
+      const infosUser = document.querySelector(".infosUser");
+      if (infosUser) {
+        infosUser.classList.add("view");
       }
     },
     colorFeedback(e, side) {
@@ -178,10 +200,15 @@ const myMixin = {
           .split("message-list-")
           .pop()
           .trim();
-        const name = container
-          .querySelector(".head-discussion")
+        const name = container.querySelector(".head-discussion")
           .textContent.trim();
-        await newFunction(name, idUser);
+        newFunction(name, idUser).then(() => {
+          if (this.iFollow || !this.lock) {
+            router.push("/profiles?name=all");
+          }else{
+            alert("profile is locked");
+          }
+        });
         return;
       }
       let parent = headerchat.closest(".group-M");
@@ -197,7 +224,11 @@ const myMixin = {
               .querySelector(`.username-${idUser}`)
               .textContent.trim();
             await newFunction(name, idUser);
-            router.push("/profiles?name=all");
+            if (this.iFollow || !this.lock) {
+              router.push("/profiles?name=all");
+            }else{
+              alert("profile is locked");
+            }
           }
         } else {
           const idUser = headerchat.getAttribute("data-user-id").trim();
@@ -208,7 +239,11 @@ const myMixin = {
               .querySelector(`.username-${idUser}`)
               .textContent.trim();
             await newFunction(name, idUser);
-            router.push("/profiles?name=all");
+            if (this.iFollow || !this.lock) {
+              router.push("/profiles?name=all");
+            }else{
+              alert("profile is locked");
+            }
           }
         }
       } else {
@@ -218,6 +253,11 @@ const myMixin = {
           .querySelector(`.username-${idUser}`)
           .textContent.trim();
         await newFunction(name, idUser);
+        if (this.iFollow || !this.lock) {
+          router.push("/profiles?name=all");
+        }else{
+          alert("profile is locked");
+        }
       }
 
       async function newFunction(name, idUser) {
@@ -241,6 +281,11 @@ const myMixin = {
         );
         store.commit("setNumberFollowers", datas.nombre);
         store.commit("setIsFollowing", datas.isFollow);
+        if (!datas.isFollow && datas.status !=="public") {
+          store.commit("setLock", true)
+        }else{
+          store.commit("setLock", false)
+        }
       }
     },
     async queryCategories(e) {
@@ -478,6 +523,26 @@ const myMixin = {
       b = Math.floor(b / (imageData.length / 4));
 
       this.dominantColor = `rgb(${r}, ${g}, ${b})`;
+    },
+    setInfo() {
+      const profile = document.querySelector(".profile");
+      profile.style.height = "26dvh";
+      const timelineLeft = document.querySelector(".timeline-left");
+      const allPosts = document.querySelector(".all-posts");
+      if (allPosts) {
+        allPosts.classList.add("view");
+      }
+      if (timelineLeft) {
+        timelineLeft.classList.add("view");
+      }
+      const status_actions = document.querySelector(".status.box");
+      if (status_actions) {
+        status_actions.classList.add("view");
+      }
+      const infosUser = document.querySelector(".infosUser");
+      if (infosUser) {
+        infosUser.classList.remove("view");
+      }
     },
   },
 };

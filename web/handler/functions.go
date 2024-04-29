@@ -165,7 +165,11 @@ func datasProfil(w http.ResponseWriter, r *http.Request, visitedID string) inter
 				// Tri des posts dans l'ordre décroissant
 				sort.Sort(CustomSortByDate(posts))
 			} else {
-				return model.PageInfo{}
+				data := map[string]interface{}{
+					"account":     "private",
+					"publication": model.PageInfo{},
+				}
+				return data
 			}
 		}
 	} else {
@@ -190,14 +194,16 @@ func datasProfil(w http.ResponseWriter, r *http.Request, visitedID string) inter
 	infoUser.Username = user.Username
 	infoUser.LastName = user.LastName
 	infoUser.StatusProfil = user.StatusProfil
+	infoUser.Age = user.Age // Birth date
+	// fmt.Println("infoUser:", infoUser)
 
 	// app.InitPostAndCommentLikeAndDislike(posts)
 	response := map[string]interface{}{
 		"success":     true,
 		"publication": app.InitPostAndCommentLikeAndDislike(posts),
 		"user":        infoUser,
+		"status":      user.StatusProfil,
 	}
-
 	return response
 }
 
@@ -1210,6 +1216,7 @@ func getFollowersInvite(w http.ResponseWriter, r *http.Request, server *WsServer
 			"isFollow":        isFollw,
 			"followed":        usersFollowed,
 			"numbersFollowed": len(usersFollowed),
+			"status":          user.StatusProfil,
 		}
 
 		tools.ResponseJSON(w, http.StatusOK, data)
