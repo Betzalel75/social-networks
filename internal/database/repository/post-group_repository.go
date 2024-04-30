@@ -112,15 +112,15 @@ func GetGroupPostsByCategoryName(db *sql.DB, categoryName string) ([]model.Post,
 }
 
 // GetPostsByCategoryAndUser retrieves posts with a specific category for a given user.
-func GetGroupPostsByCategoryAndUser(db *sql.DB, categoryName string, userID string) ([]model.Post, error) {
+func GetGroupPostsByCategoryAndUser(db *sql.DB, categoryName string, groupID string) ([]model.Post, error) {
 	querySQL := `
 		SELECT p.post_id, p.group_id, p.user_id, p.title, p.content, p.image, p.likeCount, p.dislikeCount, p.commentCount, p.created_at
 		FROM group_posts p
 		JOIN categories c ON (p.post_id = c.post_id)
-		WHERE (c.name = ? AND p.user_id = ?)
+		WHERE (c.name = ? AND p.group_id = ?)
 		ORDER BY p.created_at DESC;
 	`
-	rows, err := db.Query(querySQL, categoryName, userID)
+	rows, err := db.Query(querySQL, categoryName, groupID)
 	if err != nil {
 		tools.Log(err)
 		return nil, err

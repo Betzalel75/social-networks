@@ -206,7 +206,7 @@
                     <div class="status-main content-publication">
                       <textarea class="status-textarea" placeholder="Post Goes Here" name="desc"
                         style="resize: none; width: 95%;" required>
-                                      </textarea>
+                                        </textarea>
                       <label for="postimage">
                         <img class="album-photos" id="output" />
                       </label>
@@ -353,9 +353,9 @@
           </div>
         </div>
         <div class="overlay" @click="
-                          rightSide = false;
-                        leftSide = false;
-                        " :class="{ active: rightSide || leftSide }"></div>
+                            rightSide = false;
+                          leftSide = false;
+                          " :class="{ active: rightSide || leftSide }"></div>
       </div>
     </div>
     <div class="conversation">
@@ -367,6 +367,7 @@
     <!-- SECTION NOTIFICATION LIST -->
     <Notifications />
     <!-- END -->
+    <Locked />
   </div>
 </template>
 
@@ -409,10 +410,11 @@ import utils from "@/mixins/utils";
 import webSocketGo from "@/mixins/websocket";
 import Notifications from './Notifications.vue';
 import Followers from './CheckFollowers.vue';
+import Locked from './Locked.vue';
 
 
 export default {
-  components: { Posts, Users, Notifications, Followers },
+  components: { Posts, Users, Notifications, Followers, Locked },
   mixins: [myMixin, minxinPost, app, utils, webSocketGo],
   data() {
     return {
@@ -504,7 +506,6 @@ export default {
         this.followed = [];
       }
       this.nbrFollowed = data.numbersFollowed;
-      console.log(this.followed, this.followers);
     },
   },
   mounted() {

@@ -87,9 +87,10 @@
                     {{ nickNameProfile }}
                   </div>
                   <div class="follows-type">
-                    <a @click="showPopup = true; listFollowers = followers; indication='Followers';"
-                        class="btn-followers" id="number-followers">Followers: <strong>{{ nbrFollowers }}</strong></a>
-                    <a @click="showPopup = true; listFollowers = followed; indication='Followed';" class="btn-followers" id="number-followers">Followed: <strong>{{ nbrFollowed }}</strong></a>
+                    <a @click="showPopup = true; listFollowers = followers; indication='Followers';" class="btn-followers"
+                      id="number-followers">Followers: <strong>{{ nbrFollowers }}</strong></a>
+                    <a @click="showPopup = true; listFollowers = followed; indication='Followed';" class="btn-followers"
+                      id="number-followers">Followed: <strong>{{ nbrFollowed }}</strong></a>
                   </div>
                 </div>
               </div>
@@ -106,25 +107,25 @@
                   @click="setActiveLink('infos'); setInfo();">Infos
                 </a>
                 <a class="private profile-menu-link active" href="/profiles/?name=all" @click="
-                          setActiveLink('all');
-                        queryCategories($event);
-                        ">All Posts</a>
+                            setActiveLink('all');
+                          queryCategories($event);
+                          ">All Posts</a>
                 <a class="private profile-menu-link" href="/profiles/?name=Event" @click="
-                          setActiveLink('Event');
-                        queryCategories($event);
-                        ">Events</a>
+                            setActiveLink('Event');
+                          queryCategories($event);
+                          ">Events</a>
                 <a class="private profile-menu-link" href="/profiles/?name=General" @click="
-                          setActiveLink('General');
-                        queryCategories($event);
-                        ">Generals</a>
+                            setActiveLink('General');
+                          queryCategories($event);
+                          ">Generals</a>
                 <a class="private profile-menu-link" href="/profiles/?name=Issue" @click="
-                          setActiveLink('Issue');
-                        queryCategories($event);
-                        ">Issues</a>
+                            setActiveLink('Issue');
+                          queryCategories($event);
+                          ">Issues</a>
                 <a class="private profile-menu-link" href="/profiles/?name=Liked" @click="
-                          setActiveLink('Liked');
-                        queryCategories($event);
-                        ">Liked Post</a>
+                            setActiveLink('Liked');
+                          queryCategories($event);
+                          ">Liked Post</a>
               </div>
             </div>
   
@@ -175,9 +176,6 @@
   
                 <div class="all-posts">
                   <Posts :posts="datas" :classeName="classe" :avatarName="avatarProfile" />
-                  <div v-if="lock">
-                    <Locked></Locked>
-                  </div>
                 </div>
                 <div class="pages box infosUser view">
                   <div class="intro-title" style="font-size: 1.5rem;">Informations</div>
@@ -283,10 +281,7 @@
             </div>
           </div>
         </div>
-        <div class="overlay" @click="
-                    rightSide = false;
-                  leftSide = false;
-                  " :class="{ active: rightSide || leftSide }"></div>
+        <div class="overlay" @click="rightSide = false;leftSide = false;" :class="{ active: rightSide || leftSide }"></div>
       </div>
     </div>
     <div class="conversation">
@@ -298,6 +293,7 @@
     <!-- SECTION NOTIFICATION LIST -->
     <Notifications />
     <!-- END -->
+    <Locked />
   </div>
 </template>
 

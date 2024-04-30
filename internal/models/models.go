@@ -199,6 +199,7 @@ type Publications struct {
 	Private  bool     `json:"private"`
 	Type     string   `json:"type"`
 	Users    []string `json:"users"`
+	GroupID  string   `json:"groupID"`
 }
 
 type MessageData struct {

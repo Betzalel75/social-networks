@@ -209,6 +209,7 @@
       <Notifications />
       <!-- END -->
     </div>
+    <Locked/>
   </div>
 </template>
 
@@ -230,10 +231,6 @@ import Locked from './Locked.vue';
 <style scoped>
 @import url("../assets/css/style.css");
 @import url("../assets/css/styles.css");
-.verouiller{
-  position: absolute;
-  z-index: 33;
-}
 </style>
 
 <script>

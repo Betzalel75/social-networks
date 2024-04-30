@@ -28,13 +28,13 @@ var routes = map[string]RouteHandler{
 	"/get-posts":               allPostHandler,           // Filtre de tous les postes de la partie Forum
 	"/getSectionContent":       getSectionContentHandler, // Filtre de tous les postes de la partie Profile
 	"/getDataProfiles":         getDataProfilesHandler,   // Route pour le profil invite
-	"/get-groupsPosts":         groupsHandler,            // Reccupere post of the group
+	"/groups":                  groupsHandler,            // Reccupere post of the group
 	"/sendInvite":              sendInviteHandler,        // Route pour envoyer une invitation ou une demande
 	"/like":                    likeHandler,
 	"/login":                   loginHandler,
 	"/logout":                  logoutHandler,
 	"/post":                    postHandler,
-	"/post-groupe":             postGroupeHandler,
+	"/post-groups":             postGroupeHandler,
 	"/register":                registerHandler,
 	"/response":                responseForInvit, // Route pour les reponses accept/reject
 	"/settings":                settingHandler,

@@ -37,13 +37,15 @@ func postGroup(w http.ResponseWriter, r *http.Request, dataContent model.Publica
 			return
 		}
 		private := false
-		
-		tools.Debogage(dataContent.Type)
+
+		// tools.Debogage(dataContent.Type)
+		// fmt.Println("users:", user)
 
 		postID := tools.NeewId()
 		post := model.Post{
 			PostID:       postID,
 			UserID:       user.UserID,
+			GroupID:      dataContent.GroupID,
 			Title:        dataContent.Title,
 			Content:      dataContent.Desc,
 			Photo:        user.Photo,
@@ -88,13 +90,16 @@ func postGroup(w http.ResponseWriter, r *http.Request, dataContent model.Publica
 			return
 		}
 
-		// userIDs := allIDs(userID) // Get all user IDs
-		// if !private {
-		// 	for _, id := range userIDs {
-		// 		// Add notification
-		// 		app.AddNotification(userID, id, "public", "post", "aucun")
-		// 	}
-		// }
+		userIDs, err := repo.GetGroupMembers(bd.GetDB(), dataContent.GroupID) // Get all user IDs
+		if err != nil {
+			tools.Log(err)
+		}
+		if !private && err == nil {
+			for _, id := range userIDs {
+				// Add notification
+				app.AddNotification(userID, id, "public", "post", "aucun")
+			}
+		}
 
 		// Créer la catégorie "all" pour le post
 		categorie := model.Category{

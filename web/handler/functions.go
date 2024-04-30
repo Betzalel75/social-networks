@@ -742,7 +742,7 @@ func getDataProfilesHandler(w http.ResponseWriter, r *http.Request, wsServer *Ws
 	tools.ResponseJSON(w, http.StatusOK, content)
 }
 
-// Post du profil invite
+// Post du groupe
 func groupsHandler(w http.ResponseWriter, r *http.Request, wsServer *WsServer) {
 	_, err := app.GetCookie(w, r)
 	if err != nil {
@@ -1596,7 +1596,7 @@ func datasGroup(w http.ResponseWriter, r *http.Request, visitedID string) interf
 		tools.Log(err)
 		return model.PageInfo{}
 	}
-
+	
 	userID, _ := repo.GetUserIDBySession(bd.GetDB(), cookie)
 	follow, err := repo.GetFollowedByUser(bd.GetDB(), userID)
 	data := GetConnection(userID)

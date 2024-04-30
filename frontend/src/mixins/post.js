@@ -10,7 +10,7 @@ const minxinPost = {
     },
   },
   methods: {
-    submitPosts(formData) {
+    submitPosts(formData, url) {
       // Convertir formData en JSON
       store.commit("setPostImage", {});
       const statusForm = document.querySelector(".login100-form-error");
@@ -21,7 +21,7 @@ const minxinPost = {
         method: "POST",
         body: data,
       };
-      fetch("/api/post", options)
+      fetch(`/api${url}`, options)
         .then((response) => response.json())
         .then((data) => {
           if (data.status === "success") {
@@ -72,6 +72,14 @@ const minxinPost = {
     },
     async sendPosts(event) {
       event.preventDefault();
+      var pathArray = window.location.pathname.split('/')[1];
+      
+      let urlPost = "";
+      if (pathArray === "profile") {
+        urlPost = "/post";
+      } else if (pathArray === "groups") {
+        urlPost = "/post-groups";
+      }
       // Sélectionnez toutes les cases à cocher avec le nom "cat"
       var checkboxes = document.querySelectorAll('input[name="cat"]');
       var lis = document.querySelectorAll(".status-menu li");
@@ -93,7 +101,7 @@ const minxinPost = {
         '#postForm textarea[name="desc"]'
       );
       const typePost = formData.get("dropdown");
-      let statusPost;
+      let statusPost = false;
       console.log(typePost);
       if (typePost == "public") {
         statusPost = false;
@@ -200,6 +208,7 @@ const minxinPost = {
         private: statusPost,
         type: typePost,
         users: userSelected,
+        groupID: store.getters.idGroupe
       };
 
       const value = utils.methods.getCookieValue("session");
@@ -210,7 +219,7 @@ const minxinPost = {
       }
       dataPost.cookie = value;
 
-      this.submitPosts(dataPost);
+      this.submitPosts(dataPost, urlPost);
     },
     validPostDesc(text) {
       let RegExp =

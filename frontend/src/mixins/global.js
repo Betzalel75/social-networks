@@ -9,12 +9,15 @@ const myMixin = {
     idUser() {
       return store.getters.idUser;
     },
-    iFollow(){
+    iFollow() {
       return store.getters.isFollowing;
     },
     lock() {
       return this.$store.getters.lock;
     },
+    idGroupe() {
+      return store.getters.idGroupe;
+  },
   },
   methods: {
     getCookieValue(cookieName) {
@@ -192,6 +195,7 @@ const myMixin = {
     },
     async getProfil(event) {
       event.preventDefault();
+      const vr = document.querySelector(".verouiller");
       const headerchat = event.target;
       const container = headerchat.closest(".container-chat");
       if (container) {
@@ -200,13 +204,16 @@ const myMixin = {
           .split("message-list-")
           .pop()
           .trim();
-        const name = container.querySelector(".head-discussion")
+        const name = container
+          .querySelector(".head-discussion")
           .textContent.trim();
         newFunction(name, idUser).then(() => {
           if (this.iFollow || !this.lock) {
             router.push("/profiles?name=all");
-          }else{
-            alert("profile is locked");
+          } else {
+            if (vr && vr.classList.contains('view')) {
+              vr.classList.remove("view");
+            }
           }
         });
         return;
@@ -226,8 +233,10 @@ const myMixin = {
             await newFunction(name, idUser);
             if (this.iFollow || !this.lock) {
               router.push("/profiles?name=all");
-            }else{
-              alert("profile is locked");
+            } else {
+              if (vr && vr.classList.contains('view')) {
+              vr.classList.remove("view");
+            }
             }
           }
         } else {
@@ -241,8 +250,10 @@ const myMixin = {
             await newFunction(name, idUser);
             if (this.iFollow || !this.lock) {
               router.push("/profiles?name=all");
-            }else{
-              alert("profile is locked");
+            } else {
+              if (vr && vr.classList.contains('view')) {
+              vr.classList.remove("view");
+            }
             }
           }
         }
@@ -255,8 +266,10 @@ const myMixin = {
         await newFunction(name, idUser);
         if (this.iFollow || !this.lock) {
           router.push("/profiles?name=all");
-        }else{
-          alert("profile is locked");
+        } else {
+          if (vr && vr.classList.contains('view')) {
+              vr.classList.remove("view");
+            }
         }
       }
 
@@ -264,12 +277,6 @@ const myMixin = {
         const user = store.getters.listUsers.find(function (user) {
           return idUser === user.UserID && user.Name === name.toLowerCase();
         });
-        const photo = user ? user.Photo : "defautl.jpg";
-        store.commit("setAvatarInvite", photo);
-        if (name) {
-          store.commit("setNickNameProfil", utils.methods.capitalize(name));
-        }
-        store.commit("setIdUser", idUser);
         const data = await utils.methods.fetchData("/getDataProfiles", idUser);
         if (!data.publication) {
           store.commit("setLock", true);
@@ -279,12 +286,21 @@ const myMixin = {
           "/getFollowersInvite",
           idUser
         );
-        store.commit("setNumberFollowers", datas.nombre);
-        store.commit("setIsFollowing", datas.isFollow);
-        if (!datas.isFollow && datas.status !=="public") {
-          store.commit("setLock", true)
-        }else{
-          store.commit("setLock", false)
+        // Verification de l'accessibilite du profile
+        if (datas.isFollow || datas.status == "public") {
+          const photo = user ? user.Photo : "defautl.jpg";
+          store.commit("setAvatarInvite", photo);
+          if (name) {
+            store.commit("setNickNameProfil", utils.methods.capitalize(name));
+          }
+          store.commit("setIdUser", idUser);
+          store.commit("setNumberFollowers", datas.nombre);
+          store.commit("setIsFollowing", datas.isFollow);
+        }
+        if (!datas.isFollow && datas.status !== "public") {
+          store.commit("setLock", true);
+        } else {
+          store.commit("setLock", false);
         }
       }
     },
@@ -293,8 +309,6 @@ const myMixin = {
       const url = e.target.getAttribute("href");
       const query = url.split("?")[1];
       const page = url.split("?")[0].split("/")[1];
-
-      console.log(this.idUser);
       if (!query) {
         return;
       }
@@ -304,6 +318,21 @@ const myMixin = {
           this.idUser
         );
         store.commit("setPublicationsUsers", data.publication);
+      }
+      router.push(url.toLowerCase());
+    },
+    queryCatgs(e) {
+      e.preventDefault();
+      const url = e.target.getAttribute("href");
+      const query = url.split("?")[1];
+      const page = url.split("?")[0].split("/")[1];
+      if (!query) {
+        return;
+      }
+      if (page === "groups") {
+        utils.methods.fetchData("/groups?" + query,this.idGroupe).then((data) => {
+          store.commit("setAllPosts", data.publication);
+        });
       }
       router.push(url.toLowerCase());
     },

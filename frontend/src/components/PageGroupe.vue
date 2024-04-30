@@ -141,7 +141,7 @@
     
                                         </span>
                                         <div class="status-main" style="border: none; background-image: url()">
-                                            <img :src="'/src/assets/images/' + avatar" class="status-img" />
+                                            <img src="https://picsum.photos/200" class="status-img" />
                                             <textarea class="status-textarea" placeholder="Title Goes Here"
                                                 style="resize: none" name="title" required></textarea>
     
@@ -149,7 +149,7 @@
                                         <div class="status-main content-publication">
                                             <textarea class="status-textarea" placeholder="Post Goes Here" name="desc"
                                                 style="resize: none; width: 95%;" required>
-                                                                        </textarea>
+                                                                                    </textarea>
                                             <label for="postimage">
                                                 <img class="album-photos" id="output" />
                                             </label>
@@ -175,7 +175,7 @@
                                     </form>
                                 </div>
                                 <div class="all-posts">
-                                    <Posts :posts="datas" :classeName="classe" avatarName="https://picsum.photos/200" />
+                                    <Posts :posts="datas" :classeName="classe" />
                                 </div>
                             </div>
                         </div>
@@ -287,6 +287,7 @@
         <!-- SECTION NOTIFICATION LIST -->
         <Notifications />
         <!-- END -->
+        <Locked />
     </div>
 </template>
 
@@ -368,6 +369,7 @@ import Notifications from './Notifications.vue';
 import External from './External.vue';
 import EventBox from './Event-Box.vue';
 import Event from './Event.vue';
+import Locked from './Locked.vue';
 
 
 
@@ -385,7 +387,7 @@ export default {
       default: "",
     }
   },
-  components: { Posts, Users, GroupeMembres, Notifications, External, EventBox, Event },
+  components: { Posts, Users, GroupeMembres, Notifications, External, EventBox, Event, Locked },
   mixins: [myMixin, minxinPost, app, utils, webSocketGo],
   data() {
     return {
@@ -431,25 +433,25 @@ export default {
       child.innerHTML = "";
       this.$store.commit("resetVisible");
       this.verification().then(() => {
-
         this.fetchData("/getmembers", this.idGroupe).then((members) => {
           this.members = members.members;
           this.$store.commit("setExternal", members.externals);
         });
-        this.fetchData("/get-groupsPosts", this.idGroupe).then((groups) => {
-          this.datas = groups.publication;
-          this.events = groups.events;
-        });
+      });
+      this.fetchData("/groups?all", this.idGroupe).then((groups) => {
+        const data = groups.publication;
+        this.datas = data
+        this.events = groups.events;
       });
     },
-    async verificateMember(){
-        let groupId = this.$store.getters.idGroupe
-        let ok= await this.isGroupMember(groupId);
-        if(ok){ // User is member in group
-            this.go();
-        }else{
-            this.$router.push({ name: 'Errors' }); // This should work
-        }
+    async verificateMember() {
+      let groupId = this.$store.getters.idGroupe
+      let ok = await this.isGroupMember(groupId);
+      if (ok) { // User is member in group
+        this.go();
+      } else {
+        this.$router.push({ name: 'Errors' }); // This should work
+      }
     },
     toggleFiltre(event) {
       event.preventDefault();
