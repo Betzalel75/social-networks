@@ -102,3 +102,21 @@ func GetEventMembersByEventID(db *sql.DB, eventID string) ([]string, error) {
 	members := strings.Split(groupUsers, ",")
   return members, nil
 }
+
+// Get Group by eventID
+func GetGroupByEventID(db *sql.DB, eventID string) (model.Group, error) {
+	querySQL := `SELECT * FROM groups WHERE group_id = (SELECT group_id FROM event WHERE event_id = ?);`
+	row := db.QueryRow(querySQL, eventID)
+
+	var group model.Group
+	err := row.Scan(&group.GroupId, &group.GroupTitle, &group.GroupDesc, &group.GroupOwner, &group.GroupUsers, &group.CreatedAt)
+	if err == sql.ErrNoRows {
+		tools.Log("Groupe avec l'ID introuvable pour l'événement : " + eventID)
+		return model.Group{}, err
+	} else if err != nil {
+		tools.Log(err)
+		return model.Group{}, err
+	}
+
+	return group, nil
+}

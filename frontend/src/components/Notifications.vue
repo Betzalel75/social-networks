@@ -6,16 +6,17 @@
     </div>
     <div class="nott-list">
       <!-- 
-          category
-          email
-          senderID
-          type
-          username
-          photo
-          created_at
-          groupID
-          notifID
-          -->
+            category
+            email
+            senderID
+            type
+            username
+            photo
+            created_at
+            groupID
+            notifID
+            groupName
+            -->
       <div v-for="(data, index) in notifications" :key="index">
         <div class="notfication-details">
           <div class="noty-user-img">
@@ -24,7 +25,7 @@
           <div class="notification-info" @click="show">
             <h3>
               <a href="javascript:void(0)" title="">{{ data.username }}</a><br />
-              {{ message(data.category) }}
+              {{ message(data.category, data.groupName) }}
             </h3><br />
             <span>{{ formatDateTime(data.created_at) }}</span>
           </div>
@@ -74,16 +75,28 @@ export default {
           nextNotificationElement.style.display === "" ? "none" : "";
       }
     },
-    message(category) {
+    message(category, name) {
       switch (category) {
         case "follow":
           return "vous suit";
         case "post":
-          return "a fait une nouvelle publication";
+          var str = "a fait une nouvelle publication";
+          if (name) {
+            str = "a fait une nouvelle publication dans le groupe " + name;
+          }
+          return str;
         case "event":
-          return "a créé un nouvel événement";
+          var str = "a créé un nouvel événement";
+          if (name) {
+            str = "a créé un nouvel événement dans le groupe " + name;
+          }
+          return str;
         case "inscription":
-          return "veut intégrer votre groupe";
+          var str = "veut intégrer votre groupe";
+          if (name) {
+            str = "veut intégrer votre groupe " + name;
+          }
+          return str;
         case "invitation":
           return "vous invite à intégrer un groupe";
         default:

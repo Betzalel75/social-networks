@@ -67,7 +67,7 @@ export default {
             );
           }
         }
-
+        this.privateNotif(id); // send notification
         const data = await response.json();
         return data;
         // this.$store.commit("setExternal", data);

@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"forum/internal/app"
 	bd "forum/internal/database"
-	model "forum/internal/models"
 	repo "forum/internal/database/repository"
+	model "forum/internal/models"
 	"forum/internal/tools"
 	"log"
 	"path/filepath"
@@ -66,6 +66,8 @@ var webSocketEndPoint = map[string]WebSocketHandler{
 	"messageRoom":     func(server *WsServer, comment []byte) { server.sendPrivateMessage(comment) },
 	"joinGroup":       func(server *WsServer, comment []byte) { server.sendJoinGroupNotification(comment) },
 	"acceptJoinGroup": func(server *WsServer, comment []byte) { server.acceptJoinGroupNotification(comment) },
+	"Broadcast":       func(server *WsServer, comment []byte) { server.broadcastGroup(comment) },
+	"Private":         func(server *WsServer, comment []byte) { server.sendPrivateNotification(comment) },
 }
 
 func (server *WsServer) handleEndPoint(value string, comment []byte) {
@@ -75,27 +77,6 @@ func (server *WsServer) handleEndPoint(value string, comment []byte) {
 		return
 	}
 	handlerWebSocket(server, comment)
-}
-
-// func chat room
-func (server *WsServer) handleChat(jsonMessage []byte) {
-	var message Message
-	if err := json.Unmarshal(jsonMessage, &message); err != nil {
-		log.Printf("Error on unmarshal JSON message %s", err)
-	}
-	senderID := message.SenderID
-	for client := range server.clients {
-		if client.ID == senderID {
-			client.chatRoom(message)
-		}
-	}
-}
-func (client *Client) chatRoom(message Message) {
-
-	roomID := message.Target.GetId()
-	if room := client.wsServer.findRoomByID(roomID); room != nil {
-		room.broadcast <- &message
-	}
 }
 
 func (server *WsServer) registerClient(client *Client) {
@@ -364,6 +345,16 @@ func (server *WsServer) sendJoinGroupNotification(p []byte) {
 		return
 	}
 	app.AddNotification(idUser, group.GroupOwner, notifType, category, idGroupe)
+	notif, err := json.Marshal(data)
+	if err != nil {
+		tools.Log(err)
+		return
+	}
+	for client := range server.clients {
+		if client.ID == group.GroupOwner {
+			client.send <- notif
+		}
+	}
 }
 
 func (server *WsServer) acceptJoinGroupNotification(p []byte) {

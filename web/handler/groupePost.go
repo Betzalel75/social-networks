@@ -97,7 +97,7 @@ func postGroup(w http.ResponseWriter, r *http.Request, dataContent model.Publica
 		if !private && err == nil {
 			for _, id := range userIDs {
 				// Add notification
-				app.AddNotification(userID, id, "public", "post", "aucun")
+				app.AddNotification(userID, id, "public", "post", dataContent.GroupID)
 			}
 		}
 

@@ -286,6 +286,7 @@ export default {
   },
   mounted() {
     this.go();
+    this.validNotifications();
   },
 };
 </script>

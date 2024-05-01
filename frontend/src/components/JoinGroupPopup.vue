@@ -48,6 +48,7 @@ export default {
         category: "inscription",
         idGroupe: this.$store.getters.idGroupe,
         idUser: this.$store.getters.localID,
+        name: this.$store.getters.nickName.toLowerCase(),
       };
 
       if (this.getToken("session")) {

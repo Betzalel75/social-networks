@@ -93,6 +93,15 @@ const app = {
         case "NewPost":
           this.newPost(data);
           break;
+        case "Broadcast":
+          this.newPost(data);
+          break;
+        case "Private":
+          this.newPost(data);
+          break;
+        case "joinGroup":
+          this.newPost(data);
+          break;
         case "messageRoom":
           webSocketGo.methods.messageReceive(data);
           break;
@@ -192,13 +201,43 @@ const app = {
         console.error("Erreur lors de l'envoi de la notification:", error);
       }
     },
+    privateNotif(receivers) {
+      const data = {
+        type: "Private",
+        connected: true,
+        cookie: this.getToken("session"),
+        name: store.getters.nickName.toLowerCase(),
+        senderID: store.getters.localID,
+        receivers: receivers,
+      };
+      try {
+        store.dispatch("sendMessage", data);
+      } catch (error) {
+        console.error("Erreur lors de l'envoi de la notification:", error);
+      }
+    },
+    broadcastGroup(groupID) {
+      const data = {
+        type: "Broadcast",
+        connected: true,
+        cookie: this.getToken("session"),
+        name: store.getters.nickName.toLowerCase(),
+        senderID: store.getters.localID,
+        receiverID: groupID,
+      };
+      try {
+        store.dispatch("sendMessage", data);
+      } catch (error) {
+        console.error("Erreur lors de l'envoi de la notification:", error);
+      }
+    },
     newPost(datas) {
-      if (datas.type == "NewPost") {
+      // if (datas.type == "NewPost" || datas.type == "Broadcast" || datas.type == "Private" || datas.type == "joinGroup") {
         if (datas.name !== store.getters.nickName.toLowerCase()) {
           const bell = document.getElementById("notification-bell");
           bell.classList.add("ring");
         }
-      }
+      // };
     },
     notifBell(e) {
       e.preventDefault();

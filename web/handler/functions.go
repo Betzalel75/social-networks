@@ -520,12 +520,6 @@ func GetConnection(idUser string) []model.Connection {
 		}
 		connections = append(connections, connect)
 	}
-	// follow, err := repo.GetFollowedByUser(bd.GetDB(), idUser)
-	// if err != nil {
-	// 	tools.Log(err)
-	// }
-	// // Filtrer les noms
-	// userList := filterNames(connections, follow)
 	return connections
 }
 
@@ -1374,9 +1368,18 @@ func getNotificationHandler(w http.ResponseWriter, r *http.Request, wsServer *Ws
 		}
 
 		usr := make([]map[string]interface{}, 0)
+		groupName := ""
 
 		for _, notif := range notifLists {
 			user, _ := repo.GetUserByID(bd.GetDB(), notif.UserID)
+			if notif.GroupID != "aucun" && notif.Category != "event"{
+				group, _ := repo.GetGroupByGroupID(bd.GetDB(), notif.GroupID)
+        groupName = group.GroupTitle
+			}
+			if notif.Category == "event" {
+				group, _ := repo.GetGroupByEventID(bd.GetDB(), notif.GroupID)
+				groupName = group.GroupTitle
+			}
 
 			userMap := make(map[string]interface{})
 			userMap["username"] = user.FirstName
@@ -1388,6 +1391,8 @@ func getNotificationHandler(w http.ResponseWriter, r *http.Request, wsServer *Ws
 			userMap["created_at"] = notif.CreatedAt
 			userMap["groupID"] = notif.GroupID
 			userMap["notifID"] = notif.NotificationID
+			userMap["groupName"] = groupName
+			userMap["vu"] = notif.Vu
 
 			usr = append(usr, userMap)
 		}

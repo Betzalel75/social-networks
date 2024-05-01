@@ -511,6 +511,7 @@ export default {
   mounted() {
     this.go();
     this.getNumbersFollowers();
+    this.validNotifications();
   },
 };
 </script>

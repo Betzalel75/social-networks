@@ -18,9 +18,9 @@ var routes = map[string]RouteHandler{
 	"/creatEvent":              eventHandler,
 	"/follow":                  followUser,
 	"/followers":               getFollowers,
-	"/getNotification":         getNotificationHandler,
 	"/getFollowersInvite":      getFollowersInvite,
 	"/getmessages":             getMessageHandler,
+	"/getNotification":         getNotificationHandler,
 	"/getsettings":             apiSettingsHandler,
 	"/getprofiledata":          getProfileDataHandler,
 	"/getgroups":               allGroupsHandler,
@@ -34,7 +34,7 @@ var routes = map[string]RouteHandler{
 	"/login":                   loginHandler,
 	"/logout":                  logoutHandler,
 	"/post":                    postHandler,
-	"/post-groups":             postGroupeHandler,
+	"/post-groups":             postGroupeHandler, // Post dans les groups
 	"/register":                registerHandler,
 	"/response":                responseForInvit, // Route pour les reponses accept/reject
 	"/settings":                settingHandler,

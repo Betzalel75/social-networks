@@ -17,7 +17,7 @@ const myMixin = {
     },
     idGroupe() {
       return store.getters.idGroupe;
-  },
+    },
   },
   methods: {
     getCookieValue(cookieName) {
@@ -211,7 +211,7 @@ const myMixin = {
           if (this.iFollow || !this.lock) {
             router.push("/profiles?name=all");
           } else {
-            if (vr && vr.classList.contains('view')) {
+            if (vr && vr.classList.contains("view")) {
               vr.classList.remove("view");
             }
           }
@@ -234,9 +234,9 @@ const myMixin = {
             if (this.iFollow || !this.lock) {
               router.push("/profiles?name=all");
             } else {
-              if (vr && vr.classList.contains('view')) {
-              vr.classList.remove("view");
-            }
+              if (vr && vr.classList.contains("view")) {
+                vr.classList.remove("view");
+              }
             }
           }
         } else {
@@ -251,9 +251,9 @@ const myMixin = {
             if (this.iFollow || !this.lock) {
               router.push("/profiles?name=all");
             } else {
-              if (vr && vr.classList.contains('view')) {
-              vr.classList.remove("view");
-            }
+              if (vr && vr.classList.contains("view")) {
+                vr.classList.remove("view");
+              }
             }
           }
         }
@@ -267,9 +267,9 @@ const myMixin = {
         if (this.iFollow || !this.lock) {
           router.push("/profiles?name=all");
         } else {
-          if (vr && vr.classList.contains('view')) {
-              vr.classList.remove("view");
-            }
+          if (vr && vr.classList.contains("view")) {
+            vr.classList.remove("view");
+          }
         }
       }
 
@@ -330,9 +330,11 @@ const myMixin = {
         return;
       }
       if (page === "groups") {
-        utils.methods.fetchData("/groups?" + query,this.idGroupe).then((data) => {
-          store.commit("setAllPosts", data.publication);
-        });
+        utils.methods
+          .fetchData("/groups?" + query, this.idGroupe)
+          .then((data) => {
+            store.commit("setAllPosts", data.publication);
+          });
       }
       router.push(url.toLowerCase());
     },
@@ -379,8 +381,11 @@ const myMixin = {
           if (response.ok) {
             app.methods.broadcastPosts(); // Envoyer la notification
 
-            response.json().then((data) => {
+            response.json().then(() => {
               // this.$store.commit("setSuggestions", data.users);
+              if ((followType = "follow")) {
+                app.methods.privateNotif(userId);
+              }
             });
           } else {
             console.error("Erreur lors de l'envoi des données");
@@ -468,7 +473,12 @@ const myMixin = {
         // Méthode pour charger les trois premières notifications
         // Get 3 notifications
         utils.methods.fetchData("/getNotification?page=1").then((data) => {
-          console.table(data.notifications);
+          for (const not of data.notifications) {
+            if (!not.vu.Bool) {
+              const bell = document.getElementById("notification-bell");
+              bell.classList.add("ring");
+            };
+          }
           store.commit("setNotifs", data.notifications);
         });
         store.commit("setShowAllNotifications", false);
@@ -572,6 +582,23 @@ const myMixin = {
       if (infosUser) {
         infosUser.classList.remove("view");
       }
+    },
+    // verification de la presence de notifications
+    validNotifications(){
+      utils.methods.fetchData("/getNotification?page=0").then((data) => {
+        let found = false;
+        for (const not of data.notifications) {
+          if (!not.vu.Bool) {
+            found = true;
+          };
+        }
+        if (found) {
+          const bell = document.getElementById("notification-bell");
+          if (bell) {
+            bell.classList.add("ring");
+          }
+        }
+      });
     },
   },
 };

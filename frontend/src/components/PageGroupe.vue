@@ -440,7 +440,9 @@ export default {
       });
       this.fetchData("/groups?all", this.idGroupe).then((groups) => {
         const data = groups.publication;
-        this.datas = data
+        if (data !== null) {
+            this.datas = data;
+        }
         this.events = groups.events;
       });
     },
@@ -479,6 +481,7 @@ export default {
   mounted() {
     // this.go();
     this.verificateMember();
+    this.validNotifications();
   },
 };
 </script>

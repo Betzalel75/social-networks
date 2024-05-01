@@ -10,7 +10,7 @@ const minxinPost = {
     },
   },
   methods: {
-    submitPosts(formData, url) {
+    submitPosts(formData, url, statusPost, users) {
       // Convertir formData en JSON
       store.commit("setPostImage", {});
       const statusForm = document.querySelector(".login100-form-error");
@@ -36,8 +36,22 @@ const minxinPost = {
             /***
             //unshift pour ajouter au debut du tableau.
             ***/
-            app.methods.broadcastPosts();
-            store.commit("addAllPost", post);
+            if (url === "/post") {
+              if (!statusPost) {
+                app.methods.broadcastPosts();
+              }else{
+                app.methods.privateNotif(users);
+              }
+              store.commit("addAllPost", post);
+            } else if (url === "/post-groups") {
+              app.methods.broadcastGroup(store.getters.idGroupe);
+              if (this.datas) {
+                this.datas.unshift(post);
+              }else{
+                this.datas = [];
+                this.datas.unshift(post);
+              }
+            }
           } else if (data.status === "nosuccess") {
             // Gérer l'échec
             if (statusForm.classList.contains("success")) {
@@ -102,7 +116,6 @@ const minxinPost = {
       );
       const typePost = formData.get("dropdown");
       let statusPost = false;
-      console.log(typePost);
       if (typePost == "public") {
         statusPost = false;
       } else {
@@ -208,7 +221,7 @@ const minxinPost = {
         private: statusPost,
         type: typePost,
         users: userSelected,
-        groupID: store.getters.idGroupe
+        groupID: store.getters.idGroupe,
       };
 
       const value = utils.methods.getCookieValue("session");
@@ -219,7 +232,7 @@ const minxinPost = {
       }
       dataPost.cookie = value;
 
-      this.submitPosts(dataPost, urlPost);
+      this.submitPosts(dataPost, urlPost, statusPost, userSelected);
     },
     validPostDesc(text) {
       let RegExp =

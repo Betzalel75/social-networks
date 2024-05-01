@@ -177,7 +177,7 @@ export default {
       } else {
         const err = document.querySelector('.errorEvent');
         err.textContent = "";
-        this.broadcastPosts(); // Envoyer la notification
+        this.broadcastGroup(this.idGroupe); // Envoyer la notification
       }
     },
     async postEvent(url, param) {
