@@ -2,7 +2,7 @@
     <div class="group-M">
         <!--  -->
         <div class="group-chat">
-            <div class="user userList" :data-user-id="idGroupe" @click="selectUser(idGroupe)">
+            <div class="user userList" :data-user-id="idGroupe" @click="selectUser(idGroupe,idGroupe)">
                 <img src="https://picsum.photos/200" alt="" class="user-img" />
                 <div :class="'username-'+idGroupe" style="display: contents; color: lightsteelblue;">
                     Group Chat
@@ -12,8 +12,8 @@
         <!--  -->
         <div>
             <div v-for="(data, index) in users" :key="index">
-                <div @click="getProfil($event)" class="user" :data-user-id="data.UserID">
-                    <img :src="'/src/assets/images/' + data.Photo" alt="" class="user-img" />
+                <div class="user" :data-user-id="data.UserID">
+                    <img :src="'/src/assets/images/' + data.Photo" alt="" class="user-img" @click="getProfil($event)" />
                     <div :class="'username-' + data.UserID" style="display: contents; color: lightsteelblue;">
                         {{ data.Name }}
                         <div :class="'user-status ' + data.Status"></div>

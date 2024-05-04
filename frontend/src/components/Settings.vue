@@ -2,27 +2,12 @@
   <div class="settingPage">
     <div class="limiter">
       <div class="container-login100">
-        <form
-          method="POST"
-          class="wrap-login100"
-          id="form-data"
-          enctype="multipart/form-data"
-        >
+        <form method="POST" class="wrap-login100" id="form-data" enctype="multipart/form-data">
           <div class="login100-pic" data-tilt>
             <div class="profile-avatar-settings">
-              <input
-                type="file"
-                accept="image/*"
-                name="photo"
-                id="fileInput"
-                @change="loadFile($event)"
-              />
+              <input type="file" accept="image/*" name="photo" id="fileInput" @change="loadFile($event)" />
               <label>
-                <img
-                  class="profile-img-settings"
-                  id="output"
-                  :src="'/src/assets/images/' + avatar"
-                />
+                <img class="profile-img-settings" id="output" :src="'/src/assets/images/' + avatar" />
               </label>
             </div>
             <span>Update Avatar</span>
@@ -40,122 +25,55 @@
             </span>
             <!-- <sub></sub> -->
             <!-- normal form -->
-            <div
-              class="wrap-input100 validate-input"
-              data-validate="Valid email is required: ex@abc.xyz"
-            >
+            <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
               <label for="username">Username :</label>
-              <input
-                id="username"
-                class="input100"
-                type="text"
-                name="username"
-                :value="data.User.FirstName"
-              />
+              <input id="username" class="input100" type="text" name="username" :value="data.User.FirstName" />
               <span class="focus-input100"></span>
               <span class="symbol-input100">
                 <i class="fa fa-envelope" aria-hidden="true"></i>
               </span>
             </div>
             <div class="back">
-              <a
-                href="javascript:void(0)"
-                onclick="history.back()"
-                style="text-decoration: none"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="50"
-                  height="50"
-                  viewBox="0 0 24 24"
-                  style="fill: #ffffff"
-                >
-                  <path
-                    d="m12.707 7.707-1.414-1.414L5.586 12l5.707 5.707 1.414-1.414L8.414 12z"
-                  ></path>
-                  <path
-                    d="M16.293 6.293 10.586 12l5.707 5.707 1.414-1.414L13.414 12l4.293-4.293z"
-                  ></path>
+              <a href="javascript:void(0)" onclick="history.back()" style="text-decoration: none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" style="fill: #ffffff">
+                  <path d="m12.707 7.707-1.414-1.414L5.586 12l5.707 5.707 1.414-1.414L8.414 12z"></path>
+                  <path d="M16.293 6.293 10.586 12l5.707 5.707 1.414-1.414L13.414 12l4.293-4.293z"></path>
                 </svg>
               </a>
             </div>
-            <div
-              class="wrap-input100 validate-input"
-              data-validate="Valid email is required: ex@abc.xyz"
-            >
+            <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
               <label for="email">Email :</label>
-              <input
-                id="email"
-                class="input100"
-                type="text"
-                name="email"
-                :placeholder="data.User.Email"
-                disabled="disabled"
-              />
+              <input id="email" class="input100" type="text" name="email" :placeholder="data.User.Email"
+                disabled="disabled" />
               <span class="focus-input100"></span>
               <span class="symbol-input100">
                 <i class="fa fa-envelope" aria-hidden="true"></i>
               </span>
             </div>
-            <div
-              id="existingPassword"
-              class="wrap-input100 validate-input"
-              data-validate="Password is required"
-            >
+            <div id="existingPassword" class="wrap-input100 validate-input" data-validate="Password is required">
               <label for="password">Password :</label>
-              <input
-                id="password"
-                class="input100"
-                type="password"
-                name="pass"
-                placeholder="Password"
-              />
+              <input id="password" class="input100" type="password" name="pass" placeholder="Password" />
               <span class="focus-input100"></span>
               <span class="symbol-input100">
                 <i class="fa fa-lock" aria-hidden="true"></i>
               </span>
             </div>
-            <span
-              ><input
-                style="margin-top: 10px"
-                type="checkbox"
-                id="updateCheckbox"
-                @click="showDiv()"
-              />
-              Update your password</span
-            >
-
+            <span><input style="margin-top: 10px" type="checkbox" id="updateCheckbox" @click="showDiv()" />
+              Update your password</span>
+  
             <!-- update password -->
             <div id="passwordDiv" style="display: none; width: 100%">
-              <div
-                class="wrap-input100 validate-input"
-                data-validate="Password is required"
-              >
+              <div class="wrap-input100 validate-input" data-validate="Password is required">
                 <label for="newPassword">New password :</label>
-                <input
-                  type="password"
-                  class="input100"
-                  id="newPassword"
-                  name="newPassword"
-                  placeholder="New password"
-                />
+                <input type="password" class="input100" id="newPassword" name="newPassword" placeholder="New password" />
                 <span class="focus-input100"></span>
                 <span class="symbol-input100">
                   <i class="fa fa-lock" aria-hidden="true"></i>
                 </span>
               </div>
-              <div
-                class="wrap-input100 validate-input"
-                data-validate="Password is required"
-              >
+              <div class="wrap-input100 validate-input" data-validate="Password is required">
                 <label for="oldPassword">Password :</label>
-                <input
-                  type="password"
-                  class="input100"
-                  id="oldPassword"
-                  name="oldPassword"
-                  placeholder="Password"
-                />
+                <input type="password" class="input100" id="oldPassword" name="oldPassword" placeholder="Password" />
                 <span class="focus-input100"></span>
                 <span class="symbol-input100">
                   <i class="fa fa-lock" aria-hidden="true"></i>
@@ -228,7 +146,7 @@ export default {
       })
         .then((response) => {
           if (!response.ok) {
-            console.error("Reponse : ", response);
+            //error("Reponse : ", response);
             throw new Error("Network response was not ok");
           }
           return response.json();
@@ -262,7 +180,7 @@ export default {
 
           this.$store.commit("setError", Erreur);
           this.$router.push("/errors");
-          console.error("Error during form submission:", error);
+          //error("Error during form submission:", error);
         });
     },
     updateSettings(event) {
@@ -293,7 +211,7 @@ export default {
                 content: base64Content,
               },
             };
-            // console.table(photoFile)
+            // //table(photoFile)
             options.image.name = photoFile.name;
             options.image.lastModified = photoFile.lastModified;
             options.image.lastModifiedDate = photoFile.lastModifiedDate;
@@ -304,7 +222,7 @@ export default {
             this.sendData(file);
           })
           .catch((error) => {
-            console.error("Erreur lors de la lecture du fichier :", error);
+            //error("Erreur lors de la lecture du fichier :", error);
           });
       } else {
         // Aucun fichier sélectionné, envoyez les autres données sans l'image
@@ -364,7 +282,7 @@ export default {
         const data = await response.json();
         return data;
       } catch (error) {
-        console.error("Error fetching settings:", error);
+        //error("Error fetching settings:", error);
         this.$router.push("/errors");
         throw error; // Rethrow the error to let the caller handle it
       }

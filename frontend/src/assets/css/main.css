@@ -308,10 +308,6 @@ textarea {
   flex-wrap: wrap;
   max-width: 600px;
   margin-top: 10px;
-  z-index: 10;
-  position: absolute;
-  left: 15px;
-  top: 100px;
 }
 
 .emoji-list {
@@ -356,7 +352,6 @@ textarea {
 }
 
 .exit {
-  /* position: absolute; */
   cursor: pointer;
   margin-top: 10px;
   margin-left: 10px;
@@ -427,18 +422,6 @@ textarea {
     overflow-x: auto;
   }
 }
-
-/* @media screen and (max-width: 500) {
-  .exit {
-    right: 5px;
-  }
-} */
-
-/* @media screen and (max-width: 600px) {
-  .exit {
-    right: -50%;
-  }
-} */
 
 
 .nosuccess {

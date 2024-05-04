@@ -52,11 +52,17 @@ const utils = {
         }
       }
     },
-    chat(id_message, message, formattedTime, actualUser, messageId) {
+    chat(id_message, message, formattedTime, actualUser, messageId, sender) {
       if (actualUser == "vous") {
-        this.new_message_send(message, formattedTime, messageId);
+        this.new_message_send(message, formattedTime, messageId, sender);
       } else {
-        this.new_message_receive(id_message, message, formattedTime, messageId);
+        this.new_message_receive(
+          id_message,
+          message,
+          formattedTime,
+          messageId,
+          sender
+        );
       }
       if (actualUser == "vous") {
         const chatHistoryElement = document.querySelector("#chatHistory");
@@ -78,12 +84,15 @@ const utils = {
       textarea.innerHTML = html;
       return textarea.value;
     },
-    new_message_send(message, formattedDate, messageId) {
+    new_message_send(message, formattedDate, messageId, sender) {
       const messageList = document.getElementById(`message-list-${messageId}`);
       const conversationList = messageList.querySelector(".messages-bubble");
       const message_to_send = `
             <li class="clearfix">
                 <div class="message other-message float-right">
+                  <strong>
+                    ${sender}
+                  </strong>
                   <p>${message}</p>
                   <span class="message-data-time right">${formattedDate}</span>
               </div>
@@ -95,12 +104,16 @@ const utils = {
       // conversationDiv.appendChild(conversationList);
       this.moveUserToTop(messageId);
     },
-    new_message_receive(id_message, message, formattedDate, messageId) {
+    new_message_receive(id_message, message, formattedDate, messageId, sender) {
       const messageList = document.getElementById(`message-list-${messageId}`);
       const conversationList = messageList.querySelector(".messages-bubble");
       const message_to_receive = `
             <li class="clearfix" id=${id_message}>
-              <div class="message my-message"><p>${message}</p>
+              <div class="message my-message">
+              <strong>
+                ${sender}
+              </strong>
+              <p>${message}</p>
               <span class="message-data-time">${formattedDate}</span>
               </div>
             </li>
@@ -159,7 +172,7 @@ const utils = {
       // Convertit la chaîne JSON en objet JavaScript
       //src
       var content = this.escapeHtml(data.comment);
-      console.table(data)
+      //table(data);
       const comment = `
               <div class="status-main listCommentaire" style="padding-top: 20px; background-color: #272a3a;">
                         <img src="/src/assets/images/${data.photoSrc}" class="status-img"
@@ -316,7 +329,7 @@ const utils = {
         const data = await response.json();
         return data;
       } catch (error) {
-        console.error("Error fetching data:", error);
+        //error("Error fetching data:", error);
         router.push("/errors");
         throw error; // Rejeter l'erreur pour laisser le gestionnaire l'attraper
       }
@@ -327,7 +340,7 @@ const utils = {
 
       // Vérifier si l'utilisateur a été trouvé
       if (!user) {
-        console.error(`L'utilisateur n'a pas été trouvé.`);
+        //error(`L'utilisateur n'a pas été trouvé.`);
         return;
       }
       user.style.backgroundColor = "";
@@ -369,7 +382,7 @@ const utils = {
           }
         })
         .catch((error) => {
-          // console.error("Échec de la mise à jour du statut du message:", error);
+          // //error("Échec de la mise à jour du statut du message:", error);
           // Objet Erreur
           const Erreur = {
             status: error.status,
@@ -378,7 +391,6 @@ const utils = {
 
           this.$store.commit("setError", Erreur);
           router.push("/errors");
-          console.error(error);
         });
     },
     deleteNotif() {
@@ -409,13 +421,13 @@ const utils = {
       try {
         const datas = await this.fetchData("/getmessages");
         if (!datas) {
-          console.error("Fetching messages");
+          //error("Fetching messages");
           return;
         }
         this.range_chat(datas, store.getters.localID);
       } catch (error) {
         // Handle or log the error as needed
-        console.error("Error getting message:", error);
+        //error("Error getting message:", error);
       }
     },
     // Convert the file
@@ -457,12 +469,9 @@ const utils = {
     },
     // Gest Groupe List
     getGroups() {
-      utils.methods
-        .fetchData("/getgroups")
-        .then((response) => {
-          store.commit("setGroup", response);
-        })
-        .catch(console.log);
+      utils.methods.fetchData("/getgroups").then((response) => {
+        store.commit("setGroup", response);
+      });
     },
   },
 };

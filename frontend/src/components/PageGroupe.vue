@@ -89,16 +89,16 @@
                             <img src="/src/assets/images/cover_zone02.jpg" alt="" class="profile-cover" />
                             <div class="group-menu">
                                 <a class="private profile-menu-link active" href="/groups/?name=all"
-                                    @click="setActiveLink('all'); queryCategories($event); toggleLeftSide();">All
+                                    @click="setActiveLink('all'); queryCatgs($event); toggleLeftSide();">All 
                                     Posts</a>
                                 <a class="private profile-menu-link" href="/groups/?name=Event"
-                                    @click="setActiveLink('Event'); queryCategories($event); toggleLeftSide();">Events</a>
+                                    @click="setActiveLink('Event'); queryCatgs($event); toggleLeftSide();">Events</a>
                                 <a class="private profile-menu-link" href="/groups/?name=General"
-                                    @click="setActiveLink('General'); queryCategories($event); toggleLeftSide();">Generals</a>
+                                    @click="setActiveLink('General'); queryCatgs($event); toggleLeftSide();">Generals</a>
                                 <a class="private profile-menu-link" href="/groups/?name=Issue"
-                                    @click="setActiveLink('Issue'); queryCategories($event); toggleLeftSide();">Issues</a>
+                                    @click="setActiveLink('Issue'); queryCatgs($event); toggleLeftSide();">Issues</a>
                                 <a class="private profile-menu-link" href="/groups/?name=Liked"
-                                    @click="setActiveLink('Liked'); queryCategories($event); toggleLeftSide();">Liked
+                                    @click="setActiveLink('Liked'); queryCatgs($event); toggleLeftSide();">Liked
                                     Post</a>
                                 <a class="private profile-menu-link " href="/groups/?name=External"
                                     @click="setActiveLink('External'); toggleFiltre($event);">External Users</a>
@@ -279,9 +279,9 @@
         <div class="conversation">
             <Conversations :ok="false" />
         </div>
-        <div class="chat">
+        <!-- <div class="chat">
             <Chat />
-        </div>
+        </div> -->
         <!-- Event -->
         <Event />
         <!-- SECTION NOTIFICATION LIST -->
@@ -292,7 +292,7 @@
 </template>
 
 <script setup>
-import Chat from "./DomChat.vue";
+// import Chat from "./DomChat.vue";
 
 
 import Posts from "./Posts.vue";

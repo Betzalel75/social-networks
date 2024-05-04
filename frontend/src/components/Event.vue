@@ -10,7 +10,7 @@
       </div>
       <div class="event-body">
         <h1>Formulaire de création d'événements</h1>
-
+  
         <form id="idEvent" method="POST" enctype="multipart/form-data">
           <div>
             <strong class="errorEvent"> </strong>
@@ -205,7 +205,7 @@ export default {
         const data = await response.json();
         return data;
       } catch (error) {
-        console.error("Error fetching data:", error);
+        //error("Error fetching data:", error);
 
         this.$router.push("/errors");
         throw error; // Rejeter l'erreur pour laisser le gestionnaire l'attraper

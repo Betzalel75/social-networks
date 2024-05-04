@@ -107,25 +107,25 @@
                   @click="setActiveLink('infos'); setInfo();">Infos
                 </a>
                 <a class="private profile-menu-link active" href="/profiles/?name=all" @click="
-                            setActiveLink('all');
-                          queryCategories($event);
-                          ">All Posts</a>
+                              setActiveLink('all');
+                            queryCategories($event);
+                            ">All Posts</a>
                 <a class="private profile-menu-link" href="/profiles/?name=Event" @click="
-                            setActiveLink('Event');
-                          queryCategories($event);
-                          ">Events</a>
+                              setActiveLink('Event');
+                            queryCategories($event);
+                            ">Events</a>
                 <a class="private profile-menu-link" href="/profiles/?name=General" @click="
-                            setActiveLink('General');
-                          queryCategories($event);
-                          ">Generals</a>
+                              setActiveLink('General');
+                            queryCategories($event);
+                            ">Generals</a>
                 <a class="private profile-menu-link" href="/profiles/?name=Issue" @click="
-                            setActiveLink('Issue');
-                          queryCategories($event);
-                          ">Issues</a>
+                              setActiveLink('Issue');
+                            queryCategories($event);
+                            ">Issues</a>
                 <a class="private profile-menu-link" href="/profiles/?name=Liked" @click="
-                            setActiveLink('Liked');
-                          queryCategories($event);
-                          ">Liked Post</a>
+                              setActiveLink('Liked');
+                            queryCategories($event);
+                            ">Liked Post</a>
               </div>
             </div>
   
@@ -281,15 +281,16 @@
             </div>
           </div>
         </div>
-        <div class="overlay" @click="rightSide = false;leftSide = false;" :class="{ active: rightSide || leftSide }"></div>
+        <div class="overlay" @click="rightSide = false;leftSide = false;" :class="{ active: rightSide || leftSide }">
+        </div>
       </div>
     </div>
     <div class="conversation">
       <Conversations />
     </div>
-    <div class="chat">
-      <Chat />
-    </div>
+    <!-- <div class="chat">
+        <Chat />
+      </div> -->
     <!-- SECTION NOTIFICATION LIST -->
     <Notifications />
     <!-- END -->
@@ -298,7 +299,7 @@
 </template>
 
 <script setup>
-import Chat from "./DomChat.vue";
+// import Chat from "./DomChat.vue";
 import Posts from "./Posts.vue";
 import Users from "./Users.vue";
 import Conversations from "./Conversations.vue";
@@ -447,11 +448,10 @@ export default {
             this.$store.commit("setLock", true);
           }
           this.$store.commit("setPublicationsUsers", data);
-          console.log(response);
           this.infosUser = response.user;
         })
         .catch((error) => {
-          console.error("Erreur lors de la récupération des données :", error);
+          //error("Erreur lors de la récupération des données :", error);
         });
     },
     // numbers of followers

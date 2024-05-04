@@ -2,14 +2,8 @@ import store from "../store/index";
 import webSocketGo from "./websocket";
 import utils from "./utils";
 import myMixin from "./global";
-import { computed } from "vue";
 
 const app = {
-  // data() {
-  //     return {
-  // ws: store.getters.ws,
-  //     }
-  // },
   computed: {
     rooms() {
       return store.getters.listGroups;
@@ -25,15 +19,15 @@ const app = {
       }
     },
     sendRoomMessage(event) {
-      const parent = event.target.parentNode
+      const parent = event.target.parentNode;
       const containerChatElement = parent.closest(".container-chat");
       const idUser = containerChatElement.getAttribute("id");
       const message_id_chat = idUser.split("message-list-").pop();
       this.sendMessageRoom(message_id_chat.trim());
     },
-    sendMessageRoom(userId) {
+    sendMessageRoom(groupID) {
       // send message to correct room.
-      const messageInput = document.getElementById(`message-input-${userId}`);
+      const messageInput = document.getElementById(`message-input-${groupID}`);
       const content = utils.methods.escapeHtml(messageInput.value);
       if (content !== "") {
         const data = {
@@ -44,11 +38,11 @@ const app = {
           cookie: this.getToken("session"),
           sender: store.getters.nickName.toLowerCase(),
           senderID: store.getters.localID,
-          receiverID: userId, // id of room
+          receiverID: groupID, // id of room
           submit: "Send message",
         };
         store.dispatch("sendMessage", data);
-        room.newMessage = "";
+        messageInput.value = "";
       }
     },
     getToken(cookieName) {
@@ -74,9 +68,7 @@ const app = {
       );
     },
 
-    onWebsocketOpen(event) {
-      // console.log("Connected to WS!", event);
-    },
+    onWebsocketOpen(event) {},
 
     handleNewMessage(event) {
       const data = JSON.parse(event.data);
@@ -109,7 +101,7 @@ const app = {
           this.newGroup(data);
           break;
         default:
-          console.error("Type de données non reconnu :", data.type);
+        //error("Type de données non reconnu :", data.type);
       }
     },
 
@@ -127,27 +119,24 @@ const app = {
               sender: store.getters.nickName.toLowerCase(),
               senderID: store.getters.localID,
               receiverID: userId,
-              Content: content,
+              message: content,
               submit: "Send message",
             };
             if (this.getToken("session")) {
               store.dispatch("sendMessage", data);
               messageInput.value = "";
             } else {
-              console.log("cookie not found");
               myMixin.methods.sayonara();
             }
           }
         } else {
           return false;
         }
-      } else {
-        console.log("Aucun utilisateur sélectionné.");
       }
     },
     sendCommentaire(postID, comment, image) {
       let ext = "";
-      if (image.src !== undefined) { 
+      if (image.src !== undefined) {
         ext = "." + image.name.split(".").pop().toLowerCase();
       }
 
@@ -158,7 +147,7 @@ const app = {
         userName: store.getters.nickName.toLowerCase(),
         image: image,
         photoSrc: store.getters.avatar,
-        srcImage: "comment-"+postID+ext,
+        srcImage: "comment-" + postID + ext,
         comment: comment,
         submit: "Add comment",
         LikeNbr: 0,
@@ -168,7 +157,6 @@ const app = {
       if (this.getToken("session")) {
         store.dispatch("sendMessage", data);
       } else {
-        console.log("cookie not found");
         myMixin.methods.sayonara();
       }
     },
@@ -198,7 +186,7 @@ const app = {
       try {
         store.dispatch("sendMessage", data);
       } catch (error) {
-        console.error("Erreur lors de l'envoi de la notification:", error);
+        //error("Erreur lors de l'envoi de la notification:", error);
       }
     },
     privateNotif(receivers) {
@@ -213,7 +201,7 @@ const app = {
       try {
         store.dispatch("sendMessage", data);
       } catch (error) {
-        console.error("Erreur lors de l'envoi de la notification:", error);
+        //error("Erreur lors de l'envoi de la notification:", error);
       }
     },
     broadcastGroup(groupID) {
@@ -228,15 +216,15 @@ const app = {
       try {
         store.dispatch("sendMessage", data);
       } catch (error) {
-        console.error("Erreur lors de l'envoi de la notification:", error);
+        //error("Erreur lors de l'envoi de la notification:", error);
       }
     },
     newPost(datas) {
       // if (datas.type == "NewPost" || datas.type == "Broadcast" || datas.type == "Private" || datas.type == "joinGroup") {
-        if (datas.name !== store.getters.nickName.toLowerCase()) {
-          const bell = document.getElementById("notification-bell");
-          bell.classList.add("ring");
-        }
+      if (datas.name !== store.getters.nickName.toLowerCase()) {
+        const bell = document.getElementById("notification-bell");
+        bell.classList.add("ring");
+      }
       // };
     },
     notifBell(e) {
@@ -264,7 +252,6 @@ const app = {
       if (this.getToken("session")) {
         store.dispatch("sendMessage", data);
       } else {
-        console.log("cookie not found");
         myMixin.methods.sayonara();
       }
     },
@@ -274,7 +261,6 @@ const app = {
         //     const bell = document.getElementById("notification-bell");
         //     bell.classList.add("ring");
         // }
-        // console.log(store.actions);
         store.commit("addGroup", data);
       }
     },

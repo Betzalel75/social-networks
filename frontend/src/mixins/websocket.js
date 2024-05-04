@@ -81,7 +81,7 @@ const webSocketGo = {
       let actualUser;
       // Obtenir l'heure actuelle
       if (!utils.methods.getCookieValue("session")) {
-        console.error("cookie not set");
+        //error("cookie not set");
         myMixin.methods.sayonara();
         return;
       }
@@ -115,13 +115,14 @@ const webSocketGo = {
         }
       }
       var id_message = message.idMessage;
-      var content = utils.methods.escapeHtml(message.Content);
+      var content = utils.methods.escapeHtml(message.message);
       utils.methods.chat(
         id_message,
         content,
         formattedTime,
         actualUser,
-        messageId
+        messageId,
+        message.sender
       );
     },
     commentaireReceive(datas) {
@@ -147,7 +148,7 @@ const webSocketGo = {
         }
       } else {
         myMixin.methods.sayonara();
-        console.error("cookie has not been");
+        //error("cookie has not been");
         return;
       }
     },
@@ -170,7 +171,6 @@ const webSocketGo = {
     async imageAvatar(e, postID) {
       const element = e.target;
       const formData = new FormData(element);
-      // console.log(formData.get('postimage'));
       const typeFile = formData.get("postimage").type.split("/")[0];
 
       const attribut = element.querySelector(`#output-${postID}`).getAttribute("src");
@@ -273,7 +273,7 @@ const webSocketGo = {
       }
       utils.methods.deleteNotif();
     },
-    selectUser(userId) {
+    selectUser(userId,groupID = null) {
       // alert(userId);
       const parent = document.querySelector(".conversation");
       const ul = parent.querySelector(".messages-bubble");
@@ -319,7 +319,8 @@ const webSocketGo = {
       img.src = srcImage;
       userName = utils.methods.capitalize(userName);
       message.textContent = `${userName}`;
-      this.getMessages(userId);
+      
+      this.getMessages(userId,groupID);
       this.activateDiv(userId);
     },
     check(datas) {
@@ -339,16 +340,20 @@ const webSocketGo = {
         );
       }
     },
-    async getMessages(user_id_chat) {
+    async getMessages(user_id_chat,groupID = null) {
+
+      let url = groupID? '/get-group-messages?groupID='+groupID : "/getmessages"
       try {
-        const datas = await utils.methods.fetchData("/getmessages");
+        const datas = await utils.methods.fetchData(url);
         let messages = []; // Tableau de messages
         if (!datas) {
           return false;
         }
 
+        //log("datas",datas);
         messages = datas.filter(
           (message) =>
+            Boolean(groupID) ||
             message.receiverID === user_id_chat ||
             message.senderID === user_id_chat
         );
@@ -361,25 +366,37 @@ const webSocketGo = {
           store.commit("setMessages_restant", { user_id_chat, messages: [] });
         }
 
+        if (Boolean(groupID)) {
+          messages =  messages.map(msg => {
+            if (msg.receiverID === groupID && msg.senderID !== store.getters.localID) {
+              msg.receiverID = store.getters.localID
+              msg.senderID = groupID
+            }
+            return msg
+          })
+        }
         this.history_message(messages);
 
         store.getters.messages_restant[user_id_chat] =
           this.getNotAddedUsers(messages);
       } catch (error) {
         // Handle or log the error as needed
-        console.error("Error getting message:", error);
+        //error("Error getting message:", error);
       }
     },
-    addMessageToList(id, message, formattedDate, messageId, isSender) {
+    addMessageToList(id, message, formattedDate, messageId, isSender,sender) {
       const messageList = document.getElementById(`message-list-${messageId}`);
       if (messageList) {
         const conversationList = messageList.querySelector(".messages-bubble");
         const messageTemplate = `
             <li class="clearfix" id="${id}">
-              <div class="message ${
-                isSender ? "other-message float-right" : "my-message"
-              }">
-              <p>${message}</p>
+            <div class="message ${
+              isSender ? "other-message float-right" : "my-message"
+            }">
+            <strong>
+              ${sender}
+            </strong>
+            <p>${message}</p>
               <span class="message-data-time ${
                 isSender ? "right" : ""
               }">${formattedDate}</span>
@@ -405,19 +422,21 @@ const webSocketGo = {
               // Si l'utilisateur actuel est le destinataire du message
               this.addMessageToList(
                 `${user.idMessage}`,
-                `${user.Content}`,
+                `${user.message}`,
                 formattedDate,
                 `${user.senderID}`,
-                false
+                false,
+                user.sender
               );
             } else if (user.senderID === store.getters.localID) {
               // Si l'utilisateur actuel est l'expéditeur du message
               this.addMessageToList(
                 `${user.idMessage}`,
-                `${user.Content}`,
+                `${user.message}`,
                 formattedDate,
                 `${user.receiverID}`,
-                true
+                true,
+                user.sender
               );
             }
           }
@@ -453,7 +472,8 @@ const webSocketGo = {
               `${message.Content}`,
               formattedDate,
               `${message.senderID}`,
-              false
+              false,
+              message.sender
             );
           } else if (message.senderID === id) {
             // Si l'utilisateur actuel est l'expéditeur du message
@@ -462,7 +482,8 @@ const webSocketGo = {
               `${message.Content}`,
               formattedDate,
               `${message.receiverID}`,
-              true
+              true,
+              message.sender
             );
           }
           ok = true;
@@ -537,10 +558,10 @@ const webSocketGo = {
         try {
           store.getters.sokectStore.send(JSON.stringify(data));
         } catch (error) {
-          console.error("Erreur lors de l'envoi du message:", error);
+          //error("Erreur lors de l'envoi du message:", error);
         }
       } else {
-        console.error("Token expired");
+        //error("Token expired");
         myMixin.methods.sayonara();
         return;
       }
@@ -552,7 +573,7 @@ const webSocketGo = {
       if (utils.methods.getCookieValue("session")) {
         this.check(datas);
       } else {
-        console.error("cookie not found");
+        //error("cookie not found");
         myMixin.methods.sayonara();
       }
     },

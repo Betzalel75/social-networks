@@ -5,7 +5,8 @@
         <img :src="'/src/assets/images/'+data.Photo" alt="" class="user-img" />
         <div :class="'username-'+data.UserID" style="display: contents; color: lightsteelblue;">
           {{data.Name}}
-          <button class="status-share" @click="sendInvitation(data.UserID)">Invite</button>
+          <button :class="getInviteClass(data.UserID)"
+            @click="sendInvitation(data.UserID)">{{getName(data.UserID)}}</button>
         </div>
       </div>
     </div>
@@ -13,8 +14,12 @@
 </template>
 
 <style scoped>
-.status-share{
+.status-share {
   margin-left: 20px;
+}
+
+.status-share.ivnited {
+  background-color: green;
 }
 </style>
 
@@ -28,7 +33,11 @@ import webSocketGo from "@/mixins/websocket";
 <script>
 export default {
   mixins: [myMixin, app, webSocketGo, utils],
-
+  data() {
+    return {
+      inviteds: [],
+    };
+  },
   computed: {
     users() {
       return this.$store.state.external;
@@ -38,6 +47,20 @@ export default {
     },
   },
   methods: {
+    getInviteClass(userID) {
+      if (this.inviteds.includes(userID)) {
+        return "status-share ivnited";
+      } else {
+        return "status-share";
+      }
+    },
+    getName(userID) {
+      if (this.inviteds.includes(userID)) {
+        return "Invited...";
+      } else {
+        return "Invite";
+      }
+    },
     async sendInvitation(id) {
       try {
         const vals = {
@@ -69,10 +92,10 @@ export default {
         }
         this.privateNotif(id); // send notification
         const data = await response.json();
+        this.inviteds.push(id);
         return data;
-        // this.$store.commit("setExternal", data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        //error("Error fetching data:", error);
         router.push("/errors");
         throw error; // Rejeter l'erreur pour laisser le gestionnaire l'attraper
       }

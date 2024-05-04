@@ -52,7 +52,7 @@ const myMixin = {
             dislikeCountPost.forEach((dislike) => {
               dislike.textContent = data.dislikeCount;
             });
-            // console.table('table-like: ',data);
+            // //table('table-like: ',data);
           })
           .catch((error) => {
             // Objet Erreur
@@ -63,7 +63,6 @@ const myMixin = {
 
             store.commit("setError", Erreur);
             router.push("/errors");
-            console.error(error);
           });
       } else {
         var event = new Event("logOut");
@@ -143,7 +142,6 @@ const myMixin = {
       })
         .then((response) => {
           if (!response.ok) {
-            console.log("reponse: ", response);
             throw new Error("Erreur réseau");
           }
           return response.json(); // Convertissez la réponse en JSON
@@ -158,7 +156,7 @@ const myMixin = {
           localStorage.removeItem("cookie");
           store.dispatch("disconnect");
           router.push("/login");
-          console.error("Erreur:", error);
+          //error("Erreur:", error);
         });
     },
     async getFollowers() {
@@ -326,6 +324,7 @@ const myMixin = {
       const url = e.target.getAttribute("href");
       const query = url.split("?")[1];
       const page = url.split("?")[0].split("/")[1];
+
       if (!query) {
         return;
       }
@@ -333,7 +332,7 @@ const myMixin = {
         utils.methods
           .fetchData("/groups?" + query, this.idGroupe)
           .then((data) => {
-            store.commit("setAllPosts", data.publication);
+            this.datas = data.publication;
           });
       }
       router.push(url.toLowerCase());
@@ -388,11 +387,11 @@ const myMixin = {
               }
             });
           } else {
-            console.error("Erreur lors de l'envoi des données");
+            //error("Erreur lors de l'envoi des données");
           }
         })
         .catch((error) => {
-          console.error("Erreur lors de la requête:", error);
+          //error("Erreur lors de la requête:", error);
         });
     },
     // Functions Event
@@ -477,7 +476,7 @@ const myMixin = {
             if (!not.vu.Bool) {
               const bell = document.getElementById("notification-bell");
               bell.classList.add("ring");
-            };
+            }
           }
           store.commit("setNotifs", data.notifications);
         });
@@ -584,13 +583,13 @@ const myMixin = {
       }
     },
     // verification de la presence de notifications
-    validNotifications(){
+    validNotifications() {
       utils.methods.fetchData("/getNotification?page=0").then((data) => {
         let found = false;
         for (const not of data.notifications) {
           if (!not.vu.Bool) {
             found = true;
-          };
+          }
         }
         if (found) {
           const bell = document.getElementById("notification-bell");

@@ -206,7 +206,7 @@
                     <div class="status-main content-publication">
                       <textarea class="status-textarea" placeholder="Post Goes Here" name="desc"
                         style="resize: none; width: 95%;" required>
-                                        </textarea>
+                                          </textarea>
                       <label for="postimage">
                         <img class="album-photos" id="output" />
                       </label>
@@ -353,17 +353,17 @@
           </div>
         </div>
         <div class="overlay" @click="
-                            rightSide = false;
-                          leftSide = false;
-                          " :class="{ active: rightSide || leftSide }"></div>
+                              rightSide = false;
+                            leftSide = false;
+                            " :class="{ active: rightSide || leftSide }"></div>
       </div>
     </div>
     <div class="conversation">
       <Conversations />
     </div>
-    <div class="chat">
-      <Chat />
-    </div>
+    <!-- <div class="chat">
+        <Chat />
+      </div> -->
     <!-- SECTION NOTIFICATION LIST -->
     <Notifications />
     <!-- END -->
@@ -372,7 +372,7 @@
 </template>
 
 <script setup>
-import Chat from "./DomChat.vue";
+// import Chat from "./DomChat.vue";
 import Posts from "./Posts.vue";
 import Users from "./Users.vue";
 import Conversations from "./Conversations.vue";
@@ -479,17 +479,13 @@ export default {
         this.statusProfil = response.user.StatusProfil;
         this.$store.commit("setAllPosts", data);
         this.infosUser = response.user;
-      }).catch(error => {
-        console.error("Erreur lors de la récupération des données :", error);
-      });
+      })
     },
     SetStatus(e) {
       this.fetchData("/updateStatus", e.target.value).then(response => {
         const data = response.status;
         this.statusProfil = data;
-      }).catch(error => {
-        console.error("Erreur lors de la récupération des données :", error);
-      });
+      })
     },
     // numbers of followers
     async getNumbersFollowers() {

@@ -8,7 +8,7 @@
             <div class="col-lg-6">
               <a  href="javascript:void(0);" @click="getProfil($event); quitter($event)"
                 data-toggle="modal" data-target="#view_info">
-                <img src="../assets/images/default.jpg" alt="avatar" style="cursor: pointer" />
+                <img src="@/assets/images/defautl.jpg" alt="avatar" style="cursor: pointer" />
               </a>
               <div class="chat-about">
                 <h2 class="head-discussion"></h2>

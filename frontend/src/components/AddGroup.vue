@@ -2,19 +2,10 @@
   <div>
     <button class="add-group-btn" @click="toggleChatPosition">
       <img
-        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAhtJREFUSEu11UnoTmEUx/HPXzJEip0hlAVFSLFSrGRIQoYFSkkSsZCFvwxhJSlTyYJQYiEZoyxk2MkUyZxsFSlDhOfU89bf7b73+r/13tW99xm+5znnd35PhzY/HW3eXx2gNxZiJiZgJP7gHR7iGs7jZ7NAqwCzcCRvWnXQV1iDm2WTmgF2pEi35wXvcRZX8Cj/m4i5WIxh+d8m7CtCygCNzb9gGS7ltJQF2AOLcBx9sQEHuk4sAiKqi/iWIp6cFj/9TxFMwV0EcBruNNZ1BfTHCwzGcpwu2TwKHE/ZyTdiP56nwo9vFL7rxLU4nPL6DOOapKUK0CurKwKcjwvFSK4ilLMug8qyUwWI+XuwBcewugj4kAaGYhTeNMl9HWAqbuNBquWkIuBrVkKo4XsGNDasq3Uj1YPwEZ8wsAgIWUahByDe4+kuINZ+zuvj/R81RPVHZwU8aTFFkZb7WShji4AzSWJLsRl7WwRsxa5Ux1OpjiuKgND+SbzEGPzuZh/0TP3zGsOxBOeKgChupCkmrEwmd6KbgPXZJqJZo9F+lHXkDFxvwSrCVu5lq5iepdq05TuxO6shzO5yhUbDeyId0Vj9kkTjFIeqzK4xti0pbGf+eJvtOjr9McISwkrmZScdkuUcTnqwGEzVhTMnGd/R3N1VjRYXzircKptUd2X2SVEvwOxcuBE52lBL6P1GNrVfzSKoA9RZRO142wF/Afg0ahnLfIJIAAAAAElFTkSuQmCC"
-      />
+        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAhtJREFUSEu11UnoTmEUx/HPXzJEip0hlAVFSLFSrGRIQoYFSkkSsZCFvwxhJSlTyYJQYiEZoyxk2MkUyZxsFSlDhOfU89bf7b73+r/13tW99xm+5znnd35PhzY/HW3eXx2gNxZiJiZgJP7gHR7iGs7jZ7NAqwCzcCRvWnXQV1iDm2WTmgF2pEi35wXvcRZX8Cj/m4i5WIxh+d8m7CtCygCNzb9gGS7ltJQF2AOLcBx9sQEHuk4sAiKqi/iWIp6cFj/9TxFMwV0EcBruNNZ1BfTHCwzGcpwu2TwKHE/ZyTdiP56nwo9vFL7rxLU4nPL6DOOapKUK0CurKwKcjwvFSK4ilLMug8qyUwWI+XuwBcewugj4kAaGYhTeNMl9HWAqbuNBquWkIuBrVkKo4XsGNDasq3Uj1YPwEZ8wsAgIWUahByDe4+kuINZ+zuvj/R81RPVHZwU8aTFFkZb7WShji4AzSWJLsRl7WwRsxa5Ux1OpjiuKgND+SbzEGPzuZh/0TP3zGsOxBOeKgChupCkmrEwmd6KbgPXZJqJZo9F+lHXkDFxvwSrCVu5lq5iepdq05TuxO6shzO5yhUbDeyId0Vj9kkTjFIeqzK4xti0pbGf+eJvtOjr9McISwkrmZScdkuUcTnqwGEzVhTMnGd/R3N1VjRYXzircKptUd2X2SVEvwOxcuBE52lBL6P1GNrVfzSKoA9RZRO142wF/Afg0ahnLfIJIAAAAAElFTkSuQmCC" />
     </button>
-    <form
-      @submit.prevent="creatGroup"
-      class="add-group-modal"
-      ref="groupx"
-      @mousedown="startDrag"
-      @mousemove="drag"
-      @mouseup="stopDrag"
-      @mouseleave="stopDrag"
-      :style="{ left: `${left}px`, top: `${top}px` }"
-    >
+    <form @submit.prevent="creatGroup" class="add-group-modal" ref="groupx" @mousedown="startDrag" @mousemove="drag"
+      @mouseup="stopDrag" @mouseleave="stopDrag" :style="{ left: `${left}px`, top: `${top}px` }">
       <div class="header">
         <p class="title">Add a new group</p>
         <button class="close-add-group-modal" @click="closeForm">X</button>
@@ -22,21 +13,11 @@
       <div class="body">
         <label class="input-container">
           Title:
-          <input
-            type="text"
-            required
-            v-model="form.group_title"
-            placeholder="The title of the group"
-          />
+          <input type="text" required v-model="form.group_title" placeholder="The title of the group" />
         </label>
         <label class="input-container">
           Description:
-          <textarea
-            type="text"
-            required
-            v-model="form.group_desc"
-            placeholder="The description of the group"
-          ></textarea>
+          <textarea type="text" required v-model="form.group_desc" placeholder="The description of the group"></textarea>
         </label>
         <div class="button-container">
           <button class="submit-btn">Create group</button>
@@ -49,14 +30,17 @@
 
 <style scoped>
 @import url("../assets/css/addGroup.css");
+
 .add-group-btn {
   border: none;
   background-color: transparent;
   cursor: pointer;
 }
+
 .add-group-btn img {
   filter: invert();
 }
+
 .add-group-btn img:hover {
   filter: none;
   background-color: white;
@@ -82,14 +66,12 @@ export default {
     };
   },
   mixins: [app],
-  emits: {
-    submit(form) {},
-  },
   methods: {
     async creatGroup() {
-      // console.log(this.form);
+      // //log(this.form);
       this.addGroup(this.form.group_title, this.form.group_desc);
       this.closeModal();
+      this.closeForm();
       // this.$emit("submit", this.form);
     },
     closeForm() {

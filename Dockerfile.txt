@@ -1,0 +1,36 @@
+# Étape 1 : Construire l'application frontend Vue.js
+FROM node:latest AS frontend-builder
+
+# Définir le répertoire de travail pour le frontend
+WORKDIR /app/frontend
+
+# Installer les dépendances du frontend
+RUN npm install
+
+# Copier le reste des fichiers frontend
+COPY frontend .
+
+# Étape 2 : Construire l'application backend Golang
+FROM golang:alpine AS backend-builder
+
+# Définir le répertoire de travail pour le backend
+WORKDIR /app/backend
+
+# Copier les fichiers backend nécessaires
+COPY backend .
+
+# Compiler l'application backend
+RUN go build -o main ./server/main.go
+
+# Étape 3 : Construire l'image finale
+FROM alpine:latest
+
+# Copier l'exécutable backend construit depuis l'étape 2
+COPY --from=backend-builder /app/backend/main /usr/local/bin/main
+
+# Exposer les ports pour le frontend et le backend
+EXPOSE 3000
+EXPOSE 8080
+
+# Commande pour démarrer les deux serveurs
+CMD ["./main", "&&", "npm", "run", "dev"]

@@ -201,9 +201,6 @@
     <div>
       <Conversations />
     </div>
-    <div class="chat">
-      <Chat />
-    </div>
     <div>
       <!-- SECTION NOTIFICATION LIST -->
       <Notifications />
@@ -214,7 +211,7 @@
 </template>
 
 <script setup>
-import Chat from "./DomChat.vue";
+// import Chat from "./DomChat.vue";
 import Posts from "./Posts.vue";
 import Users from "./Users.vue";
 import Conversations from "./Conversations.vue";
@@ -236,7 +233,7 @@ import Locked from './Locked.vue';
 <script>
 export default {
   mixins: [myMixin, app, webSocketGo, utils],
-  components: { Posts, Users, Suggestion, Groups, Notifications, Locked },
+  components: { Conversations, Posts, Users, Suggestion, Groups, Notifications, Locked },
 
   data() {
     return {

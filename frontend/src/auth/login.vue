@@ -8,87 +8,41 @@
           <h2 class="form_title title">Create Account</h2>
           <div class="form__icons"><i class="bx bxl-git form__icon"></i></div>
           <span class="form__span"></span>
-          <input
-            type="text"
-            class="form__input"
-            placeholder="Nickname (Optional)"
-            name="identifiant"
-          />
+          <input type="text" class="form__input" placeholder="Nickname (Optional)" name="identifiant" />
           <div class="form_input">
             <small> Date of Birth </small>
           </div>
           <input type="date" class="form__input" name="age" id="age" />
           <!-- <input type="checkbox" class="form__input values" name="gender" id="gender" placeholder="Gender" required> -->
-          <input
-            type="text"
-            class="form__input radio"
-            name="about"
-            placeholder="About Me (Optional)"
-          />
-          <input
-            type="first-name"
-            class="form__input values"
-            name="first-name"
-            id="first-name"
-            placeholder="First Name"
-          />
-          <input
-            type="last-name"
-            class="form__input values"
-            name="last-name"
-            id="last-name"
-            placeholder="Last Name"
-          />
-          <input
-            class="form__input"
-            type="email"
-            placeholder="Email"
-            name="email"
-          />
-          <input
-            class="form__input values"
-            type="password"
-            placeholder="Password"
-            name="password"
-          />
+          <input type="text" class="form__input radio" name="about" placeholder="About Me (Optional)" />
+          <input type="first-name" class="form__input values" name="first-name" id="first-name"
+            placeholder="First Name" />
+          <input type="last-name" class="form__input values" name="last-name" id="last-name" placeholder="Last Name" />
+          <input class="form__input" type="email" placeholder="Email" name="email" />
+          <input class="form__input values" type="password" placeholder="Password" name="password" />
           <!-- Photo de profi -->
           <label for="postimage" style="display: none">
             <img class="album-photos" id="output" />
           </label>
           <a href="javascript:void(0)" class="p-action">
-            <input
-              type="file"
-              accept="image/*"
-              id="fileInput"
-              name="postimage"
-              style="display: none"
-            />
+            <input type="file" accept="image/*" id="fileInput" name="postimage" style="display: none" />
             <label for="fileInput" style="cursor: pointer">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                style="fill: #0575e6; width: 28; height: 28">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="fill: #0575e6; width: 28; height: 28">
                 <path
-                  d="M18.944 11.112C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.611 5.757 9.15 3.609 9.792 2 11.82 2 14c0 2.757 2.243 5 5 5h11c2.206 0 4-1.794 4-4a4.01 4.01 0 0 0-3.056-3.888zM13 14v3h-2v-3H8l4-5 4 5h-3z"
-                ></path>
+                  d="M18.944 11.112C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.611 5.757 9.15 3.609 9.792 2 11.82 2 14c0 2.757 2.243 5 5 5h11c2.206 0 4-1.794 4-4a4.01 4.01 0 0 0-3.056-3.888zM13 14v3h-2v-3H8l4-5 4 5h-3z">
+                </path>
               </svg>
-              <sup
-                style="
-                  top: -0.3em;
-                  color: black;
-                  font-size: 20px;
-                  font-weight: 600;
-                  cursor: pointer;
-                "
-                >Avatar</sup
-              >
+              <sup style="
+                    top: -0.3em;
+                    color: black;
+                    font-size: 20px;
+                    font-weight: 600;
+                    cursor: pointer;
+                  ">Avatar</sup>
             </label>
           </a>
-          <input
-            type="submit"
-            class="form__button button submit switch-button-signin"
-            name="signup"
-            value="SIGN UP"
-            @click="handleSubmit($event)"
-          />
+          <input type="submit" class="form__button button submit switch-button-signin" name="signup" value="SIGN UP"
+            @click="handleSubmit($event)" />
         </form>
       </div>
       <div class="container-connexionPage b-container" id="b-container">
@@ -96,8 +50,7 @@
           <h2 class="form_title title">Sign in to Website</h2>
           <div class="form__icons"><i class="bx bxl-git form__icon"></i></div>
           <span class="form__span"></span>
-          <input class="form__input values" type="text" placeholder="Email" name="identifiant" id="email"
-            required />
+          <input class="form__input values" type="text" placeholder="Email" name="identifiant" id="email" required />
           <input class="form__input values" type="password" placeholder="Password" name="password" id="password"
             required />
           <input type="submit" class="form__button button submit switch-button-signin" name="signin" value="SIGN IN"
@@ -139,11 +92,11 @@
             <input type="text" class="input" placeholder="Nickname (Optional)" name="identifiant" />
             <!-- <input type="number" class="input" name="age" id="age" placeholder="Age" required /> -->
             <div class="input" style="text-align: center; justify-content: center;">
-            <small > Date of Birth </small>
-          </div>
-          <input type="date" class="input" name="age" id="age" />
+              <small> Date of Birth </small>
+            </div>
+            <input type="date" class="input" name="age" id="age" />
             <!--  -->
-              <input class="input radio" type="text" id="male" name="gender" placeholder="About Me (Optional)" />
+            <input class="input radio" type="text" id="male" name="gender" placeholder="About Me (Optional)" />
             <!--  -->
             <input type="first-name" class="input values" name="first-name" id="first-name" placeholder="First Name"
               required />
@@ -155,30 +108,27 @@
         </div>
         <!-- Photo de profi -->
         <label for="postimage" style="display: none">
-            <img class="album-photos" id="output" />
+          <img class="album-photos" id="output" />
+        </label>
+        <a href="javascript:void(0)" class="p-action">
+          <input type="file" accept="image/*" id="fileInput" name="postimage" style="display: none" />
+          <label for="fileInput" style="cursor: pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="fill: #fff; width: 28px; height: 28px">
+              <path
+                d="M18.944 11.112C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.611 5.757 9.15 3.609 9.792 2 11.82 2 14c0 2.757 2.243 5 5 5h11c2.206 0 4-1.794 4-4a4.01 4.01 0 0 0-3.056-3.888zM13 14v3h-2v-3H8l4-5 4 5h-3z">
+              </path>
+            </svg>
+            <sup style="
+                    top: -0.3em;
+                    color: black;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                  ">Avatar</sup>
           </label>
-          <a href="javascript:void(0)" class="p-action">
-            <input type="file" accept="image/*" id="fileInput" name="postimage" style="display: none"/>
-            <label for="fileInput" style="cursor: pointer">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                style="fill: #fff; width: 28px; height: 28px">
-                <path
-                  d="M18.944 11.112C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.611 5.757 9.15 3.609 9.792 2 11.82 2 14c0 2.757 2.243 5 5 5h11c2.206 0 4-1.794 4-4a4.01 4.01 0 0 0-3.056-3.888zM13 14v3h-2v-3H8l4-5 4 5h-3z"
-                ></path>
-              </svg>
-              <sup
-                style="
-                  top: -0.3em;
-                  color: black;
-                  font-size: 1rem;
-                  font-weight: 600;
-                  cursor: pointer;
-                "
-                >Avatar</sup
-              >
-            </label>
-          </a>
-        <button type="submit" style="margin-top: 0px;" class="submit-btn" name="signup" value="SIGN UP" @click="handleSubmit($event)">
+        </a>
+        <button type="submit" style="margin-top: 0px;" class="submit-btn" name="signup" value="SIGN UP"
+          @click="handleSubmit($event)">
           Sign up
         </button>
       </form>
@@ -206,6 +156,7 @@
 <style scoped>
 @import url("../assets/css/login.css");
 @import url("../assets/css/mobile.css");
+
 .p-action {
   margin-bottom: -40px;
 }
@@ -360,7 +311,7 @@ export default {
           this.$router.push(result.redirect);
         }
       } catch (error) {
-        console.error("Error:", error);
+        //error("Error:", error);
         // Affichage du message d'erreur
         this.errorSpans.forEach((errorSpan) => {
           errorSpan.textContent = this.Err;
@@ -377,7 +328,7 @@ export default {
         // Parcourir tous les champs
         let isFormValid = true;
         const inputs = signupForm.querySelectorAll(".values");
-        
+
         const self = this;
         inputs.forEach(function (input) {
           // Vérifier si un champ est vide
@@ -468,7 +419,7 @@ export default {
         }
       } catch (error) {
         // Affichage du message d'erreur
-        console.error("Error:", error);
+        //error("Error:", error);
         this.errorSpans.forEach((errorSpan) => {
           errorSpan.textContent = "Invalid entries.";
           errorSpan.classList.add("nosucces"); // Ajoutez une classe CSS pour un style spécifique si nécessaire

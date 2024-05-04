@@ -60,10 +60,14 @@ export default {
       return [month, day];
     },
     nextSlide() {
-      this.activeIndex = (this.activeIndex + 1) % this.slideItems.length;
+      if (this.slideItems) {
+        this.activeIndex = (this.activeIndex + 1) % this.slideItems.length;
+      }
     },
     prevSlide() {
-      this.activeIndex = (this.activeIndex - 1 + this.slideItems.length) % this.slideItems.length;
+      if (this.slideItems) {
+        this.activeIndex = (this.activeIndex - 1 + this.slideItems.length) % this.slideItems.length;
+      }
     },
   },
   mounted() {

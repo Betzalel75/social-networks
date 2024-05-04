@@ -54,7 +54,7 @@ export default {
       if (this.getToken("session")) {
         this.$store.dispatch("sendMessage", data);
       } else {
-        console.log("cookie not found");
+        //log("cookie not found");
         myMixin.methods.sayonara();
       }
       this.sent = true;

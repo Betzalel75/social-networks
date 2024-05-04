@@ -39,7 +39,7 @@ const minxinPost = {
             if (url === "/post") {
               if (!statusPost) {
                 app.methods.broadcastPosts();
-              }else{
+              } else {
                 app.methods.privateNotif(users);
               }
               store.commit("addAllPost", post);
@@ -47,7 +47,7 @@ const minxinPost = {
               app.methods.broadcastGroup(store.getters.idGroupe);
               if (this.datas) {
                 this.datas.unshift(post);
-              }else{
+              } else {
                 this.datas = [];
                 this.datas.unshift(post);
               }
@@ -57,7 +57,6 @@ const minxinPost = {
             if (statusForm.classList.contains("success")) {
               statusForm.classList.remove("success");
             }
-            console.log(data.message);
             statusForm.classList.add(data.status);
             statusForm.innerHTML = data.message;
           } else {
@@ -81,13 +80,13 @@ const minxinPost = {
 
           store.commit("setError", Erreur);
           router.push("/errors");
-          console.error("Erreur lors de la requête AJAX :", error);
+          //error("Erreur lors de la requête AJAX :", error);
         });
     },
     async sendPosts(event) {
       event.preventDefault();
-      var pathArray = window.location.pathname.split('/')[1];
-      
+      var pathArray = window.location.pathname.split("/")[1];
+
       let urlPost = "";
       if (pathArray === "profile") {
         urlPost = "/post";
@@ -126,10 +125,11 @@ const minxinPost = {
         '.checkbox-wrapper-5 input[type="checkbox"]:checked'
       );
       const userSelected = this.getCheckedUsers(checkedCheckboxes);
-      // console.table(userSelected);
-      // return false;
+
       const desc = description.value; // formData.get('desc');
-      const publisher = document.querySelector('#postForm input[name="publish"]');
+      const publisher = document.querySelector(
+        '#postForm input[name="publish"]'
+      );
       const publish = publisher.value;
       const attribut = document.getElementById("output").getAttribute("src");
       // Vérifiez si un fichier a été sélectionné
@@ -172,14 +172,14 @@ const minxinPost = {
         desc === "" ||
         !auMoinsUneSelectionnee
       ) {
-        console.error("Champs incomplets");
+        //error("Champs incomplets");
         if (!auMoinsUneSelectionnee) {
           lis.forEach(function (li) {
             if (li) {
               li.classList.add("invalid");
             }
           });
-          console.error("At least one checkbox must be selected.");
+          //error("At least one checkbox must be selected.");
         } else {
           lis.forEach(function (li) {
             if (li) {
@@ -226,7 +226,7 @@ const minxinPost = {
 
       const value = utils.methods.getCookieValue("session");
       if (!value) {
-        console.error("no session cookie");
+        //error("no session cookie");
         myMixin.methods.sayonara();
         return false;
       }
@@ -258,11 +258,14 @@ const minxinPost = {
         const userLi = checkbox.closest(".check");
         if (userLi) {
           // Récupère le nom d'utilisateur et l'image
-          const userID = userLi.querySelector(".user").getAttribute('data-user-id').trim();
+          const userID = userLi
+            .querySelector(".user")
+            .getAttribute("data-user-id")
+            .trim();
           // const userName = userLi.querySelector(`.username-${userID}`).textContent;
 
           // Ajoute l'utilisateur à l'objet checkedUsers
-          checkedUsers.push(userID)
+          checkedUsers.push(userID);
         }
       });
 
