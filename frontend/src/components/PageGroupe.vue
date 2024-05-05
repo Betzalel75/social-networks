@@ -86,10 +86,10 @@
                                 <img src="https://picsum.photos/200" alt="" class="profile-img" />
                             </div>
                             <div class="group-name" :data-userId="localID">{{ nickNameGroupe }}</div>
-                            <img src="/src/assets/images/cover_zone02.jpg" alt="" class="profile-cover" />
+                            <img src="http://localhost:8080/images/cover_zone02.jpg" alt="" class="profile-cover" />
                             <div class="group-menu">
                                 <a class="private profile-menu-link active" href="/groups/?name=all"
-                                    @click="setActiveLink('all'); queryCatgs($event); toggleLeftSide();">All 
+                                    @click="setActiveLink('all'); queryCatgs($event); toggleLeftSide();">All
                                     Posts</a>
                                 <a class="private profile-menu-link" href="/groups/?name=Event"
                                     @click="setActiveLink('Event'); queryCatgs($event); toggleLeftSide();">Events</a>
@@ -149,7 +149,7 @@
                                         <div class="status-main content-publication">
                                             <textarea class="status-textarea" placeholder="Post Goes Here" name="desc"
                                                 style="resize: none; width: 95%;" required>
-                                                                                    </textarea>
+                                                                                            </textarea>
                                             <label for="postimage">
                                                 <img class="album-photos" id="output" />
                                             </label>
@@ -201,7 +201,7 @@
     
                         <span href="javascript:void(0)" class="account-user" @click="myFunction('profil')">{{ nickName
                             }}
-                            <img :src="'/src/assets/images/' + avatar" alt="" class="account-profile" />
+                            <img :src="'http://localhost:8080/images/' + avatar" alt="" class="account-profile" />
                         </span>
                     </div>
                     <div class="side-wrapper stories" id="profil" style="display: none">
@@ -280,8 +280,8 @@
             <Conversations :ok="false" />
         </div>
         <!-- <div class="chat">
-            <Chat />
-        </div> -->
+                    <Chat />
+                </div> -->
         <!-- Event -->
         <Event />
         <!-- SECTION NOTIFICATION LIST -->
@@ -441,7 +441,7 @@ export default {
       this.fetchData("/groups?all", this.idGroupe).then((groups) => {
         const data = groups.publication;
         if (data !== null) {
-            this.datas = data;
+          this.datas = data;
         }
         this.events = groups.events;
       });

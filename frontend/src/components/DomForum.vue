@@ -113,7 +113,7 @@
             </button>
   
             <span href="javascript:void(0)" class="account-user" @click="myFunction('profil')">{{ nickName }}
-              <img :src="'/src/assets/images/' + avatar" alt="" class="account-profile" />
+              <img :src="'http://localhost:8080/images/' + avatar" alt="" class="account-profile" />
             </span>
           </div>
           <div class="side-wrapper stories" id="profil" style="display: none">
@@ -157,10 +157,10 @@
           <Groups />
           <div class="side-wrapper contacts">
             <div style="
-                          display: grid;
-                          justify-content: center;
-                          margin-bottom: 20px;
-                        ">
+                              display: grid;
+                              justify-content: center;
+                              margin-bottom: 20px;
+                            ">
               <router-link to="/profile?name=all" href="javascript:void(0)" class="status-share"
                 style="text-decoration: none">New Post</router-link>
             </div>
@@ -193,9 +193,9 @@
           </div>
         </div>
         <div class="overlay" @click="
-                      rightSide = false;
-                      leftSide = false;
-                    " :class="{ active: rightSide || leftSide }"></div>
+                          rightSide = false;
+                          leftSide = false;
+                        " :class="{ active: rightSide || leftSide }"></div>
       </div>
     </div>
     <div>
@@ -206,7 +206,7 @@
       <Notifications />
       <!-- END -->
     </div>
-    <Locked/>
+    <Locked />
   </div>
 </template>
 

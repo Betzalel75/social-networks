@@ -36,7 +36,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request, User model.User, data mo
 		}
 		image := User.Photo
 		if User.Photo != "defautl.jpg" {
-			os.Remove("../frontend/src/assets/images/" + User.Photo)
+			os.Remove("./images/" + User.Photo)
 		}
 		if data.Image.Name != "" {
 			// nb := strings.Split(data.Image.Name, ".")[0]

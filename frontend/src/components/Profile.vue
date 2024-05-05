@@ -122,7 +122,7 @@
               </div>
               <!--  -->
             </div>
-            <!-- <img src="/src/assets/images/cover_zone02.jpg" alt="" class="profile-cover" /> -->
+            <!-- <img src="http://localhost:8080/images/cover_zone02.jpg" alt="" class="profile-cover" /> -->
             <div class="profile-cover" id="group-background" :style="{ backgroundColor: dominantColor }"></div>
   
           </div>
@@ -198,7 +198,7 @@
   
                     </span>
                     <div class="status-main" style="border: none; background-image: url()">
-                      <img :src="'/src/assets/images/' + avatar" class="status-img" />
+                      <img :src="'http://localhost:8080/images/' + avatar" class="status-img" />
                       <textarea class="status-textarea" placeholder="Title Goes Here" style="resize: none" name="title"
                         required></textarea>
   
@@ -206,7 +206,7 @@
                     <div class="status-main content-publication">
                       <textarea class="status-textarea" placeholder="Post Goes Here" name="desc"
                         style="resize: none; width: 95%;" required>
-                                          </textarea>
+                                              </textarea>
                       <label for="postimage">
                         <img class="album-photos" id="output" />
                       </label>
@@ -281,7 +281,7 @@
   
   
             <span href="javascript:void(0)" class="account-user" @click="myFunction('profil')">{{ nickName }}
-              <img :src="'/src/assets/images/' + avatar" alt="" class="account-profile" />
+              <img :src="'http://localhost:8080/images/' + avatar" alt="" class="account-profile" />
             </span>
           </div>
           <div class="side-wrapper stories" id="profil" style="display: none">
@@ -353,17 +353,17 @@
           </div>
         </div>
         <div class="overlay" @click="
-                              rightSide = false;
-                            leftSide = false;
-                            " :class="{ active: rightSide || leftSide }"></div>
+                                  rightSide = false;
+                                leftSide = false;
+                                " :class="{ active: rightSide || leftSide }"></div>
       </div>
     </div>
     <div class="conversation">
       <Conversations />
     </div>
     <!-- <div class="chat">
-        <Chat />
-      </div> -->
+            <Chat />
+          </div> -->
     <!-- SECTION NOTIFICATION LIST -->
     <Notifications />
     <!-- END -->
@@ -429,7 +429,7 @@ export default {
       nbrFollowed: "",
       statusProfil: "",
       profileImage: "",
-      dominantColor: '#ffffff',
+      dominantColor: '#151728',
       showPopup: false,
       listFollowers: [],
       indication: "",
@@ -468,7 +468,7 @@ export default {
           element.parentNode.removeChild(element);
         }
       });
-      this.profileImage = '/src/assets/images/' + this.avatar
+      this.profileImage = 'http://localhost:8080/images/' + this.avatar
       const parent = document.querySelector('.content-publication');
       const child = parent.querySelector('.status-textarea');
       child.innerHTML = "";

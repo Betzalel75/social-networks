@@ -4,7 +4,7 @@
     <div class="slide-items">
       <div class="event box" :class="{ active: index === activeIndex }" v-for="(data, index) in events" :key="index">
         <div class="event-wrapper">
-          <img :src="'/src/assets/images/'+data.Image" class="event-img" />
+          <img :src="'http://localhost:8080/images/'+data.Image" class="event-img" />
           <div class="event-date">
             <div class="event-month">{{returnDate(data.Date)[0]}}</div>
             <div class="event-day">{{returnDate(data.Date)[1]}}</div>
@@ -81,7 +81,6 @@ export default {
 </script>
 
 <style scoped>
-
 .slide {
   position: relative;
   height: 100%;
@@ -123,11 +122,11 @@ export default {
 .slide-items>.active {
   position: relative;
   opacity: 1;
-  poiter-events: initial;
+  /* poiter-events: initial; */
 }
 
 .slide-nav button {
-  -webkit-appearance: none;
+  /* -webkit-appearance: none; */
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   opacity: 0;
 }

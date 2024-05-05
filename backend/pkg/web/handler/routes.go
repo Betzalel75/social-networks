@@ -52,7 +52,6 @@ func Handler(w http.ResponseWriter, r *http.Request, wsServer *WsServer) {
 		// Vérifier la méthode de la requête
 		if r.Method == http.MethodOptions {
 			// Répondre avec les en-têtes CORS appropriés pour les demandes OPTIONS
-			tools.Debogage("cors")
 			w.Header().Set("Access-Control-Allow-Origin", "*")
 			w.Header().Set("Access-Control-Allow-Methods", "POST")
 			w.Header().Set("Access-Control-Allow-Headers", "Content-Type")

@@ -6,7 +6,7 @@
           <input :id="'check-' + data.UserID" type="checkbox">
           <label :for="'check-' + data.UserID">
             <div class="user user-cercle" :data-user-id="data.UserID">
-              <img :src="'/src/assets/images/'+data.Photo" alt="" class="user-img" />
+              <img :src="'http://localhost:8080/images/'+data.Photo" alt="" class="user-img" />
               <div :class="'username-'+data.UserID" style="display: contents; color: lightsteelblue;">{{data.FirstName}}
               </div>
             </div>

@@ -39,9 +39,8 @@ func UploadFile(id string, data model.File) (string, error) {
 
 	// Créer un nouveau nom pour le fichier
 	newFilename := id + ext
-
 	// Stocker le fichier dans un dossier avec le nouveau nom
-	dst, err := os.Create("../frontend/src/assets/images/" + newFilename)
+	dst, err := os.Create("./images/" + newFilename)
 	if err != nil {
 		Log(err)
 		return "unable to download file", err
@@ -113,8 +112,8 @@ func UploadAvatar(w http.ResponseWriter, r *http.Request, name, id string) (stri
 	}
 	// Créez un nouveau nom pour le fichier
 	newFilename := id + ext
-	// Stockez le fichier dans un dossier avec le nouveau nom
-	dst, err := os.Create("../frontend/src/assets/images/" + newFilename)
+	// Stockez le fichier dans un dossier avec le nouveau nom /app/images/
+	dst, err := os.Create("./images/" + newFilename)
 	if err != nil {
 		return "unable to download file", errors.New("unable to download file")
 	}

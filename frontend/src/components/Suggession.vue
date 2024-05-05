@@ -1,29 +1,17 @@
 <template>
-  <div >
+  <div>
     <div class="content-carousel" @scroll="handleScroll">
       <div class="carousel" v-for="(data, index) in suggestion" :key="index">
         <div class="status_top">
           <div class="user_status" :data-user-id="data.UserID">
-            <a
-              
-              href="javascript:void(0);"
-              @click="getProfil($event)"
-            >
-              <img
-                :src="'/src/assets/images/' + data.Photo"
-                alt=""
-                class="user-img"
-                style="cursor: pointer"
-              />
+            <a href="javascript:void(0);" @click="getProfil($event)">
+              <img :src="'http://localhost:8080/images/' + data.Photo" alt="" class="user-img" style="cursor: pointer" />
             </a>
             <div :class="'username-' + data.UserID">
               {{ data.Name }}
             </div>
             <div class="btn-follow">
-              <button
-                :class="'follow-' + data.UserID"
-                @click="followedUser(data.UserID, $event)"
-              >
+              <button :class="'follow-' + data.UserID" @click="followedUser(data.UserID, $event)">
                 Follow
               </button>
             </div>

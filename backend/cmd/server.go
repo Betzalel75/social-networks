@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"forum/pkg/tools"
+	"forum/pkg/web/handler"
 	"log"
 	"net/http"
-	"forum/pkg/web/handler"
 )
 
 const (
@@ -17,6 +17,8 @@ func Start() {
 	mux := http.NewServeMux()
 	wsServer := handler.NewWebsocketServer()
 	go wsServer.Run()
+	static := http.FileServer(http.Dir("./images/"))
+	mux.Handle("/images/", http.StripPrefix("/images/", static))
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		handler.Handler(w, r, wsServer)
 	})

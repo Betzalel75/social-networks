@@ -3,7 +3,8 @@
     <div :class="'album box ' + classeName" id="content-albums" :data-postId="data.PostID" v-for="(data, index) in posts"
       :key="index">
       <div class="status-main">
-        <img :src="avatarName !== '' ? '/src/assets/images/' + avatarName : '/src/assets/images/' + data.Photo"
+        <img
+          :src="avatarName !== '' ? 'http://localhost:8080/images/' + avatarName : 'http://localhost:8080/images/' + data.Photo"
           class="status-img" />
         <div class="album-detail">
           <div class="album-title">
@@ -16,7 +17,7 @@
       <div class="album-content" style="color: white; word-break: break-word;">
         {{ this.unescapeHtml(data.Title) }}
         <div class="album-photos">
-          <img :src="'/src/assets/images/' + data.Image" alt="" class="album-photo" />
+          <img :src="'http://localhost:8080/images/' + data.Image" alt="" class="album-photo" />
         </div>
         <p style="word-break: break-word; color: white;">{{ this.unescapeHtml(data.Content) }}</p>
       </div>

@@ -310,7 +310,6 @@ func post(w http.ResponseWriter, r *http.Request, dataContent model.Publications
 		if dataContent.Type == "circle" || dataContent.Type == "private" {
 			private = true
 		}
-		tools.Debogage(dataContent.Type)
 
 		postID := tools.NeewId()
 		post := model.Post{
@@ -567,6 +566,10 @@ func registerHandler(w http.ResponseWriter, r *http.Request, wsServer *WsServer)
 
 func wSHandler(w http.ResponseWriter, r *http.Request, wsServer *WsServer) {
 	cookie, err := app.GetCookie(w, r)
+	if r.Method == http.MethodOptions {
+		tools.Debogage("skipping")
+	}
+	fmt.Println(r.Cookie("session"))
 	if err != nil {
 		tools.Log(err)
 		data := map[string]interface{}{

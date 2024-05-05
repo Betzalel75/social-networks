@@ -78,7 +78,7 @@
           </div>
           <div class="profile" style="width: 96%; margin: 20px auto 0 auto">
             <div class="profile-avatar">
-              <img :src="'/src/assets/images/' + avatarProfile" alt="" class="profile-img" />
+              <img :src="'http://localhost:8080/images/' + avatarProfile" alt="" class="profile-img" />
             </div>
             <div class="composents">
               <div class="profil-description">
@@ -107,29 +107,29 @@
                   @click="setActiveLink('infos'); setInfo();">Infos
                 </a>
                 <a class="private profile-menu-link active" href="/profiles/?name=all" @click="
-                              setActiveLink('all');
-                            queryCategories($event);
-                            ">All Posts</a>
+                                  setActiveLink('all');
+                                queryCategories($event);
+                                ">All Posts</a>
                 <a class="private profile-menu-link" href="/profiles/?name=Event" @click="
-                              setActiveLink('Event');
-                            queryCategories($event);
-                            ">Events</a>
+                                  setActiveLink('Event');
+                                queryCategories($event);
+                                ">Events</a>
                 <a class="private profile-menu-link" href="/profiles/?name=General" @click="
-                              setActiveLink('General');
-                            queryCategories($event);
-                            ">Generals</a>
+                                  setActiveLink('General');
+                                queryCategories($event);
+                                ">Generals</a>
                 <a class="private profile-menu-link" href="/profiles/?name=Issue" @click="
-                              setActiveLink('Issue');
-                            queryCategories($event);
-                            ">Issues</a>
+                                  setActiveLink('Issue');
+                                queryCategories($event);
+                                ">Issues</a>
                 <a class="private profile-menu-link" href="/profiles/?name=Liked" @click="
-                              setActiveLink('Liked');
-                            queryCategories($event);
-                            ">Liked Post</a>
+                                  setActiveLink('Liked');
+                                queryCategories($event);
+                                ">Liked Post</a>
               </div>
             </div>
   
-            <img src="/src/assets/images/cover_zone02.jpg" alt="" class="profile-cover" />
+            <img src="http://localhost:8080/images/cover_zone02.jpg" alt="" class="profile-cover" />
           </div>
           <div class="main-container cash" style="padding: 10px 18px 20px 28px">
             <div class="timeline">
@@ -210,7 +210,7 @@
               </svg>
             </button>
             <span href="javascript:void(0)" class="account-user" @click="myFunction('profil')">{{ nickName }}
-              <img :src="'/src/assets/images/' + avatar" alt="" class="account-profile" />
+              <img :src="'http://localhost:8080/images/' + avatar" alt="" class="account-profile" />
             </span>
           </div>
           <div class="side-wrapper stories" id="profil" style="display: none">
@@ -289,8 +289,8 @@
       <Conversations />
     </div>
     <!-- <div class="chat">
-        <Chat />
-      </div> -->
+            <Chat />
+          </div> -->
     <!-- SECTION NOTIFICATION LIST -->
     <Notifications />
     <!-- END -->

@@ -7,22 +7,22 @@
     </div>
     <div class="nott-list">
       <!-- 
-                  category
-                  email
-                  senderID
-                  type
-                  username
-                  photo
-                  created_at
-                  groupID
-                  notifID
-                  groupName
-                  vu
-                  -->
+                      category
+                      email
+                      senderID
+                      type
+                      username
+                      photo
+                      created_at
+                      groupID
+                      notifID
+                      groupName
+                      vu
+                      -->
       <div v-for="(data, index) in notifications" :key="index">
         <div :class="setNotifClass(data.category, data.vu)" @click="updateView(data.notifID, $event, data.category)">
           <div class="noty-user-img">
-            <img :src="'/src/assets/images/'+data.photo" alt="">
+            <img :src="'http://localhost:8080/images/'+data.photo" alt="">
           </div>
           <div class="notification-info" @click="show">
             <h3>

@@ -2,7 +2,7 @@
   <div>
     <div v-for="(data, index) in users" :key="index">
       <div class="user userList" :data-user-id="data.UserID">
-        <img :src="'/src/assets/images/'+data.Photo" alt="" class="user-img" />
+        <img :src="'http://localhost:8080/images/'+data.Photo" alt="" class="user-img" />
         <div :class="'username-'+data.UserID" style="display: contents; color: lightsteelblue;">
           {{data.Name}}
           <button :class="getInviteClass(data.UserID)"

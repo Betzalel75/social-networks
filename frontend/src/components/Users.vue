@@ -4,7 +4,7 @@
     <!-- <div v-html="getUsers(users)"></div> -->
     <div v-for="(data, index) in (users ? users : user)" :key="index">
       <div class="user userList" :data-user-id="data.UserID" @click="selectUser(data.UserID)">
-        <img :src="'/src/assets/images/'+data.Photo" alt="" class="user-img" />
+        <img :src="'http://localhost:8080/images/'+data.Photo" alt="" class="user-img" />
         <div :class="'username-'+data.UserID" style="display: contents; color: lightsteelblue;">
           {{data.Name ? capitalize(data.Name) : capitalize(data.FirstName) }}
           <div :class="'user-status '+data.Status"></div>

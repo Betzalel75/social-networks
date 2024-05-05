@@ -3,6 +3,10 @@ import createPersistedState from "vuex-persistedstate";
 import websocketService from "../mixins/websocket";
 import webSocketWs from "../mixins/appSocket";
 import { reactive } from "vue";
+// import fs from "fs";
+
+// const env = fs.readSync("../.env");
+// console.log(env);
 
 const state = reactive({
   allPosts: [], // Liste de tous les posts du profile

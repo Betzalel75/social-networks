@@ -7,7 +7,7 @@
             <div class="profile-avatar-settings">
               <input type="file" accept="image/*" name="photo" id="fileInput" @change="loadFile($event)" />
               <label>
-                <img class="profile-img-settings" id="output" :src="'/src/assets/images/' + avatar" />
+                <img class="profile-img-settings" id="output" :src="'http://localhost:8080/images/' + avatar" />
               </label>
             </div>
             <span>Update Avatar</span>

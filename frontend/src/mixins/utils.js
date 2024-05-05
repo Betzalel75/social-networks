@@ -175,7 +175,7 @@ const utils = {
       //table(data);
       const comment = `
               <div class="status-main listCommentaire" style="padding-top: 20px; background-color: #272a3a;">
-                        <img src="/src/assets/images/${data.photoSrc}" class="status-img"
+                        <img src="http://localhost:8080/images/${data.photoSrc}" class="status-img"
                             style="width: 40px; height: 40px;" />
                         <div class="album-detail">
                             <div class="album-title"><strong>${data.userName}</strong> comment
@@ -184,7 +184,7 @@ const utils = {
                          <div class="album-date"></div>
                          </div>
                          <div class="album-photos">
-          <img src=/src/assets/images/${data.srcImage} alt="" class="album-photo" />
+          <img src=http://localhost:8080/images/${data.srcImage} alt="" class="album-photo" />
         </div>
                      <p style="width: 100%; word-break: break-word; color: white;">${content}</p>
                      <div class="contenu-a-recharger">
