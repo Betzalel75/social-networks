@@ -68,7 +68,29 @@ const app = {
       );
     },
 
-    onWebsocketOpen(event) {},
+    onWebsocketOpen() {
+      const cookie = localStorage.getItem("cookie");
+      if (
+        utils.methods.getCookieValue("session") !== undefined &&
+        utils.methods.getCookieValue("session") !== null &&
+        utils.methods.getCookieValue("session") !== ""
+      ) {
+        const data = {
+          type: "check",
+          connected: true,
+          cookie: cookie,
+        };
+        try {
+          store.getters.ws.send(JSON.stringify(data));
+        } catch (error) {
+          //error("Erreur lors de l'envoi du message:", error);
+        }
+      } else {
+        //error("Token expired");
+        myMixin.methods.sayonara();
+        return;
+      }
+    },
 
     handleNewMessage(event) {
       const data = JSON.parse(event.data);

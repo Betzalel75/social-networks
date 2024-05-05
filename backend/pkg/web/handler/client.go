@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"encoding/json"
+	"fmt"
 	bd "forum/pkg/db/sqlite"
 	repo "forum/pkg/db/sqlite/repository"
 	"forum/pkg/tools"
@@ -138,7 +140,7 @@ func (client *Client) disconnect() {
 }
 
 // ServeWs handles websocket requests from clients requests.
-func ServeWs(wsServer *WsServer, w http.ResponseWriter, r *http.Request, cookie string) {
+func ServeWs(wsServer *WsServer, w http.ResponseWriter, r *http.Request) {
 
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -146,7 +148,24 @@ func ServeWs(wsServer *WsServer, w http.ResponseWriter, r *http.Request, cookie 
 		tools.Log(err)
 		return
 	}
-	userID, err := repo.GetUserIDBySession(bd.GetDB(), cookie)
+	// Lire le message du client pour recuperer le cookie
+	var checkData CheckConnexion
+	_, p, err := conn.ReadMessage()
+	if err != nil {
+		err = json.Unmarshal(p, &checkData)
+		fmt.Println("\033[31mAucun cookie\033[0m")
+		tools.Log(err)
+		// return
+	}
+
+	err = json.Unmarshal(p, &checkData)
+	if err != nil {
+		fmt.Println("\033[31mErreur lors de la désérialisation du message 'check':\033][0m")
+		tools.Log(err)
+		return
+	}
+	
+	userID, err := repo.GetUserIDBySession(bd.GetDB(), checkData.Cookie)
 	if err != nil {
 		tools.Log(err)
 		return

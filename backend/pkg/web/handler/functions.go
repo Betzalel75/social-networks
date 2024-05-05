@@ -565,23 +565,23 @@ func registerHandler(w http.ResponseWriter, r *http.Request, wsServer *WsServer)
 }
 
 func wSHandler(w http.ResponseWriter, r *http.Request, wsServer *WsServer) {
-	cookie, err := app.GetCookie(w, r)
-	if r.Method == http.MethodOptions {
-		tools.Debogage("skipping")
-	}
-	fmt.Println(r.Cookie("session"))
-	if err != nil {
-		tools.Log(err)
-		data := map[string]interface{}{
-			"code":    http.StatusUnauthorized,
-			"message": "Unauthorized",
-		}
-		tools.ResponseJSON(w, http.StatusUnauthorized, data)
-		return
-	}
-	if app.IsConnected(w, r, cookie) {
-		ServeWs(wsServer, w, r, cookie)
-	}
+	// cookie, err := app.GetCookie(w, r)
+	// if r.Method == http.MethodOptions {
+	// 	tools.Debogage("skipping")
+	// }
+	// fmt.Println(r.Cookie("session"))
+	// if err != nil {
+	// 	tools.Log(err)
+	// 	data := map[string]interface{}{
+	// 		"code":    http.StatusUnauthorized,
+	// 		"message": "Unauthorized",
+	// 	}
+	// 	tools.ResponseJSON(w, http.StatusUnauthorized, data)
+	// 	return
+	// }
+	// if app.IsConnected(w, r, cookie) {
+		ServeWs(wsServer, w, r)
+	// }
 }
 
 func getProfileDataHandler(w http.ResponseWriter, r *http.Request, wsServer *WsServer) {
