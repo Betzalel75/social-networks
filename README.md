@@ -33,11 +33,6 @@ Les utilisateurs peuvent chater entre eux ou a travers un groupe.
 3. Construisez l'image Docker en utilisant la commande `bash docker.sh`
 4. L'application se lance automatiquement à la fin de la construction des images
 
-### Using Script
-
-1. Lancez le script en utilisant la commande ` sudo make build `
-2. Exécutez l'application avec ` sudo make run `
-
 ## Utilisation
 
 Ouvrez votre navigateur web et accédez à `http://localhost:3000"` ou un autre lien proposer automatiquement par le serveur Frontend.
