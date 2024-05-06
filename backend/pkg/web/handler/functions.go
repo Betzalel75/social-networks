@@ -1492,16 +1492,15 @@ func responseForInvit(w http.ResponseWriter, r *http.Request, wsServer *WsServer
 
 	switch data.Category {
 	case "follow":
-		followRequest(data.SenderID, data.ReceiverID, data.NotifID, data.Type)
+		followRequest(data.SenderID, userID, data.NotifID, data.Category)
 	case "event":
 		responseToParticpe(userID, data.GroupID, data.NotifID, data.Type)
 	case "inscription":
 		responseToRejoin(data.SenderID, data.GroupID, data.NotifID, data.Type)
 	case "invitation":
-		tools.Debogage(data.Type)
 		responseToRejoin(userID, data.GroupID, data.NotifID, data.Type)
 	case "unfollow":
-		followRequest(data.SenderID, data.ReceiverID, data.NotifID, data.Type)
+		followRequest(data.SenderID, userID, data.NotifID, data.Category)
 	default:
 		break
 	}
