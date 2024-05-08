@@ -382,7 +382,7 @@ html {
   align-items: center;
   display: flex;
   z-index: 1;
-  bottom: 60px;
+  bottom: 100px;
   left: 24px;
 }
 
@@ -1110,7 +1110,7 @@ html {
 
 .composents {
   /* position: absolute; */
-  margin-top: 8rem;
+  margin-top: 10rem;
   max-height: 214px;
   background: #151728;
   width: 100%;

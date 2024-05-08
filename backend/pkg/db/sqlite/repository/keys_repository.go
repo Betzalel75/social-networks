@@ -37,9 +37,9 @@ func UpdateKey(db *sql.DB, key model.Key) error {
 }
 
 // Get All Keys by userID
-func GetKeysByKeyID(db *sql.DB, KeyID string) ([]model.Key, error) {
+func GetKeysByKeyID(db *sql.DB, userID string) ([]model.Key, error) {
 	// Préparation de la requête SQL
-	stmt, err := db.Prepare("SELECT key_id, user_id, key, private FROM keys WHERE key_id = ?;")
+	stmt, err := db.Prepare("SELECT key_id, user_id, key, private FROM keys WHERE user_id = ? AND private = false;")
 	if err != nil {
 		tools.Log(err)
 		return nil, err
@@ -47,7 +47,7 @@ func GetKeysByKeyID(db *sql.DB, KeyID string) ([]model.Key, error) {
 	defer stmt.Close()
 
 	// Exécution de la requête et récupération des résultats
-	rows, err := stmt.Query(KeyID)
+	rows, err := stmt.Query(userID)
 	if err != nil {
 		tools.Log(err)
 		return nil, err

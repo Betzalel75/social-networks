@@ -44,7 +44,8 @@
           </svg>
           <span class="dislikeCount" :data-post-id="data.PostID">{{ data.DislikeCount }}</span>
         </a>
-        <a href="javascript:void(0)" class="album-action" @click="myFunction(data.PostID)">
+        <a href="javascript:void(0)" class="album-action"
+          @click="myFunction(data.PostID); getComments($event,data.PostID)">
           <svg stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
             class="css-i6dzq1" viewBox="0 0 24 24">
             <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
@@ -54,7 +55,8 @@
         <!-- Add comment div -->
         <div class="status box" :id="data.PostID" style="display: none">
           <div class="" style="border-bottom: 1px solid #272a3a;margin-top: 1%;">
-            <form method="POST" class="comment-form" :data-post-id="data.PostID" @submit.prevent="sendcomment">
+            <form method="POST" class="comment-form" :id="'comment-'+data.PostID" :data-post-id="data.PostID"
+              @submit.prevent="sendcomment">
               <h3 style="margin: 28px 0 0 1%; font-size: 1.5rem; color: #ccc8db;">
                 Add a comment
               </h3>
@@ -82,7 +84,7 @@
           </div>
           <!-- Tous les commentaires pour ce post -->
           <div class="alls-comments">
-            <Comments :comments="data.Comment" />
+            <Comments :comments="commentsTab" />
           </div>
         </div>
       </div>
@@ -100,6 +102,12 @@ import webSocketGo from "@/mixins/websocket";
 
 export default {
   mixins: [myMixin, app, webSocketGo, utils],
+  
+  computed: {
+    commentsTab(){
+      return this.$store.getters.commentTab
+    }
+  },
 
   props: {
     posts: {
@@ -118,6 +126,24 @@ export default {
     Comments
   },
   methods: {
+    getComments(e, postID) {
+      e.preventDefault();
+      this.fetchData("/getComments", postID).then((data) => {
+        this.$store.commit("setCommentTab",data.comments)
+        const comment_count = document.querySelector(
+          `.album.box.publicPublications .commentCount[data-post-id="${postID}"]`
+        );
+        if (comment_count) {
+          comment_count.textContent = `${data.count}`;
+        }
+        const comment_count_private = document.querySelector(
+          `.album.box.userPublications .commentCount[data-post-id="${postID}"]`
+        );
+        if (comment_count_private) {
+          comment_count_private.textContent = `${data.count}`;
+        }
+      });
+    },
   },
 };
 </script>

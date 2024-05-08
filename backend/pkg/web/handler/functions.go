@@ -580,7 +580,7 @@ func wSHandler(w http.ResponseWriter, r *http.Request, wsServer *WsServer) {
 	// 	return
 	// }
 	// if app.IsConnected(w, r, cookie) {
-		ServeWs(wsServer, w, r)
+	ServeWs(wsServer, w, r)
 	// }
 }
 
@@ -645,8 +645,6 @@ func likeHandler(w http.ResponseWriter, r *http.Request, wsServer *WsServer) {
 		// Perform action (like or dislike) and update counts
 		response := app.PerformAction(cookie, request.PostID, r.URL.Query().Get("name"), request.Action)
 		// Return the updated counts as JSON response
-		fmt.Println("reponse", response)
-
 		tools.ResponseJSON(w, http.StatusOK, response)
 	} else {
 		fmt.Println("bad request like: ", r.Body)
@@ -919,6 +917,17 @@ func followUser(w http.ResponseWriter, r *http.Request, ws *WsServer) {
 		}
 		if usr.StatusProfil == "public" || follow.FollowType == "unfollow" {
 			app.AddFollow(userID, follow.FollowedUser, follow.FollowType)
+			// Ajouter l'utilisateur dans le tableau user_key
+			keys, err := repo.GetKeysByKeyID(bd.GetDB(), usr.UserID)
+			if err != nil {
+				tools.Log(err)
+			}
+			// Partager les key publics avec le nouveau follower
+			if len(keys) != 0 {	
+				for _, k := range keys {
+					repo.CreateUserKey(bd.GetDB(), userID, k.KeyID)
+				}
+			}
 		} else {
 			// Add notification
 			app.AddNotification(userID, follow.FollowedUser, "private", follow.FollowType, "aucun")
@@ -1492,7 +1501,7 @@ func responseForInvit(w http.ResponseWriter, r *http.Request, wsServer *WsServer
 
 	switch data.Category {
 	case "follow":
-		followRequest(data.SenderID, userID, data.NotifID, data.Category)
+		followRequest(data.SenderID, userID, data.NotifID, data.Category, data.Type)
 	case "event":
 		responseToParticpe(userID, data.GroupID, data.NotifID, data.Type)
 	case "inscription":
@@ -1500,7 +1509,7 @@ func responseForInvit(w http.ResponseWriter, r *http.Request, wsServer *WsServer
 	case "invitation":
 		responseToRejoin(userID, data.GroupID, data.NotifID, data.Type)
 	case "unfollow":
-		followRequest(data.SenderID, userID, data.NotifID, data.Category)
+		unFollowRequest(data.SenderID, userID, data.NotifID, data.Category)
 	default:
 		break
 	}
@@ -1545,7 +1554,40 @@ func responseForInvit(w http.ResponseWriter, r *http.Request, wsServer *WsServer
 }
 
 // Accept or reject following requests
-func followRequest(userID, receiverID, notifID, types string) interface{} {
+func followRequest(userID, receiverID, notifID, types, reponse string) interface{} {
+	if reponse == "accept" {
+		// Ajouter l'utilisateur dans le tableau user_key
+		keys, err := repo.GetKeysByKeyID(bd.GetDB(), receiverID)
+		if err != nil {
+			tools.Log(err)
+		}
+		// Partager les key publics avec le nouveau follower
+		for _, k := range keys {
+			repo.CreateUserKey(bd.GetDB(), userID, k.KeyID)
+		}
+	}
+
+	app.AddFollow(userID, receiverID, types)
+	allU := GetConnection(userID)
+	followeds, err := repo.GetFollowedByUser(bd.GetDB(), receiverID)
+	if err != nil {
+		tools.Log(err)
+	}
+	// Supprimer la notification
+	repo.DeleteNotification(bd.GetDB(), notifID)
+	if err != nil {
+		tools.Log(err)
+	}
+
+	// Filtrer les noms
+	users := filterNames(allU, followeds)
+	data := map[string]interface{}{
+		"users": users,
+	}
+	return data
+}
+
+func unFollowRequest(userID, receiverID, notifID, types string) interface{} {
 	app.AddFollow(userID, receiverID, types)
 	allU := GetConnection(userID)
 	followeds, err := repo.GetFollowedByUser(bd.GetDB(), receiverID)

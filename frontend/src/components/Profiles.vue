@@ -129,7 +129,7 @@
               </div>
             </div>
   
-            <img src="http://localhost:8080/images/cover_zone02.jpg" alt="" class="profile-cover" />
+            <img src="/src/assets/images/cover_zone02.jpg" alt="" class="profile-cover" />
           </div>
           <div class="main-container cash" style="padding: 10px 18px 20px 28px">
             <div class="timeline">

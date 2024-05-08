@@ -215,26 +215,29 @@ const webSocketGo = {
       const commentInput = event.target.querySelector('[name="comment"]');
       const comment = commentInput.value.trim();
 
-      // if (comment !== "") {
-        // Envoyez le commentaire au serveur
-        this.imageAvatar(event, postID).then(() => {
-          const img = this.image;
-          if (img.src !== undefined) { 
-            const err = this.verifyFile(img, comment);
-            if (err !== null) {
-              const spam = event.target.querySelector(".login100-form-error");
-              spam.classList.add("nosuccess");
-              spam.innerHTML = err;
-              return false;
-            }
+      // Envoyez le commentaire au serveur
+      this.imageAvatar(event, postID).then((image) => {
+        const spam = event.target.querySelector(".login100-form-error");
+        if (image && image.name !== undefined) { 
+          const err = this.verifyFile(image, comment);
+          if (err !== null) {
+            spam.classList.add("nosuccess");
+            spam.innerHTML = err;
+            return false;
           }
-
-          app.methods.sendCommentaire(postID, comment, this.image);
+        }
+        if (spam.classList.contains('nosuccess')) {
+          spam.classList.remove('nosuccess');
+          spam.innerHTML = "";
+        }
+        
+        if (comment !== "") {
+          app.methods.sendCommentaire(postID, comment, image);
           // Réinitialisez le champ de commentaire
+          }
           commentInput.value = "";
           store.commit("setPostImage", {});
         });
-      // }
     },
     quitter(e) {
       // quitter la conversation

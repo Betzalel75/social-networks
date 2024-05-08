@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	bd "forum/pkg/db/sqlite"
 	repo "forum/pkg/db/sqlite/repository"
 	"forum/pkg/internal/app"
@@ -95,6 +96,7 @@ func (server *WsServer) broadcastToClients(comment []byte) {
 		tools.Log(err)
 		return
 	}
+	fmt.Println("commentaire:",commentMessage)
 
 	// Utilisez les valeurs désérialisées
 	postID := commentMessage.PostID
@@ -102,7 +104,7 @@ func (server *WsServer) broadcastToClients(comment []byte) {
 	submit := commentMessage.Submit
 	senderId := commentMessage.SenderID
 	photo := commentMessage.Image
-
+	fmt.Println("image:", commentMessage.Image)
 	commentId := tools.NeewId()
 	go func() {
 		image := ""

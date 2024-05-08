@@ -5,6 +5,7 @@ import (
 	"fmt"
 	bd "forum/pkg/db/sqlite"
 	repo "forum/pkg/db/sqlite/repository"
+	"forum/pkg/internal/app"
 	"forum/pkg/tools"
 	"log"
 	"net/http"
@@ -141,7 +142,11 @@ func (client *Client) disconnect() {
 
 // ServeWs handles websocket requests from clients requests.
 func ServeWs(wsServer *WsServer, w http.ResponseWriter, r *http.Request) {
-
+	cookie, err := app.GetCookie(w, r)
+	if err != nil {
+		tools.Log(err)
+	}
+	tools.Debogage(cookie)
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		tools.Debogage(r)
@@ -164,7 +169,7 @@ func ServeWs(wsServer *WsServer, w http.ResponseWriter, r *http.Request) {
 		tools.Log(err)
 		return
 	}
-	
+
 	userID, err := repo.GetUserIDBySession(bd.GetDB(), checkData.Cookie)
 	if err != nil {
 		tools.Log(err)

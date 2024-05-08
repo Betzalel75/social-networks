@@ -143,3 +143,12 @@ func ValidEventDate(date time.Time) bool {
 	// Vérifier si la date est dans le passé
 	return !date.Before(dateActuelle)
 }
+
+// Fonction pour inverser un tableau
+func Reverse(tab []model.Comment) []model.Comment {
+	var result []model.Comment
+	for i := len(tab) - 1; i >= 0; i-- {
+			result = append(result, tab[i])
+	}
+	return result
+}

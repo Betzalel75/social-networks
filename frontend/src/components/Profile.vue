@@ -122,8 +122,8 @@
               </div>
               <!--  -->
             </div>
-            <!-- <img src="http://localhost:8080/images/cover_zone02.jpg" alt="" class="profile-cover" /> -->
-            <div class="profile-cover" id="group-background" :style="{ backgroundColor: dominantColor }"></div>
+            <img src="/src/assets/images/cover_zone02.jpg" alt="" class="profile-cover" />
+            <!-- <div class="profile-cover" id="group-background" :style="{ backgroundColor: dominantColor }"></div> -->
   
           </div>
           <div class="main-container" style="padding: 10px 18px 20px 28px">
@@ -479,7 +479,11 @@ export default {
         this.statusProfil = response.user.StatusProfil;
         this.$store.commit("setAllPosts", data);
         this.infosUser = response.user;
-      })
+        const composent = document.querySelector('.composents');
+        if (!data) {
+          composent.style.marginTop = '10rem';
+        }
+      });
     },
     SetStatus(e) {
       this.fetchData("/updateStatus", e.target.value).then(response => {

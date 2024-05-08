@@ -56,7 +56,8 @@ func GetCommentsByPost(db *sql.DB, postID string) ([]model.Comment, error) {
 		}
 		comments = append(comments, comment)
 	}
-	return comments, nil
+	newTab := tools.Reverse(comments)
+	return newTab, nil
 }
 
 // Read a Comment by ID

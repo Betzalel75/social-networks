@@ -29,7 +29,7 @@ func AddGroup(title, desc, owner_id string) (model.Group, error) {
 		}
 		return group, nil
 	} else {
-		log.Println("il y a un truc qui n'a pas fonctionner")
+		log.Println("il y a un truc qui n'a pas fonctionner dans la creation du group")
 		return model.Group{}, errors.New(("missing a required field"))
 	}
 }

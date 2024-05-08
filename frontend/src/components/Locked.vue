@@ -6,7 +6,7 @@
           <div class="intro-title" style="color: #fefefe;">
             This profile is locked
           </div>
-          <img src="http://localhost:8080/images/locked.svg" alt="" style="max-width: 400px;">
+          <img src="/src/assets/images/locked.svg" alt="" style="max-width: 400px;">
         </div>
       </div>
     </div>

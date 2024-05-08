@@ -15,9 +15,11 @@ var routes = map[string]RouteHandler{
 	"/allUsers":                allUsersHandler,
 	"/check":                   handleConnectionsHandler,
 	"/check-status":            checkStatusHandler,
+	"/comments":                comment,
 	"/creatEvent":              eventHandler,
 	"/follow":                  followUser,
 	"/followers":               getFollowers,
+	"/getComments":             getComments, // Get comments by postID
 	"/getFollowersInvite":      getFollowersInvite,
 	"/getmessages":             getMessageHandler,
 	"/get-group-messages":      getGroupMessageHandler,

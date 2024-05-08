@@ -18,6 +18,12 @@ coverage
 /cypress/videos/
 /cypress/screenshots/
 
+images/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -50,3 +56,4 @@ text/plain
 ./frontend/node_modules/.vite/deps/chunk-JXSOPAYJ.js
 ./frontend/node_modules/.vite/deps/chunk-GMM36UL7.js.map
 ./frontend/node_modules/.vite/deps/chunk-JXSOPAYJ.js.map
+./.git/objects/pack/pack-039ee6e374ee2a43eda07b3d5e7d87360415d7bc.pack

@@ -158,29 +158,53 @@ const app = {
     },
     sendCommentaire(postID, comment, image) {
       let ext = "";
-      if (image.src !== undefined) {
+      if (image && image.name !== undefined) {
         ext = "." + image.name.split(".").pop().toLowerCase();
       }
 
       const data = {
-        type: "comment",
-        postID: postID,
-        senderID: store.getters.localID,
-        userName: store.getters.nickName.toLowerCase(),
-        image: image,
-        photoSrc: store.getters.avatar,
-        srcImage: "comment-" + postID + ext,
-        comment: comment,
-        submit: "Add comment",
-        LikeNbr: 0,
-        DislikeNbr: 0,
+        method: "POST",
+        body: JSON.stringify({
+          type: "comment",
+          postID: postID,
+          senderID: store.getters.localID,
+          userName: store.getters.nickName.toLowerCase(),
+          image: image,
+          photoSrc: store.getters.avatar,
+          srcImage: "comment-" + postID + ext,
+          comment: comment,
+          submit: "Add comment",
+          LikeNbr: 0,
+          DislikeNbr: 0,
+        }),
       };
-
-      if (this.getToken("session")) {
-        store.dispatch("sendMessage", data);
-      } else {
-        myMixin.methods.sayonara();
-      }
+      fetch("/api/comments", data)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          store.commit("setCommentTab",data.comments)
+          const comment_count = document.querySelector(
+            `.album.box.publicPublications .commentCount[data-post-id="${postID}"]`
+          );
+          if (comment_count) {
+            comment_count.textContent = `${data.count}`;
+          }
+          const comment_count_private = document.querySelector(
+            `.album.box.userPublications .commentCount[data-post-id="${postID}"]`
+          );
+          if (comment_count_private) {
+            comment_count_private.textContent = `${data.count}`;
+          }
+          // Réinitialiser le formulaire
+          document.getElementById(`comment-${postID}`).reset();
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
     },
     typing(idt, value) {
       const data = {

@@ -181,9 +181,9 @@ func GetAllPostsAccessibleByUser(db *sql.DB, userID string) ([]model.Post, error
 	query := `
 			SELECT p.post_id, p.user_id, p.title, p.content, p.image, p.likeCount, p.dislikeCount, p.commentCount, p.created_at, p.private
 			FROM posts p
-			INNER JOIN keys k ON p.post_id = k.key
-			INNER JOIN user_key uk ON k.key_id = uk.key_id
-			WHERE uk.user_id = ? OR k.user_id = ?;
+			LEFT JOIN keys k ON p.post_id = k.key
+			LEFT JOIN user_key uk ON k.key_id = uk.key_id
+			WHERE (k.key IS NOT NULL AND (k.user_id = ? OR uk.user_id = ?)) OR (k.key IS NULL AND k.user_id = ?);
 	`
 	stmt, err := db.Prepare(query)
 	if err != nil {
@@ -193,7 +193,7 @@ func GetAllPostsAccessibleByUser(db *sql.DB, userID string) ([]model.Post, error
 	defer stmt.Close()
 
 	// Exécution de la requête et récupération des résultats
-	rows, err := stmt.Query(userID, userID)
+	rows, err := stmt.Query(userID, userID, userID)
 	if err != nil {
 		tools.Log(err)
 		return nil, err

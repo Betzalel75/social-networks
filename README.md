@@ -33,7 +33,36 @@ Les utilisateurs peuvent chater entre eux ou a travers un groupe.
 3. Construisez l'image Docker en utilisant la commande `bash docker.sh`
 4. L'application se lance automatiquement à la fin de la construction des images
 
+
 ## Utilisation
+
+Ouvrez deux terminals
+
+### Dans le cas du serveur backend.
+
+Déplacez vous dans le répertoire `backend` avec la commande.
+```bash
+   cd backend
+```
+Executer la commande suivante pour lancer le serveur backend
+```bash
+   go run ./server
+```
+
+### Dans le cas du serveur frontend.
+
+Déplacez vous dans le répertoire `frontend` avec la commande.
+```bash
+   cd frontend
+```
+Executer la commande suivante pour mettre à jour les packages du frontend
+```bash
+   npm install
+```
+Executer la commande suivante pour lancer le serveur frontend
+```bash
+   npm run dev
+```
 
 Ouvrez votre navigateur web et accédez à `http://localhost:3000"` ou un autre lien proposer automatiquement par le serveur Frontend.
 

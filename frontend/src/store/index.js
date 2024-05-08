@@ -3,10 +3,6 @@ import createPersistedState from "vuex-persistedstate";
 import websocketService from "../mixins/websocket";
 import webSocketWs from "../mixins/appSocket";
 import { reactive } from "vue";
-// import fs from "fs";
-
-// const env = fs.readSync("../.env");
-// console.log(env);
 
 const state = reactive({
   allPosts: [], // Liste de tous les posts du profile
@@ -45,6 +41,13 @@ const state = reactive({
 const mutations = {
   setError(state, erreur) {
     state.errors = erreur;
+  },
+  setCommentTab(state, comment){
+    if (!comment) {
+      state.commentTab = [];
+      return;
+    }
+    state.commentTab = comment;
   },
   setAllPosts(state, allPosts) {
     state.allPosts = allPosts;
@@ -209,7 +212,10 @@ const actions = {
     if (state.ws && state.ws.readyState === WebSocket.OPEN) {
       state.ws.send(JSON.stringify(data));
     } else {
-      //error("WebSocket is not open.");
+      console.error("WebSocket is not open.", state.ws.readyState);
+    webSocketWs.methods.init();
+    state.ws.send(JSON.stringify(data));
+
     }
   },
   disconnect({ commit }) {
