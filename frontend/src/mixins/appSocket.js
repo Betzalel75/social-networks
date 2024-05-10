@@ -102,8 +102,6 @@ const app = {
         case "message":
           webSocketGo.methods.messageReceive(data);
           break;
-        case "comment":
-          webSocketGo.methods.commentaireReceive(data);
         case "NewPost":
           this.newPost(data);
           break;
@@ -117,7 +115,7 @@ const app = {
           this.newPost(data);
           break;
         case "messageRoom":
-          webSocketGo.methods.messageReceive(data);
+          webSocketGo.methods.messageRoom(data);
           break;
         case "NewGroup":
           this.newGroup(data);

@@ -28,6 +28,19 @@
             <label for="date">Date de l'événement :</label><br />
             <input type="date" id="date" name="date" required />
           </div>
+          <div style="margin-bottom: 10px;">
+            <span>Options:</span>
+            <ul class="links">
+              <li>
+                <input type="checkbox" name="going" value="going" id="event" />
+                <label style="color: black;" for="event">Aller</label>
+              </li>
+              <li>
+                <input type="checkbox" name="notgoing" value="notgoing" id="gen" />
+                <label style="color: black;" for="gen"> Ne pas y aller</label>
+              </li>
+            </ul>
+          </div>
           <div>
             <button type="submit" @click="createEvent($event)">
               Créer l'événement

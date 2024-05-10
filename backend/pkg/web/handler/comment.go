@@ -69,18 +69,21 @@ func comment(w http.ResponseWriter, r *http.Request, wsServer *WsServer) {
 }
 
 // Get all comments for a post by post ID
-func getComments(w http.ResponseWriter, r *http.Request, wsServer *WsServer)  {
+func getComments(w http.ResponseWriter, r *http.Request, wsServer *WsServer) {
 	var commentMessage model.Credentials
-		if err := json.NewDecoder(r.Body).Decode(&commentMessage); err != nil {
-			tools.Log(err)
-			data := map[string]interface{}{
-				"code":    http.StatusInternalServerError,
-				"message": "Internal Server Error",
-			}
-			tools.ResponseJSON(w, http.StatusInternalServerError, data)
-			return
+	if err := json.NewDecoder(r.Body).Decode(&commentMessage); err != nil {
+		tools.Log(err)
+		data := map[string]interface{}{
+			"code":    http.StatusInternalServerError,
+			"message": "Internal Server Error",
 		}
-		post, err := repo.GetPostByID(bd.GetDB(), commentMessage.Identifiant)
+		tools.ResponseJSON(w, http.StatusInternalServerError, data)
+		return
+	}
+	var post model.Post
+	post, err := repo.GetPostByID(bd.GetDB(), commentMessage.Identifiant)
+	if err != nil {
+		post, err = repo.GetGroupPostByID(bd.GetDB(), commentMessage.Identifiant)
 		if err != nil {
 			tools.Log(err)
 			data := map[string]interface{}{
@@ -90,10 +93,11 @@ func getComments(w http.ResponseWriter, r *http.Request, wsServer *WsServer)  {
 			tools.ResponseJSON(w, http.StatusInternalServerError, data)
 			return
 		}
-		comment := app.CommentsToPost(bd.GetDB(), post)
-		data := map[string]interface{}{
-			"count":    len(comment),
-			"comments": comment,
-		}
-		tools.ResponseJSON(w, http.StatusOK, data)
+	}
+	comment := app.CommentsToPost(bd.GetDB(), post)
+	data := map[string]interface{}{
+		"count":    len(comment),
+		"comments": comment,
+	}
+	tools.ResponseJSON(w, http.StatusOK, data)
 }

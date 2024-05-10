@@ -176,6 +176,17 @@ func ServeWs(wsServer *WsServer, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	client := newClient(conn, wsServer, userID)
+	go func() {
+		groups, _ := repo.GetGroups(bd.GetDB())
+		for _, g := range groups {
+			userIDS, _ := repo.GetGroupMembers(bd.GetDB(), g.GroupId)
+			for _, id := range userIDS {
+				if client.ID == id {
+					client.joinRoom(g.GroupId)
+				}
+			}
+		}
+	}()
 
 	go client.writePump()
 	go client.readPump()

@@ -168,69 +168,7 @@ const utils = {
         };
       }
     },
-    addComment(data) {
-      // Convertit la chaîne JSON en objet JavaScript
-      //src
-      var content = this.escapeHtml(data.comment);
-      //table(data);
-      const comment = `
-              <div class="status-main listCommentaire" style="padding-top: 20px; background-color: #272a3a;">
-                        <img src="http://localhost:8080/images/${data.photoSrc}" class="status-img"
-                            style="width: 40px; height: 40px;" />
-                        <div class="album-detail">
-                            <div class="album-title"><strong>${data.userName}</strong> comment
-                                <span>Post</span>
-                            </div>
-                         <div class="album-date"></div>
-                         </div>
-                         <div class="album-photos">
-          <img src=http://localhost:8080/images/${data.srcImage} alt="" class="album-photo" />
-        </div>
-                     <p style="width: 100%; word-break: break-word; color: white;">${content}</p>
-                     <div class="contenu-a-recharger">
-                         <a href="#" class="album-action" data-action="like"
-                             onclick="sendFeedback('${data.commentID}', 'like', 'comment_id')"
-                            data-post-id="${data.commentID}">
-                            <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor"
-                                stroke-width="2" fill="none" stroke-linecap="round"
-                                stroke-linejoin="round" class="css-i6dzq1" viewBox="0 0 24 24"
-                                fill="white" class="css-i6dzq1">
-                                <path
-                                  d="M4 21h1V8H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2zM20 8h-7l1.122-3.368A2 2 0 0 0 12.225 2H12L7 7.438V21h11l3.912-8.596L22 12v-2a2 2 0 0 0-2-2z">
-                              </path>
-                          </svg>
-                          <span class="likeCount"
-                              data-post-id="${data.commentID}">${data.LikeNbr}</span>
-                      </a>
-                    <a href="#" class="dislikeButton album-action" data-action="dislike"
-                        onclick="sendFeedback('${data.commentID}', 'dislike', 'comment_id')"
-                        data-post-id="${data.commentID}">
-                        <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor"
-                            stroke-width="2" fill="none" stroke-linecap="round"
-                            stroke-linejoin="round" viewBox="0 0 24 24">
-                         <path
-                             d="M20 3h-1v13h1a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM4 16h7l-1.122 3.368A2 2 0 0 0 11.775 22H12l5-5.438V3H6l-3.937 8.649-.063.293V14a2 2 0 0 0 2 2z">
-                         </path>
-                     </svg>
-                     <span class="dislikeCount"
-                         data-post-id="${data.commentID}">${data.DislikeNbr}</span>
-                  </a>
-                  </div>
-                  </div>
-              `;
-      const commentHtml = webSocketGo.methods.strToDom(comment);
-      const sectionComment = document.querySelector(
-        `.status.box[id="${data.postID}"]`
-      );
-      if (sectionComment) {
-        const itemsectionComment =
-          sectionComment.querySelector(".alls-comments");
-        itemsectionComment.insertBefore(
-          commentHtml,
-          itemsectionComment.firstChild
-        );
-      }
-    },
+
     range_chat(data, user_id) {
       if (data.length > 0) {
         const self = this;
@@ -469,9 +407,69 @@ const utils = {
     },
     // Gest Groupe List
     getGroups() {
-      utils.methods.fetchData("/getgroups").then((response) => {
+      this.fetchData("/getgroups").then((response) => {
         store.commit("setGroup", response);
       });
+    },
+    // Méthode pour accepter une notification
+    async reponse(senderID, groupID, notifID, category, responseType) {
+      try {
+        const vals = {
+          cookie: this.getCookieValue("session"),
+          groupID: groupID,
+          senderID: senderID,
+          category: category,
+          type: responseType,
+          notifID: notifID,
+        };
+        const options = {
+          method: "POST",
+          body: JSON.stringify(vals),
+        };
+        const response = await fetch("/api/response", options);
+
+        if (!response.ok) {
+          const Errors = {
+            status: response.status,
+            message: response.statusText,
+          };
+          store.commit("setError", Errors);
+          if (response.status == 401) {
+            this.$store.dispatch("disconnect");
+            this.$router.push("/login");
+          } else {
+            throw new Error(
+              `Failed to fetch settings. Status: ${response.status}, ${response.statusText}`
+            );
+          }
+        }
+        // Partie websocket
+        if (
+          (category === "inscription" || category === "invitation") &&
+          responseType === "accept"
+        ) {
+          let user = "";
+          if (category === "inscription") {
+            user = senderID;
+          } else {
+            user = store.getters.localID;
+          }
+          const data_reponse = {
+            type: "acceptJoinGroup",
+            sourceID: groupID, // Group ID
+            userID: user, // User ID
+          };
+          store.dispatch("sendMessage", data_reponse);
+        }
+
+        const data = await response.json();
+        this.$store.commit("setNotifs", data.notifications);
+        return data;
+      } catch (error) {
+        //error("Error fetching data:", error);
+        this.$router.push("/errors");
+        throw error; // Rejeter l'erreur pour laisser le gestionnaire l'attraper
+      }
     },
   },
 };

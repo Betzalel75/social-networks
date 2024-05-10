@@ -31,6 +31,8 @@ func GetEventByGroupId(db *sql.DB, idGroup string) ([]model.Event, error) {
 			tools.Log(err)
 			return nil, err
 		}
+		m, _ := GetEventMembersByEventID(db, e.EventID)
+		e.Members = len(m)
 		event = append(event, e)
 	}
 

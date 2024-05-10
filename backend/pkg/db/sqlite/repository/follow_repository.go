@@ -2,7 +2,6 @@ package repo
 
 import (
 	"database/sql"
-	"fmt"
 
 	// "fmt"
 	model "forum/pkg/internal/models"
@@ -23,8 +22,8 @@ func CreateFollow(db *sql.DB, follow model.Follow) error {
 		deleteSQL := `DELETE FROM follow WHERE follow_id = ?;`
 		_, err := db.Exec(deleteSQL, existingFollowID)
 		if err != nil {
-			fmt.Printf("Erreur ... : %v", err)
-			fmt.Printf("\n")
+			tools.Log(err)
+			return err
 		}
 	}
 
@@ -83,3 +82,33 @@ func GetFollowedByUser(db *sql.DB, userID string) ([]model.Follow, error) {
 	}
 	return follows, nil
 }
+
+// CheckFollow vérifie s'il existe une relation de suivi entre deux utilisateurs dans la base de données.
+func CheckFollowRelation(db *sql.DB, userID, followedUserID string) (bool, error) {
+	// Vérifier si l'utilisateur suit le suivi de l'utilisateur suivi.
+	query := `SELECT follow_id FROM follow WHERE user_id = ? AND followed_user = ? AND follow_type = "follow";`
+	row := db.QueryRow(query, userID, followedUserID)
+	var followID string
+	err := row.Scan(&followID)
+	if err == nil {
+			return true, nil // Relation de suivi existante
+	}
+	if err != sql.ErrNoRows {
+			return false, err // Erreur autre que "pas de lignes"
+	}
+
+	// Vérifier si l'utilisateur suivi suit l'utilisateur.
+	query = `SELECT follow_id FROM follow WHERE user_id = ? AND followed_user = ? AND follow_type = "follow";`
+	row = db.QueryRow(query, followedUserID, userID)
+	err = row.Scan(&followID)
+	if err == nil {
+			return true, nil // Relation de suivi existante
+	}
+	if err != sql.ErrNoRows {
+			return false, err // Erreur autre que "pas de lignes"
+	}
+
+	// Aucune relation de suivi trouvée
+	return false, nil
+}
+

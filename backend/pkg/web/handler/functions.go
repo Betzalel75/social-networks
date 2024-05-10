@@ -56,7 +56,6 @@ func datasProfil(w http.ResponseWriter, r *http.Request, visitedID string) inter
 				break
 			}
 		}
-		fmt.Println("isfollow:", isFollw)
 
 		if isFollw {
 			posts, err = repo.GetPostsByKeysCategoryAndUser(bd.GetDB(), filtre, visitedID, visitorID)
@@ -486,8 +485,8 @@ func GetConnection(idUser string) []model.Connection {
 ======================== GET MESSAGES ============================
 /----------------------------------------------------------------*/
 
-func getMessage(w http.ResponseWriter, cookie string) {
-
+func getMessage(w http.ResponseWriter, data model.Credentials) {
+	cookie := data.Cookie
 	if cookie == "" {
 		tools.Log("cookie is empty")
 		data := map[string]interface{}{
@@ -509,7 +508,17 @@ func getMessage(w http.ResponseWriter, cookie string) {
 		tools.Log(err)
 		return
 	}
-	tools.ResponseJSON(w, http.StatusOK, messages)
+	ok := false
+	usr, _ := repo.GetUserByID(bd.GetDB(), data.Identifiant)
+	relationships, _ := repo.CheckFollowRelation(bd.GetDB(), userID, data.Identifiant)
+	if usr.StatusProfil == "public" || relationships {
+		ok = true
+	}
+	datas := map[string]interface{}{
+		"messages":      messages,
+		"relationships": ok,
+	}
+	tools.ResponseJSON(w, http.StatusOK, datas)
 }
 func getGroupMessage(w http.ResponseWriter, groupID string) {
 
@@ -529,11 +538,13 @@ func getGroupMessage(w http.ResponseWriter, groupID string) {
 	}
 	messages, err := repo.GetMessagesByUser(bd.GetDB(), groupID)
 	if err != nil {
-
 		tools.Log(err)
 		return
 	}
-	tools.ResponseJSON(w, http.StatusOK, messages)
+	data := map[string]interface{}{
+		"messages": messages,
+	}
+	tools.ResponseJSON(w, http.StatusOK, data)
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request, wsServer *WsServer) {
@@ -759,8 +770,8 @@ func getMessageHandler(w http.ResponseWriter, r *http.Request, wsServer *WsServe
 		tools.ResponseJSON(w, http.StatusInternalServerError, data)
 		return
 	}
-	cookie := credentials.Cookie
-	getMessage(w, cookie)
+	// cookie := credentials.Cookie
+	getMessage(w, credentials)
 }
 func getGroupMessageHandler(w http.ResponseWriter, r *http.Request, wsServer *WsServer) {
 	// Décode le corps de la requête JSON dans une structure Credentials
@@ -917,16 +928,9 @@ func followUser(w http.ResponseWriter, r *http.Request, ws *WsServer) {
 		}
 		if usr.StatusProfil == "public" || follow.FollowType == "unfollow" {
 			app.AddFollow(userID, follow.FollowedUser, follow.FollowType)
-			// Ajouter l'utilisateur dans le tableau user_key
-			keys, err := repo.GetKeysByKeyID(bd.GetDB(), usr.UserID)
-			if err != nil {
-				tools.Log(err)
-			}
-			// Partager les key publics avec le nouveau follower
-			if len(keys) != 0 {	
-				for _, k := range keys {
-					repo.CreateUserKey(bd.GetDB(), userID, k.KeyID)
-				}
+			if follow.FollowType == "unfollow" {
+				removeUserKeysWhenUnfollow(bd.GetDB(), usr.UserID, userID)
+				repo.DeleteNotificationByUserID(bd.GetDB(), userID, usr.UserID)
 			}
 		} else {
 			// Add notification
@@ -1036,6 +1040,8 @@ func eventHandler(w http.ResponseWriter, r *http.Request, ws *WsServer) {
 	if app.IsConnected(w, r, cookie) {
 		titre := r.FormValue("titre")
 		description := r.FormValue("description")
+		going := r.FormValue("going")
+		notgoing := r.FormValue("notgoing")
 		date := r.FormValue("date")
 		idGroup := r.FormValue("groupID")
 
@@ -1076,7 +1082,7 @@ func eventHandler(w http.ResponseWriter, r *http.Request, ws *WsServer) {
 			tools.Log(err)
 			return
 		}
-		if !tools.ValidEventDate(dates) || titre == "" || description == "" {
+		if !tools.ValidEventDate(dates) || titre == "" || description == "" || going == "" || notgoing == "" {
 			err := "fields are required"
 			data := map[string]interface{}{
 				"code":    http.StatusBadRequest,
@@ -1659,13 +1665,15 @@ func responseToRejoin(receiverID, groupID, notifID, types string) {
 // Accept invitation to particip an event
 func responseToParticpe(receiverID, eventID, notifID, types string) {
 	// Supprimer la notification
-	err := repo.DeleteNotification(bd.GetDB(), notifID)
-	if err != nil {
-		tools.Log(err)
+	if notifID != "" {
+		err := repo.DeleteNotification(bd.GetDB(), notifID)
+		if err != nil {
+			tools.Log(err)
+		}
 	}
 
 	if types == "accept" {
-		err = repo.AddMemberToEventMembers(bd.GetDB(), eventID, receiverID)
+		err := repo.AddMemberToEventMembers(bd.GetDB(), eventID, receiverID)
 		if err != nil {
 			tools.Log(err)
 		}
@@ -1700,7 +1708,6 @@ func datasGroup(w http.ResponseWriter, r *http.Request, visitedID string) interf
 	if err != nil {
 		tools.Log(err)
 	}
-
 	// app.InitPostAndCommentLikeAndDislike(posts)
 	response := map[string]interface{}{
 		"success":     true,

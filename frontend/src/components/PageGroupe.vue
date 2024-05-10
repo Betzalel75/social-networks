@@ -116,6 +116,7 @@
                             <div class="timeline-left">
                                 <!-- composant event-box -->
                                 <Event-Box :events="events"></Event-Box>
+                                
                                 <!-- END -->
                             </div>
                             <div class="timeline-right">
@@ -444,6 +445,7 @@ export default {
           this.datas = data;
         }
         this.events = groups.events;
+        
       });
     },
     async verificateMember() {

@@ -61,3 +61,21 @@ func GetAllKeysByUserID(db *sql.DB, userID string) ([]model.Key, error) {
 
 	return keys, nil
 }
+
+// Delete Keys by keyID
+func DeleteKeysBykeyID(db *sql.DB, keyID string) error {
+  stmt, err := db.Prepare("DELETE FROM user_key WHERE key_id = ?;")
+  if err != nil {
+    tools.Log(err)
+    return err
+  }
+  defer stmt.Close()
+
+  _, err = stmt.Exec(keyID)
+  if err != nil {
+    tools.Log(err)
+    return err
+  }
+
+  return nil
+}

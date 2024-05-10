@@ -11,6 +11,11 @@
           </div>
           <div class="event-title">{{data.Title}}</div>
           <div class="event-subtitle">{{data.Description}}</div>
+          <!-- Vote -->
+          <div class="container-buttons">
+            <p style="color: aliceblue; margin: 8px">Participants: {{ data.Members }}</p>
+          </div>
+          <!--  -->
         </div>
       </div>
     </div>
@@ -41,6 +46,11 @@ export default {
     events(newEvents) {
       this.slideItems = newEvents;
     },
+  },
+  computed: {
+    localID() {
+      return this.$store.getters.localID;
+    }
   },
 
   data() {
@@ -91,7 +101,9 @@ export default {
   overflow: hidden;
 }
 
-
+.slide-next, .slide-prev, .slide-nav {
+  height: 300px;
+}
 .slide-items {
   position: relative;
   grid-area: 1/1;
@@ -170,5 +182,36 @@ export default {
   to {
     transform: initial;
   }
+}
+
+/* Bouttons Accepter || Reffuser */
+
+.accept-button, .reject-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.accept-button {
+  background-color: #4CAF50; /* Vert */
+  color: white;
+	margin-right: 0.3rem;
+}
+
+.reject-button {
+  background-color: #f44336; /* Rouge */
+  color: white;
+}
+
+/* Effets au survol */
+.accept-button:hover {
+  background-color: #45a049; /* Vert foncé */ /* Rouge foncé */
+}
+
+.reject-button:hover{
+	background-color: #c01509; /* Rouge foncé */
 }
 </style>

@@ -77,7 +77,7 @@ func GetKeysByKeyID(db *sql.DB, userID string) ([]model.Key, error) {
 // GetAllNonPrivateKeysByUserID récupère toutes les clés privées associées à un utilisateur en utilisant son identifiant (userID).
 func GetAllPrivateKeysByUserID(db *sql.DB, userID string) ([]model.Key, error) {
 	// Préparation de la requête SQL
-	stmt, err := db.Prepare("SELECT key_id, user_id, key, private FROM keys WHERE user_id = ? AND private = false;")
+	stmt, err := db.Prepare("SELECT key_id, user_id, key, private FROM keys WHERE user_id = ?;")
 	if err != nil {
 		tools.Log(err)
 		return nil, err

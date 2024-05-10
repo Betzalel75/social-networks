@@ -2,14 +2,12 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	bd "forum/pkg/db/sqlite"
 	repo "forum/pkg/db/sqlite/repository"
 	"forum/pkg/internal/app"
 	model "forum/pkg/internal/models"
 	"forum/pkg/tools"
 	"log"
-	"path/filepath"
 )
 
 type WsServer struct {
@@ -61,10 +59,9 @@ type WebSocketHandler func(*WsServer, []byte)
 var webSocketEndPoint = map[string]WebSocketHandler{
 	"typing":          func(server *WsServer, comment []byte) { server.sendTyping(comment) },
 	"message":         func(server *WsServer, comment []byte) { server.sendPrivateMessage(comment) },
-	"comment":         func(server *WsServer, comment []byte) { server.broadcastToClients(comment) },
 	"NewPost":         func(server *WsServer, comment []byte) { server.broadcastPostToClients(comment) },
 	"addGroup":        func(server *WsServer, comment []byte) { server.addGroup(comment) },
-	"messageRoom":     func(server *WsServer, comment []byte) { server.sendPrivateMessage(comment) },
+	"messageRoom":     func(server *WsServer, comment []byte) { server.handleChat(comment) },
 	"joinGroup":       func(server *WsServer, comment []byte) { server.sendJoinGroupNotification(comment) },
 	"acceptJoinGroup": func(server *WsServer, comment []byte) { server.acceptJoinGroupNotification(comment) },
 	"Broadcast":       func(server *WsServer, comment []byte) { server.broadcastGroup(comment) },
@@ -86,55 +83,6 @@ func (server *WsServer) registerClient(client *Client) {
 
 func (server *WsServer) unregisterClient(client *Client) {
 	delete(server.clients, client)
-}
-
-func (server *WsServer) broadcastToClients(comment []byte) {
-	// Désérialisez les données JSON du commentaire
-	var commentMessage model.CommentMessage
-	err := json.Unmarshal(comment, &commentMessage)
-	if err != nil {
-		tools.Log(err)
-		return
-	}
-	fmt.Println("commentaire:",commentMessage)
-
-	// Utilisez les valeurs désérialisées
-	postID := commentMessage.PostID
-	commentContent := commentMessage.Comment
-	submit := commentMessage.Submit
-	senderId := commentMessage.SenderID
-	photo := commentMessage.Image
-	fmt.Println("image:", commentMessage.Image)
-	commentId := tools.NeewId()
-	go func() {
-		image := ""
-		// Sauvegarde des commentaires avec le client WebSocket dans la base de données
-		if photo.Name != "" {
-			img, err := tools.UploadFile("comment-"+postID, photo)
-			if err != nil {
-				tools.Log(err)
-				return
-			}
-			// Utilisez le nom de fichier retourné s'il y a eu un téléchargement réussi
-			image = img
-		}
-		app.AddComment(postID, commentContent, submit, senderId, commentId, image)
-	}()
-
-	commentMessage.DislikeNbr = 0
-	commentMessage.LikeNbr = 0
-	commentMessage.Type = "comment"
-	commentMessage.CommentID = commentId
-	commentMessage.Src = "comment-" + postID + filepath.Ext(photo.Name)
-	// Convertissez la structure CommentMessage en JSON
-	messageData, err := json.Marshal(commentMessage)
-	if err != nil {
-		tools.Log(err)
-		return
-	}
-	for client := range server.clients {
-		client.send <- messageData
-	}
 }
 
 func (server *WsServer) sendTyping(p []byte) {
@@ -367,21 +315,15 @@ func (server *WsServer) acceptJoinGroupNotification(p []byte) {
 		return
 	}
 
-	notificationID, ok := data["notificationID"].(string)
-	if !ok {
-		err := "notificationID manquant ou invalide"
-		tools.Log(err)
-		return
-	}
 	sourceID, ok := data["sourceID"].(string)
 	if !ok {
 		err := "sourceID manquant ou invalide"
 		tools.Log(err)
 		return
 	}
-	senderID, ok := data["senderID"].(string)
+	userID, ok := data["userID"].(string)
 	if !ok {
-		err := "senderID manquant ou invalide"
+		err := "userID manquant ou invalide"
 		tools.Log(err)
 		return
 	}
@@ -392,14 +334,14 @@ func (server *WsServer) acceptJoinGroupNotification(p []byte) {
 		tools.Log(err)
 		return
 	}
-	err = repo.AddMemberToGroup(db, sourceID, senderID)
+	err = repo.AddMemberToGroup(db, sourceID, userID)
 	if err != nil {
 		tools.Log(err)
 		return
 	}
-	err = repo.UpdateNotification(db, notificationID, true)
-	if err != nil {
-		tools.Log(err)
-		return
+	for client := range server.clients {
+		if client.ID == userID {
+			client.joinRoom(sourceID)
+		}
 	}
 }

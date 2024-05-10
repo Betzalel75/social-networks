@@ -81,7 +81,6 @@ func registration(w http.ResponseWriter, r *http.Request, username, email, passw
 	if username == "" {
 		existant = errors.New("error")
 	}
-	// fmt.Println(exist, existant)
 	if exist == sql.ErrNoRows && existant != nil {
 		pwd, err := passwordCrypt(password)
 		if err != nil {

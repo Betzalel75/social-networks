@@ -38,8 +38,6 @@ func postGroup(w http.ResponseWriter, r *http.Request, dataContent model.Publica
 		}
 		private := false
 
-		// tools.Debogage(dataContent.Type)
-		// fmt.Println("users:", user)
 
 		postID := tools.NeewId()
 		post := model.Post{

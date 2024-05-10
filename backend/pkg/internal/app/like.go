@@ -55,13 +55,13 @@ func AddLike(useID, ID, name string, typ int) {
 
 	// if exist like/dislake we upgrade it
 	if (typ == 1 && like.Type == -1) || (typ == 1 && like.Type == 0) {
-		// fmt.Println(typ, like.Type)
+		
 		repo.UpdateLikeType(bd.GetDB(), like.LikeID, typ)
 	} else if typ == -1 && like.Type == 1 || (typ == -1 && like.Type == 0) {
-		// fmt.Println(typ, like.Type)
+		
 		repo.UpdateLikeType(bd.GetDB(), like.LikeID, typ)
 	} else if typ == like.Type {
-		// fmt.Println(typ, like.Type)
+		
 		repo.UpdateLikeType(bd.GetDB(), like.LikeID, 0)
 	}
 }

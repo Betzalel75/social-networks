@@ -150,7 +150,7 @@ export default {
     message(category, name) {
       switch (category) {
         case "follow":
-          return "vous suit";
+          return "veut vous suivre";
         case "post":
           var str = "a fait une nouvelle publication";
           if (name) {
@@ -182,48 +182,6 @@ export default {
         this.$store.commit("setNotifs", data.notifications);
         this.$store.commit("setShowAllNotifications", true);
       });
-    },
-    // Méthode pour accepter une notification
-    async reponse(senderID, groupID, notifID, category, responseType) {
-      try {
-        const vals = {
-          cookie: this.getCookieValue("session"),
-          groupID: groupID,
-          senderID: senderID,
-          category: category,
-          type: responseType,
-          notifID: notifID,
-        };
-        const options = {
-          method: "POST",
-          body: JSON.stringify(vals),
-        };
-        const response = await fetch("/api/response", options);
-
-        if (!response.ok) {
-          const Errors = {
-            status: response.status,
-            message: response.statusText,
-          };
-          store.commit("setError", Errors);
-          if (response.status == 401) {
-            this.$store.dispatch("disconnect");
-            this.$router.push("/login");
-          } else {
-            throw new Error(
-              `Failed to fetch settings. Status: ${response.status}, ${response.statusText}`
-            );
-          }
-        }
-
-        const data = await response.json();
-        this.$store.commit("setNotifs", data.notifications);
-        return data
-      } catch (error) {
-        //error("Error fetching data:", error);
-        this.$router.push("/errors");
-        throw error; // Rejeter l'erreur pour laisser le gestionnaire l'attraper
-      }
     },
   },
 }

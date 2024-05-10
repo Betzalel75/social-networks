@@ -140,3 +140,23 @@ func DeleteNotification(db *sql.DB, notifID string) error {
 
 	return nil
 }
+
+// Delete notification by users id
+func DeleteNotificationByUserID(db *sql.DB,senderID, receiverID string) error {
+  // Prépare la requête SQL pour mettre à jour les colonnes 'vu' pour les messages du destinataire donné
+  stmt, err := db.Prepare("DELETE FROM notifications WHERE user_id = ? AND recever_id = ? AND category = follow;")
+  if err != nil {
+		tools.Log(err)
+    return err
+  }
+  defer stmt.Close()
+
+  // Exécute la requête avec les paramètres fournis
+  _, err = stmt.Exec(senderID, receiverID)
+  if err != nil {
+		tools.Log(err)
+    return err
+  }
+
+  return nil
+}

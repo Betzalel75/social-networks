@@ -234,6 +234,7 @@ type Event struct {
 	Date        string
 	Image       string
 	GroupID     string
+	Members     int
 }
 
 type EventMember struct {

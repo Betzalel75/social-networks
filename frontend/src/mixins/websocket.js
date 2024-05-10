@@ -125,33 +125,6 @@ const webSocketGo = {
         message.sender
       );
     },
-    commentaireReceive(datas) {
-      if (utils.methods.getCookieValue("session")) {
-        if (datas.type === "comment") {
-          if (
-            store.getters.commentTab.some(
-              (t) => t.commentID === datas.commentID
-            )
-          ) {
-            return;
-          }
-          store.getters.commentTab.push(datas);
-          if (datas.userName == store.getters.nickName.toLowerCase()) {
-            if (datas.commentID) {
-              utils.methods.addComment(datas);
-              utils.methods.incrementCommentNumber(datas);
-            }
-          } else {
-            utils.methods.addComment(datas);
-            utils.methods.incrementCommentNumber(datas);
-          }
-        }
-      } else {
-        myMixin.methods.sayonara();
-        //error("cookie has not been");
-        return;
-      }
-    },
     verifyFile(r, comment) {
       if (r.name == undefined && comment !== "") {
         return "Type file not supported";
@@ -173,7 +146,9 @@ const webSocketGo = {
       const formData = new FormData(element);
       const typeFile = formData.get("postimage").type.split("/")[0];
 
-      const attribut = element.querySelector(`#output-${postID}`).getAttribute("src");
+      const attribut = element
+        .querySelector(`#output-${postID}`)
+        .getAttribute("src");
       if (attribut && typeFile == "image") {
         const photoFile = formData.get("postimage");
         const inputFileElement = element.querySelector("#fileInput"); // Obtenez l'élément d'entrée de type fichier
@@ -218,7 +193,7 @@ const webSocketGo = {
       // Envoyez le commentaire au serveur
       this.imageAvatar(event, postID).then((image) => {
         const spam = event.target.querySelector(".login100-form-error");
-        if (image && image.name !== undefined) { 
+        if (image && image.name !== undefined) {
           const err = this.verifyFile(image, comment);
           if (err !== null) {
             spam.classList.add("nosuccess");
@@ -226,18 +201,18 @@ const webSocketGo = {
             return false;
           }
         }
-        if (spam.classList.contains('nosuccess')) {
-          spam.classList.remove('nosuccess');
+        if (spam.classList.contains("nosuccess")) {
+          spam.classList.remove("nosuccess");
           spam.innerHTML = "";
         }
-        
+
         if (comment !== "") {
           app.methods.sendCommentaire(postID, comment, image);
           // Réinitialisez le champ de commentaire
-          }
-          commentInput.value = "";
-          store.commit("setPostImage", {});
-        });
+        }
+        commentInput.value = "";
+        store.commit("setPostImage", {});
+      });
     },
     quitter(e) {
       // quitter la conversation
@@ -276,7 +251,7 @@ const webSocketGo = {
       }
       utils.methods.deleteNotif();
     },
-    selectUser(userId,groupID = null) {
+    selectUser(userId, groupID = null) {
       // alert(userId);
       const parent = document.querySelector(".conversation");
       const ul = parent.querySelector(".messages-bubble");
@@ -322,8 +297,8 @@ const webSocketGo = {
       img.src = srcImage;
       userName = utils.methods.capitalize(userName);
       message.textContent = `${userName}`;
-      
-      this.getMessages(userId,groupID);
+
+      this.getMessages(userId, groupID);
       this.activateDiv(userId);
     },
     check(datas) {
@@ -343,11 +318,28 @@ const webSocketGo = {
         );
       }
     },
-    async getMessages(user_id_chat,groupID = null) {
-
-      let url = groupID? '/get-group-messages?groupID='+groupID : "/getmessages"
+    async getMessages(user_id_chat, groupID = null) {
+      let url = groupID
+        ? "/get-group-messages?groupID=" + groupID
+        : "/getmessages";
       try {
-        const datas = await utils.methods.fetchData(url);
+        const data = await utils.methods.fetchData(url, user_id_chat);
+        if (groupID === null && !data.relationships) {
+          store.commit("setLock", true);
+          const vr = document.querySelector(".verouiller");
+          if (vr && vr.classList.contains("view")) {
+            vr.classList.remove("view");
+          }
+          // quitter la conversation
+          const div = document.querySelector(".container-chat");
+          if (div === null || div === undefined) {
+            return false;
+          }
+          div.style.display = "none";
+          store.commit("decrementVisible");
+          return false;
+        }
+        const datas = data.messages;
         let messages = []; // Tableau de messages
         if (!datas) {
           return false;
@@ -370,13 +362,16 @@ const webSocketGo = {
         }
 
         if (Boolean(groupID)) {
-          messages =  messages.map(msg => {
-            if (msg.receiverID === groupID && msg.senderID !== store.getters.localID) {
-              msg.receiverID = store.getters.localID
-              msg.senderID = groupID
+          messages = messages.map((msg) => {
+            if (
+              msg.receiverID === groupID &&
+              msg.senderID !== store.getters.localID
+            ) {
+              msg.receiverID = store.getters.localID;
+              msg.senderID = groupID;
             }
-            return msg
-          })
+            return msg;
+          });
         }
         this.history_message(messages);
 
@@ -387,7 +382,7 @@ const webSocketGo = {
         //error("Error getting message:", error);
       }
     },
-    addMessageToList(id, message, formattedDate, messageId, isSender,sender) {
+    addMessageToList(id, message, formattedDate, messageId, isSender, sender) {
       const messageList = document.getElementById(`message-list-${messageId}`);
       if (messageList) {
         const conversationList = messageList.querySelector(".messages-bubble");
@@ -581,6 +576,55 @@ const webSocketGo = {
       }
     },
     // UTILS................................
+    messageRoom(message) {
+      let messageId;
+      let actualUser;
+      // Obtenir l'heure actuelle
+      if (!utils.methods.getCookieValue("session")) {
+        //error("cookie not set");
+        myMixin.methods.sayonara();
+        return;
+      }
+      const firstButton = document.querySelector("#notification");
+
+      const currentTime = new Date();
+      const formattedTime = currentTime.toLocaleTimeString();
+
+      if (store.getters.nickName.toLowerCase() == message.sender) {
+        actualUser = "vous";
+        messageId = message.receiverID;
+      } else {
+        actualUser = message.sender;
+        messageId = message.receiverID;
+        const messageDiv = document.getElementById(`message-list-${messageId}`);
+        if (messageDiv) {
+          if (messageDiv.style.display == "block") {
+            const id_message = message.idMessage;
+            utils.methods.notifBlink(messageId, id_message);
+            utils.methods.moveUserToTop(messageId);
+          } else {
+            utils.methods.notification(messageId);
+            firstButton.classList.add("ring");
+            utils.methods.moveUserToTop(messageId);
+          }
+        } else {
+          utils.methods.notification(messageId);
+          firstButton.classList.add("ring");
+          utils.methods.moveUserToTop(messageId);
+          return;
+        }
+      }
+      var id_message = message.idMessage;
+      var content = utils.methods.escapeHtml(message.message);
+      utils.methods.chat(
+        id_message,
+        content,
+        formattedTime,
+        actualUser,
+        messageId,
+        message.sender
+      );
+    },
   },
 };
 

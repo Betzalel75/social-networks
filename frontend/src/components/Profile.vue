@@ -76,7 +76,7 @@
           </div>
           <div class="profile" style="width: 96%; margin: 20px auto 0 auto; margin-bottom: 5rem;">
             <div class="profile-avatar">
-              <img :src="profileImage" ref="profileImage" @load="extractColors" alt="" class="profile-img" />
+              <img :src="profileImage" ref="profileImage" alt="" class="profile-img" />
             </div>
             <div class="composents">
               <!--  -->

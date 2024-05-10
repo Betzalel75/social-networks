@@ -111,7 +111,6 @@ func AddPost(w http.ResponseWriter, r *http.Request, cookie string) {
 }
 
 func IsFieldPostValidd(r *http.Request) bool {
-	// fmt.Println("Post =>", r.PostForm)
 	if r.FormValue("publish") != "Publish" || r.
 		FormValue("title") == "" || r.FormValue("desc") == "" {
 		err := "Tilte => " + r.FormValue("title") + " desc => " + r.FormValue("desc") + " publish => " + r.FormValue("publish")

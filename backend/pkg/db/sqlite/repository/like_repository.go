@@ -107,7 +107,6 @@ func CountLikes(db *sql.DB, name, ID string) (int, int, error) {
 		tools.Log(err)
 		return 0, 0, err
 	}
-	// fmt.Println(likesCount, dislikesCount)
 	return likesCount, dislikesCount, nil
 }
 
