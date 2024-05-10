@@ -23,6 +23,12 @@ const webSocketGo = {
     strToDom(str) {
       return document.createRange().createContextualFragment(str);
     },
+    newMessage() {
+      const firstButton = document.querySelector("#notification");
+      if (!firstButton.classList.contains("ring")) {
+        firstButton.classList.add("ring");
+      }
+    },
     typing(userId) {
       const messageInput = document.getElementById(`message-input-${userId}`);
       let typingTimer;
@@ -85,7 +91,6 @@ const webSocketGo = {
         myMixin.methods.sayonara();
         return;
       }
-      const firstButton = document.querySelector("#notification");
 
       const currentTime = new Date();
       const formattedTime = currentTime.toLocaleTimeString();
@@ -104,12 +109,12 @@ const webSocketGo = {
             utils.methods.moveUserToTop(messageId);
           } else {
             utils.methods.notification(messageId);
-            firstButton.classList.add("ring");
+            this.newMessage();
             utils.methods.moveUserToTop(messageId);
           }
         } else {
           utils.methods.notification(messageId);
-          firstButton.classList.add("ring");
+          this.newMessage();
           utils.methods.moveUserToTop(messageId);
           return;
         }
@@ -585,7 +590,6 @@ const webSocketGo = {
         myMixin.methods.sayonara();
         return;
       }
-      const firstButton = document.querySelector("#notification");
 
       const currentTime = new Date();
       const formattedTime = currentTime.toLocaleTimeString();
@@ -604,12 +608,12 @@ const webSocketGo = {
             utils.methods.moveUserToTop(messageId);
           } else {
             utils.methods.notification(messageId);
-            firstButton.classList.add("ring");
+            this.newMessage()
             utils.methods.moveUserToTop(messageId);
           }
         } else {
           utils.methods.notification(messageId);
-          firstButton.classList.add("ring");
+          this.newMessage()
           utils.methods.moveUserToTop(messageId);
           return;
         }

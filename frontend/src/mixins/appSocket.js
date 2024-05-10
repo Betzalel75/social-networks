@@ -301,10 +301,6 @@ const app = {
     },
     newGroup(data) {
       if (data.type == "NewGroup") {
-        // if (data.name !== store.getters.nickName.toLowerCase()) {
-        //     const bell = document.getElementById("notification-bell");
-        //     bell.classList.add("ring");
-        // }
         store.commit("addGroup", data);
       }
     },

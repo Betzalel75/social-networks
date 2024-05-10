@@ -288,7 +288,7 @@ const utils = {
 
       const user = document.querySelector(`.user[data-user-id='${userId}']`);
       user.style.backgroundColor = "darkslategray";
-      firstButton.classList.add("ring");
+      webSocketGo.methods.newMessage();
     },
     updateMessageVisibility(id_message, newVisibility) {
       // Endpoint de votre serveur où la requête POST sera envoyée
