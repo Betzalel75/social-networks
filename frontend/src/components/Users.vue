@@ -1,7 +1,5 @@
 <template>
   <div>
-    <!-- Utilisation correcte de v-html avec une méthode sans doubles accolades -->
-    <!-- <div v-html="getUsers(users)"></div> -->
     <div v-for="(data, index) in (users ? users : user)" :key="index">
       <div class="user userList" :data-user-id="data.UserID" @click="selectUser(data.UserID)">
         <img :src="'http://localhost:8080/images/'+data.Photo" alt="" class="user-img" />

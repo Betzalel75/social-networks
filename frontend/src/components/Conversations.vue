@@ -6,8 +6,8 @@
         <div class="chat-header clearfix">
           <div class="row">
             <div class="col-lg-6">
-              <a  href="javascript:void(0);" @click="getProfil($event); quitter($event)"
-                data-toggle="modal" data-target="#view_info">
+              <a href="javascript:void(0);" @click="getProfil($event); quitter($event)" data-toggle="modal"
+                data-target="#view_info">
                 <img src="@/assets/images/defautl.jpg" alt="avatar" style="cursor: pointer" />
               </a>
               <div class="chat-about">
@@ -131,7 +131,6 @@
               <button class="input-group-text" @click="handleClick($event)"><i class="fa fa-send"></i></button>
             </div>
           </div>
-  
         </div>
       </div>
     </div>
@@ -160,7 +159,7 @@ export default {
       offsetY: 0,
     };
   },
-  props:{
+  props: {
     ok: {
       type: Boolean,
       default: true,
@@ -174,6 +173,19 @@ export default {
       } else {
         this.sendRoomMessage(event);
       }
+    },
+    enterSend() {
+      const self = this;
+      document.getElementById("message-input").addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          if (!event.shiftKey) {
+            // Empêchez le comportement par défaut de la touche "Entrer" (qui est de faire un retour à la ligne)
+            event.preventDefault();
+            // Appel de la fonction pour gérer l'envoi du message
+            self.handleClick(event);
+          }
+        }
+      });
     },
     toggleEmojiList() {
       var emojiList = document.querySelector(".emoji-list");
@@ -344,6 +356,7 @@ export default {
   },
   mounted() {
     this.initEvent();
+    this.enterSend();
   },
 };
 

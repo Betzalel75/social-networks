@@ -509,9 +509,10 @@ func getMessage(w http.ResponseWriter, data model.Credentials) {
 		return
 	}
 	ok := false
-	usr, _ := repo.GetUserByID(bd.GetDB(), data.Identifiant)
+	invited, _ := repo.GetUserByID(bd.GetDB(), data.Identifiant)
+	user, _ := repo.GetUserByID(bd.GetDB(), userID)
 	relationships, _ := repo.CheckFollowRelation(bd.GetDB(), userID, data.Identifiant)
-	if usr.StatusProfil == "public" || relationships {
+	if (invited.StatusProfil == "public" && user.StatusProfil == "public") || relationships {
 		ok = true
 	}
 	datas := map[string]interface{}{

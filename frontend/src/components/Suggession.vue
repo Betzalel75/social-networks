@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="carrousel-container">
     <div class="content-carousel" @scroll="handleScroll">
       <div class="carousel" v-for="(data, index) in suggestion" :key="index">
         <div class="status_top">
@@ -28,15 +28,9 @@ import app from "@/mixins/appSocket";
 
 export default {
   mixins: [myMixin, app],
-
-  // props: {
-  //   suggestion: {
-  //     type: Array
-  //   }
-  // },
   computed: {
     suggestion() {
-      return this.$store.getters.suggestions;
+      return this.$store.getters.listUsers;
     },
   },
   methods: {
@@ -55,6 +49,12 @@ export default {
 </script>
 
 <style scoped>
+.carrousel-container{
+ position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
 .status_top {
   display: flex;
   justify-content: center;
